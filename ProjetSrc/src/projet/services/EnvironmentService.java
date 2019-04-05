@@ -1,6 +1,6 @@
 package projet.services;
 
-public interface Environment extends ScreenService {
+public interface EnvironmentService extends ScreenService {
 	/**
 	 * observators
 	 */

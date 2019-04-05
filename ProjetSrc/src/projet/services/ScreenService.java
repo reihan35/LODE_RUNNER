@@ -5,21 +5,13 @@ public interface ScreenService {
 	 * predicates
 	 */
 	 /** verifie si les coordonnes sont dans la fenetre
-	 * pre: 0<=y 
-	 * pre: y<=getHeight()
-	 * pre: 0<=x 
-	 * pre: x<=getWidth()
+	 * def: 0<=y && y<=getHeight() && 0<=x && x<=getWidth()
 	 */
-	public boolean isInWindow(int x, int y);
+	default public boolean isInWindow(int x, int y) {
+		return 0<=y && y<=getHeight() && 0<=x && x<=getWidth();
+	}
 	
 
-	/**								
-	 * creuse un trou dans la cellule de coordonnes (x, y)
-	 * post: forall (x, y) in [0;getWidth()[ X [0;getHeight()[
-	 * 			(x != u || y != v)  implies
-	 * 				getCellNature(x, y) == getCellNature(x, y)@pre
-	 */
-	public boolean cellNatureHasNotChanged(int  x,int y);
 
 	/**
 	 * const observators
@@ -61,18 +53,19 @@ public interface ScreenService {
 	
 	/**								
 	 * creuse un trou dans la cellule de coordonnes (x, y)
-	 * pre: getCellNature(x, y) == HOL
+	 * post: getCellNature(x, y) == HOL
 	 * post: forall (x, y) in [0;getWidth()[ X [0;getHeight()[
-	 * 			(x != u || y != v)  implies getCellNature(x, y) == PLT 
+ 	 *			(x != u || y != v)  
+ 	 *			implies getCellNature(x, y) == getCellNature(x, y)@pre
 	 */
 	public void dig(int x, int y);
 	
 	/**								
-	 * creuse un trou dans la cellule de coordonnes (x, y)
-	 * pre: getCellNature(x, y) == PLT
+	 * remplit un trou dans la cellule de coordonnes (x, y)
+	 * post: getCellNature(x, y) == PLT
 	 * post: forall (x, y) in [0;getWidth()[ X [0;getHeight()[
-	 * 			(x != u || y != v)  implies
-	 * 				getCellNature(x, y) == PLT 
+ 	 *			(x != u || y != v)  
+ 	 *			implies getCellNature(x, y) == getCellNature(x, y)@pre
 	 */
 	public void fill(int x, int y);
 	

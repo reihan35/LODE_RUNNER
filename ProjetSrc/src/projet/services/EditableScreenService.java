@@ -1,6 +1,6 @@
 package projet.services;
 
-public interface EditableScreen extends ScreenService {
+public interface EditableScreenService extends ScreenService {
 	
 	/**
 	 * observators
@@ -13,8 +13,8 @@ public interface EditableScreen extends ScreenService {
 	 * invariants
 	 * inv : Playable() = \forall (x, y) in [0;getWidth()[ X [0;getHeight()[
 	 * 						getCellNature(x, y) != HOL 
-	 * 						&& \forall x in [0;getWidth()[
-	 * 							getCellNature(x,0) == MTL
+	 * 					&& \forall x in [0;getWidth()[
+	 * 						getCellNature(x,0) == MTL
 	 *
 	 **/
 	
@@ -25,9 +25,11 @@ public interface EditableScreen extends ScreenService {
 	/**
 	 * pre : isInWindow(i, j)
 	 * post : getCellNature(i, j) = c
-	 * post : cellNatureHasNotChanged(int  x,int y)
+	 * post: forall (x, y) in [0;getWidth()[ X [0;getHeight()[
+ 	 *			(x != u || y != v)  
+ 	 *			implies getCellNature(x, y) == getCellNature(x, y)@pre
 	**/
-	void SetNature(int i,int j,Cell c);
+	void setNature(int i,int j,Cell c);
 	
 	
 }
