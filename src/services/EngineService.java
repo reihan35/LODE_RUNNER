@@ -26,26 +26,38 @@ public interface EngineService {
 	
 	/**
 	 * invariants
-	 * forall (x, y) in getGuards() implies ItemService(x,y) in getEnvi().getCellContent(x,y)
-	 * getTreasures().size() = 0 implies Status = Win
+	 * forall Guard g in getGuards()
+	 * 		g in getEnvi().getCellContentChar(g.getWdt(),g.getHgt())
+	 * forall Treasure t in getTreasures()
+	 * 		g in getEnvi().getCellContentChar(t.getWdt(),t.getHgt())
+	 * getTreasures().size() == 0 implies getStatus() = WIN
+	 * Player p = getPlayer() in getEnvi().getCellContentChar(p.getWdt(), p.getHgt())
 	 */
-	
+
 	/**
-	 * constructors //JE SAIS PAS CMT DIRE CHAQUE XY DOIT ETRE UNIQUE 
-	 * pre : screen.isPlayble() &&  forall (x, y) in guards 
- 	 *								implies getCellNature(x, y) == EMP
- 	 *								&& forall (x, y) in treasures 
- 	 *								implies getCellNature(x, y-1) in {PLT, MTL}
- 	 * post : forall (x, y) in Treasures 
- 	 * 			(x==player.getX() && y==player.getY()) implies treasures = treasures@pre\(x,y) 
+	 * constructors 
+	 * pre : screen.isPlayable() 
+	 * post: getEnvi().getScreen() == screen
+	 * post: getPlayer.getWdt() == playerCoord.getX() && getPlayer().getHgt() == playerCoord.getY()
+	 * post: forall (int x, int y) in guardsCoord,
+	 * 			exists Guard g in getGuards() with g.getWdt() == x && g.getHgt() == y
+	 * post: forall (int x, int y) in treasuresCoord,
+	 * 			exists Treasure t in getTreasures() with t.getWdt() == x && t.getHgt() == y
+	 * post: getStatus() == PLAYING
 	 */
-	public void init(EditableScreenService screen,Coordinates player,ArrayList<Coordinates> guards,
-				ArrayList<Coordinates> Treasures);
+	public void init(EditableScreenService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
+				ArrayList<Coordinates> treasuresCoord);
 	
 	
 	/**
 	 * Operators
 	 */
 	
+	/**
+	 * post: exists Guard g in getEnvi().getCellContentChar(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
+	 * 			implies getStatus() == LOSS
+	 * post: exists Treasure t in getEnvi().getCellContentItem(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
+	 * 			implies not exists t in getTreasures()
+	 */
 	public void step();
 }
