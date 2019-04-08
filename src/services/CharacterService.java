@@ -54,69 +54,41 @@ public interface CharacterService{
 	/**
 	 * post: getHgt() == getHgt()@pre
 	 * 
-	 * post: getWdt()@pre == 0 implies getWdt() == getWdt()@pre
 	 * 
-	 * post: getEnvi().getCellNature(getWdt()@pre-1, getHgt()) in {MTL, PLT}
-	 * 		implies getWdt() == getWdt()@pre
-	 * 
-	 * post: getEnvi().getCellNature(getWdt()@pre, getHgt()) not in {LAD, HDR}	
-	 * 			&& getWdt()@pre != 0 && isFreeCell(getWdt()@pre, getHgt() - 1)
-	 * 			&& not characterAt(getWdt()@pre, getHgt()-1)
-	 * 				implies getWdt() == getWdt()@pre
-	 * 
-	 * post: characterAt(getWdt()@pre - 1, getHgt())
-	 * 			implies getWdt() == getWdt()@pre
-	 * 
-	 * post: getWdt()@pre != 0 && isFreeCell(getWdt()@pre - 1, getHgt())
+	 * post: if (getWdt()@pre != 0 && isFreeCell(getWdt()@pre - 1, getHgt())
 	 * 		&& (getEnvi().getCellNature(getWdt()@pre, getHgt()) in {LAD, HDR}
 	 * 			|| getEnvi().getCellNature(getWdt()@pre, getHgt() - 1) in {PLT, MTL, LAD}
 	 * 			|| characterAt(getWdt()@pre, getHgt() - 1))
-	 *		&& not characterAt(getWdt()@pre - 1, getHgt())
-	 *			implies getWdt() == getWdt()@pre - 1 
-	 */
+	 *		&& not characterAt(getWdt()@pre - 1, getHgt()))
+	 *			then getWdt() == getWdt()@pre - 1 
+	 *			else getWdt() == getWdt()@pre
+	 */			
 	public void goLeft();
 	
 	
 	/**
 	 * post: getHgt() == getHgt()@pre
 	 * 
-	 * post: getWdt()@pre == getEnvi().getWidth() - 1 implies getWdt() == getWdt()@pre
-	 * 
-	 * post: getEnvi().getCellNature(getWdt()@pre + 1, getHgt()) in {MTL, PLT}
-	 * 		implies getWdt() == getWdt()@pre
-	 * 
-	 * post: getEnvi().getCellNature(getWdt()@pre, getHgt()) not in {LAD, HDR}	
-	 * 			&& getWdt()@pre != 0 && isFreeCell(getWdt()@pre, getHgt() - 1)
-	 * 			&& not characterAt(getWdt()@pre, getHgt() - 1)
-	 * 				implies getWdt() == getWdt()@pre
-	 * 
-	 * post: characterAt(getWdt()@pre + 1, getHgt())
-	 * 			implies getWdt() == getWdt()@pre
-	 * 
-	 * post: getWdt()@pre != 0 && isFreeCell(getWdt()@pre + 1, getHgt())
+	 * post: if getWdt()@pre != getEnvi().getWidth() - 1 && isFreeCell(getWdt()@pre + 1, getHgt())
 	 * 		&& (getEnvi().getCellNature(getWdt()@pre, getHgt()) in {LAD, HDR}
 	 * 			|| getEnvi().getCellNature(getWdt()@pre, getHgt() - 1) in {PLT, MTL, LAD}
 	 * 			|| characterAt(getWdt()@pre, getHgt() - 1))
 	 *		&& not characterAt(getWdt()@pre + 1, getHgt())
-	 *			implies getWdt() == getWdt()@pre + 1 
+	 *			then getWdt() == getWdt()@pre + 1 
+	 *			else getWdt() == getWdt()@pre
+	 *			
 	 */
 	public void goRight();
 	
 	/**
 	 * post: getWdt() == getWdt()@pre
 	 * 
-	 * post: getHgt()@pre == getEnvi().getHeight()-1 implies getHgt() == getHgt()@pre
-	 * 
-	 * post: getEnvi().getCellNature(getWdt(), getHgt()@pre + 1) != LAD
-	 * 		implies getHgt() == getHgt()@pre
-	 *
-	 * post: characterAt(getWdt(),getHgt()@pre + 1)
-	 * 			implies getHgt() == getHgt()@pre
-	 * 
-	 * post: getEnvi().getCellNature(getWdt(), getHgt()@pre) == LAD
+	 * post: if not getHgt()@pre == getEnvi().getHeight()-1
+	 * 			&& getEnvi().getCellNature(getWdt(), getHgt()@pre) == LAD
 	 * 			&& isFreeCell(getWdt(), getHgt()@pre + 1)
-	 * 			&& not characterAt(getWdt()@pre, getHgt()@pre + 1)
-	 * 				implies getHgt() == getHgt()@pre + 1
+	 * 			&& not characterAt(getWdt(), getHgt()@pre + 1)
+	 * 				then getHgt() == getHgt()@pre + 1
+	 * 				else getHgt() == getHgt()@pre + 1
 	 * 
 	 */
 	public void goUp();
@@ -125,17 +97,12 @@ public interface CharacterService{
 	/**
 	 * post: getWdt() == getWdt()@pre
 	 * 
-	 * post: getHgt()@pre == getEnvi().getHeight()-1 implies getHgt() == getHgt()@pre
 	 * 
-	 * post: not isFreeCell(getWdt(), getHgt()@pre + 1)
-	 * 			implies getHgt() == getHgt()@pre
-	 *
-	 * post: characterAt(getWdt(),getHgt()@pre - 1)
-	 * 			implies getHgt() == getHgt()@pre
-	 * 
-	 * post: isFreeCell(getWdt(), getHgt()@pre + 1)
+	 * post: if not getHgt()@pre == 0
+	 * 			&& isFreeCell(getWdt(), getHgt()@pre - 1)
 	 * 			&& not characterAt(getWdt()@pre, getHgt()@pre - 1)
-	 * 				implies getHgt() == getHgt()@pre - 1
+	 * 				then getHgt() == getHgt()@pre - 1
+	 * 				else getHgt() == getHgt()@pre
 	 * 
 	 */
 	public void goDown();

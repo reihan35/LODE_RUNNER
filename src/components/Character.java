@@ -1,11 +1,10 @@
 package components;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import services.Cell;
 import services.CharacterService;
 import services.EnvironmentService;
+import util.SetUtil;
 
 public class Character implements CharacterService {
 
@@ -24,6 +23,23 @@ public class Character implements CharacterService {
 	@Override
 	public int getWdt() {
 		return wdt;
+	}
+	
+
+	@Override
+	public boolean characterAt(int x, int y) {
+		// TODO Auto-generated method stub
+		return getEnvi().getCellContentChar(x, y).size() > 0;
+	}
+
+	@Override
+	public boolean isFreeCell(int x, int y) {
+		Cell currCell = getEnvi().getCellNature(x, y);
+		Cell[] free = {Cell.LAD, Cell.EMP, Cell.HDR, Cell.HOL};
+		if(SetUtil.isIn(currCell, free)) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -86,5 +102,6 @@ public class Character implements CharacterService {
 	public void stay() {
 
 	}
+
 
 }
