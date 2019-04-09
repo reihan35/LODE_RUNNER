@@ -9,7 +9,7 @@ public interface ScreenService {
 	 * def: 0<=y && y<=getHeight() && 0<=x && x<=getWidth()
 	 */
 	default public boolean isInWindow(int x, int y) {
-		return 0<=y && y<=getHeight() && 0<=x && x<=getWidth();
+		return 0<=y && y<getHeight() && 0<=x && x<getWidth();
 	}
 	
 

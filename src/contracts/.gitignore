@@ -1,0 +1,8 @@
+/CharacterContract.class
+/ContractError.class
+/EditableScreenContract.class
+/EnvironmentContract.class
+/InvariantError.class
+/PostconditionError.class
+/PreconditionError.class
+/ScreenContract.class

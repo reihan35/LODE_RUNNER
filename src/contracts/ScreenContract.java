@@ -57,6 +57,7 @@ public class ScreenContract extends ScreenDecorator {
 			if(!(getCellNature(x, y) == Cell.EMP)) {
 				throw new PostconditionError("ScreenContract, init, toutes les cases n'ont pas ete initialisees a vide");
 			}
+		
 	}
 	
 	/**
@@ -71,13 +72,20 @@ public class ScreenContract extends ScreenDecorator {
  	 *			implies getCellNature(x, y) == getCellNature(x, y)@pre
 	 */
 	public void dig(int x, int y) {
+		
+		if(!isInWindow(x, y)) {
+			throw new PreconditionError("ScreenContract, getCellNature, isInWindow(x, y)");
+		}
+		
 		int getHeight_atPre = getHeight();
 		int getWidth_atPre = getWidth();
 		
 		Cell[][] getCellNature_atPre = new Cell[getWidth()][getHeight()];
-		for (int i=0; i<getWidth()-1; i++)
-			for(int j=0; j<getHeight()-1; j++)
+		for (int i=0; i<getWidth(); i++) {
+			for(int j=0; j<getHeight(); j++) {
 				getCellNature_atPre[i][j] = getCellNature(i, j);
+			}
+		}
 		
 		super.dig(x, y);
 		if(getHeight_atPre != getHeight() || getWidth_atPre != getWidth()) {
@@ -87,11 +95,14 @@ public class ScreenContract extends ScreenDecorator {
 		if(!(getCellNature(x, y) == Cell.HOL)) {
 			throw new PostconditionError("ScreenContract, dig, la case n'est pas un trou apres avoir creuse");
 		}
-		for (int i=0; i<getWidth()-1; i++)
-			for(int j=0; j<getHeight()-1; j++)
-				if(!(getCellNature_atPre[i][j] == getCellNature(i, j))) {
+		for (int i=0; i<getWidth(); i++) {
+			for(int j=0; j<getHeight(); j++) {
+				if(!(getCellNature_atPre[i][j] == getCellNature(i, j)) && (x!=i || y!=j)) {
 					throw new PostconditionError("ScreenContract, dig, d'autres cellules que la cellule du perso ont changé");
+				}
+			}
 		}
+				
 	}
 	
 	/**								
@@ -102,6 +113,11 @@ public class ScreenContract extends ScreenDecorator {
  	 *			implies getCellNature(x, y) == getCellNature(x, y)@pre
 	 */
 	public void fill(int x, int y) {
+		
+		if(!isInWindow(x, y)) {
+			throw new PreconditionError("ScreenContract, getCellNature, isInWindow(x, y)");
+		}
+		
 		int getHeight_atPre = getHeight();
 		int getWidth_atPre = getWidth();
 		
@@ -121,7 +137,7 @@ public class ScreenContract extends ScreenDecorator {
 		
 		for (int i=0; i<getWidth()-1; i++)
 			for(int j=0; j<getHeight()-1; j++)
-				if(!(getCellNature_atPre[i][j] == getCellNature(i, j))) {
+				if(!(getCellNature_atPre[i][j] == getCellNature(i, j))&& (x!=i || y!=j)) {
 					throw new PostconditionError("ScreenContract, dig, d'autres cellules que la cellule du perso ont changé");
 		}
 	}

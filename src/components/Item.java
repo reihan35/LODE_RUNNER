@@ -9,6 +9,14 @@ public class Item implements ItemService {
 	protected int hgt;
 	protected int col;
 	
+	public void init(int id, ItemType type, int hgt, int col) {
+		this.id = id;
+		this.type = type;
+		this.hgt = hgt;
+		this.col = col;
+
+	}
+	
 	@Override
 	public int getId() {
 		return id;
@@ -17,15 +25,6 @@ public class Item implements ItemService {
 	@Override
 	public ItemType getNature() {
 		return type;
-	}
-
-	@Override
-	public void init(int id, ItemType type, int hgt, int col) {
-		this.id = id;
-		this.type = type;
-		this.hgt = hgt;
-		this.col = col;
-
 	}
 
 }

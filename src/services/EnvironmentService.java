@@ -2,7 +2,9 @@ package services;
 
 import java.util.ArrayList;
 
-public interface EnvironmentService extends ScreenService {
+import components.Player;
+
+public interface EnvironmentService extends EditableScreenService {
 	/**
 	 * observators
 	 */
@@ -19,6 +21,24 @@ public interface EnvironmentService extends ScreenService {
 	 */
 	
 	ArrayList<CharacterService> getCellContentChar(int x, int y);
+	
+	/*
+	 * DES PRES ET POST A RAJOUTE !
+	 * */
+
+	void addCellContentItem(int x, int y,ItemService i);
+	
+	/*
+	 * DES PRES ET POST A RAJOUTE !
+	 * */
+	
+	void addCellContentChar(int x, int y, CharacterService c);
+	
+	/*
+	 * DES PRES ET POST A RAJOUTE !
+	 * */
+	
+	void removeCellContentItem(int x , int y ,ItemService i);
 	
 	/**
 	 * invariants :

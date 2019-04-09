@@ -27,17 +27,20 @@ public class Screen implements ScreenService {
 
 	@Override
 	public Cell getCellNature(int x, int y) {
+		System.out.println();
 		return cellNature[x][y];
 	}
 
 	@Override
-	public void init(int h, int w) {
+	public void init(int w, int h) {
 		height = h;
 		width = w;
-		cellNature = new Cell[w][h];
-		for(int i=0; i<w-1; i++)
-			for(int j=0; j<h-1; j++)
+		cellNature = new Cell[w][h]; 
+		for(int i=0; i<w; i++) {
+			for(int j=0; j<h; j++) {
 				cellNature[i][j] = Cell.EMP;
+			}
+		}
 	}
 
 	@Override
