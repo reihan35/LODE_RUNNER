@@ -27,4 +27,9 @@ public class Item implements ItemService {
 		return type;
 	}
 
+	@Override
+	public void printItem() {
+		System.out.println("Item d'id " + id);
+	}
+
 }

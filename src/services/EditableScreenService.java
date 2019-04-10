@@ -6,18 +6,20 @@ public interface EditableScreenService extends ScreenService {
 	/**
 	 * observators
 	 */
-	
 
-	public boolean isPlayable();
+	/**
+	 * predicates
+	 */
 	
 	/**
-	 * invariants
-	 * inv : Playable() = \forall (x, y) in [0;getWidth()[ X [0;getHeight()[
+	 * def : Playable() = \forall (x, y) in [0;getWidth()[ X [0;getHeight()[
 	 * 						getCellNature(x, y) != HOL 
 	 * 					&& \forall x in [0;getWidth()[
 	 * 						getCellNature(x,0) == MTL
 	 *
 	 **/
+	
+	public boolean isPlayable();
 	
 	/**
 	 * operators

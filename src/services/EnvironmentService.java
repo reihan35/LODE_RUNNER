@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import components.Player;
 
-public interface EnvironmentService extends EditableScreenService {
+public interface EnvironmentService extends ScreenService {
 	/**
 	 * observators
 	 */
@@ -39,6 +39,8 @@ public interface EnvironmentService extends EditableScreenService {
 	 * */
 	
 	void removeCellContentItem(int x , int y ,ItemService i);
+
+	void printCellContentItem(int x, int y);
 	
 	/**
 	 * invariants :

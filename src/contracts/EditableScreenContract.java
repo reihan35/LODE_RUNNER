@@ -13,28 +13,6 @@ public class EditableScreenContract extends EditableScreenDecorator implements E
 		super(delegates);
 	}
 
-	/**
-	 * invariants
-	 * inv : Playable() = \forall (x, y) in [0;getWidth()[ X [0;getHeight()[
-	 * 						getCellNature(x, y) != HOL 
-	 * 					&& \forall x in [0;getWidth()[
-	 * 						getCellNature(x,0) == MTL
-	 *
-	 **/
-	public void checkInvariants() {
-		
-		for (int i=0; i<getWidth(); i++)
-			for(int j=0; j<getHeight()-1; j++) 
-				if(!(getCellNature(i, j) !=Cell.HOL)) {
-					throw new InvariantError("cellNature ne doit pas etre un trou");
-				}
-		
-		for (int i=0; i<getWidth(); i++)
-			if(!(getCellNature(i, 0) !=Cell.MTL)) {
-				throw new InvariantError("le niveau 0 de l'ecran doit comporter uniquement des plateformes en metal");
-			}
-		
-	}
 	
 	/**
 	 * operators
@@ -52,7 +30,6 @@ public class EditableScreenContract extends EditableScreenDecorator implements E
 		if(!isInWindow(x, y)) {
 			throw new PreconditionError("isInWindow(x, y)");
 		}
-		//checkInvariants();
 		
 		Cell[][] getCellNature_atPre = new Cell[getWidth()][getHeight()];
 		for (int i=0; i<getWidth(); i++)
@@ -61,7 +38,6 @@ public class EditableScreenContract extends EditableScreenDecorator implements E
 		
 		super.setNature(x, y, c);
 		
-		//checkInvariants();
 		
 		if(!(getCellNature(x, y) == c)) {
 			throw new PostconditionError("l'etat de la cellule n'a pas la valeur voulue");

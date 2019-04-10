@@ -13,5 +13,7 @@ public interface ItemService {
 	 * Constuctor
 	 **/
 	
-	public void init(int id,ItemType type,int hgt,int col);
+	public void init(int id,ItemType type,int hgt,int wdt);
+	
+	public void printItem();
 }

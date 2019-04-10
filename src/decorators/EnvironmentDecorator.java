@@ -9,7 +9,7 @@ import services.CharacterService;
 import services.EnvironmentService;
 import services.ItemService;
 
-public class EnvironmentDecorator extends EditableScreenContract implements EnvironmentService{
+public class EnvironmentDecorator extends ScreenContract implements EnvironmentService{
 	
 	
 	public EnvironmentDecorator(EnvironmentService delegates) {
@@ -43,6 +43,11 @@ public class EnvironmentDecorator extends EditableScreenContract implements Envi
 	@Override
 	public void removeCellContentItem(int x, int y, ItemService i) {
 		delegates.removeCellContentItem(x, y, i);
+	}
+
+	@Override
+	public void printCellContentItem(int x, int y) {
+		delegates.printCellContentItem(x, y);
 	}
 
 
