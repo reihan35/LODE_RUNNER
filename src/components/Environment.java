@@ -5,18 +5,32 @@ import java.util.Arrays;
 
 import services.Cell;
 import services.CharacterService;
+import services.EditableScreenService;
 import services.EnvironmentService;
 import services.ItemService;
 import services.ItemType;
 
 public class Environment extends Screen implements EnvironmentService {
+	
 	protected ArrayList<ItemService>[][] cellContentItems;
 	protected ArrayList<CharacterService>[][] cellContentChar;
+	protected EditableScreenService s;
+	
 	@Override
 	public ArrayList<ItemService> getCellContentItem(int x, int y) {
 		return cellContentItems[x][y];
 	}
 	
+	@Override
+	public void init(EditableScreenService s) {
+		this.s = s;
+	}
+	
+	@Override
+	public EditableScreenService getScreen() {
+		// TODO Auto-generated method stub
+		return s;
+	}
 
 	@Override
 	public ArrayList<CharacterService> getCellContentChar(int x, int y) {

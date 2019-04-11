@@ -6,18 +6,23 @@ import contracts.EditableScreenContract;
 import contracts.ScreenContract;
 import services.Cell;
 import services.CharacterService;
+import services.EditableScreenService;
 import services.EnvironmentService;
 import services.ItemService;
 
 public class EnvironmentDecorator extends ScreenContract implements EnvironmentService{
 	
 	
+	EnvironmentService delegates;
+
 	public EnvironmentDecorator(EnvironmentService delegates) {
 		super(delegates);
 	}
-
-	EnvironmentService delegates;
-
+	
+	@Override
+	public void init(EditableScreenService s) {
+		delegates.init(s);
+	}
 	@Override
 	public ArrayList<ItemService> getCellContentItem(int x, int y) {
 		return delegates.getCellContentItem(x, y);
@@ -48,6 +53,12 @@ public class EnvironmentDecorator extends ScreenContract implements EnvironmentS
 	@Override
 	public void printCellContentItem(int x, int y) {
 		delegates.printCellContentItem(x, y);
+	}
+
+	@Override
+	public EditableScreenService getScreen() {
+		// TODO Auto-generated method stub
+		return delegates.getScreen();
 	}
 
 

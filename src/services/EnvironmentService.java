@@ -9,18 +9,19 @@ public interface EnvironmentService extends ScreenService {
 	 * observators
 	 */
 	
+	public void init(EditableScreenService s);
 	
 	/**
 	 * pre : isInWindow(int x, int y) 
 	 */
 	
-	ArrayList<ItemService> getCellContentItem(int x, int y);
+	public ArrayList<ItemService> getCellContentItem(int x, int y);
 	
 	/**
 	 * pre : isInWindow(int x, int y) 
 	 */
 	
-	ArrayList<CharacterService> getCellContentChar(int x, int y);
+	public ArrayList<CharacterService> getCellContentChar(int x, int y);
 	
 	/*
 	 * DES PRES ET POST A RAJOUTE !
@@ -38,9 +39,16 @@ public interface EnvironmentService extends ScreenService {
 	 * DES PRES ET POST A RAJOUTE !
 	 * */
 	
-	void removeCellContentItem(int x , int y ,ItemService i);
+	public void removeCellContentItem(int x , int y ,ItemService i);
 
-	void printCellContentItem(int x, int y);
+	public void printCellContentItem(int x, int y);
+
+	/**
+	 * AJOUR DE PRES / POST
+	 * @return
+	 */
+	
+	public EditableScreenService getScreen();
 	
 	/**
 	 * invariants :

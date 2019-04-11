@@ -10,6 +10,7 @@ import services.EnvironmentService;
 import services.GuardService;
 import services.ItemService;
 import services.PlayerService;
+import services.Stat;
 import services.Status;
 
 public class EngineDecorator implements EngineService {
@@ -49,7 +50,7 @@ public class EngineDecorator implements EngineService {
 	}
 
 	@Override
-	public Status getStatus() {
+	public Stat getStatus() {
 		// TODO Auto-generated method stub
 		return delegates.getStatus();
 	}
@@ -65,5 +66,13 @@ public class EngineDecorator implements EngineService {
 		// TODO Auto-generated method stub
 		delegates.step();
 	}
+
+	@Override
+	public int getHoles(int x, int y) {
+		// TODO Auto-generated method stub
+		return delegates.getHoles(x, y);
+	}
+	
+
 
 }

@@ -15,5 +15,8 @@ public interface ItemService {
 	
 	public void init(int id,ItemType type,int hgt,int wdt);
 	
+	public int getHgt();
+	public int getWdt();
+	
 	public void printItem();
 }

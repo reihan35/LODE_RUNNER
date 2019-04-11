@@ -2,6 +2,7 @@ package components;
 
 import java.util.ArrayList;
 
+import services.Cell;
 import services.Command;
 import services.Coordinates;
 import services.EditableScreenService;
@@ -11,16 +12,20 @@ import services.GuardService;
 import services.ItemService;
 import services.ItemType;
 import services.PlayerService;
-import services.Status;
+import services.Stat;
+import services.Stat;
 
 public class Engine implements EngineService {
 	
 	private EnvironmentService env;
 	private PlayerService player;
-	public ArrayList<GuardService> guards;
-	public ArrayList<ItemService> treasures;
-	public Status s;
-	public ArrayList<Command> commands;
+	private ArrayList<GuardService> guards;
+	private ArrayList<ItemService> treasures;
+	private Stat s;
+	private ArrayList<Command> commands;
+	private int[][] holesTimes;
+
+	
 	
 	public void init(EditableScreenService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
 			ArrayList<Coordinates> treasuresCoord) {
@@ -29,7 +34,7 @@ public class Engine implements EngineService {
 		for(Coordinates c : treasuresCoord) {
 			Item i = new Item();
 			i.init(id++,ItemType.TREASURE,c.getX(),c.getY());
-			treasures.add(id,i);
+			treasures.add(i);
 			env.addCellContentItem(c.getX(),c.getY(), i);
 		}
 		
@@ -38,7 +43,12 @@ public class Engine implements EngineService {
 		Player p = new Player();
 		p.init(env, h_play, w_play);
 		env.addCellContentChar(h_play,w_play,p);
-		s = Status.PLAYING;
+		s = Stat.PLAYING;
+		for(int i = 0 ; i < getEnvi().getWidth() ; i++) {
+			for(int j = 0 ; j < getEnvi().getHeight() ; j++) {
+				holesTimes[i][j] = -1;
+			}
+		}
 
 	}
 	
@@ -64,7 +74,7 @@ public class Engine implements EngineService {
 	}
 
 	@Override
-	public Status getStatus() {
+	public Stat getStatus() {
 		// TODO Auto-generated method stub
 		return s;
 	}
@@ -85,15 +95,38 @@ public class Engine implements EngineService {
 	
 
 	@Override
+	public int getHoles(int x , int y) {
+		return holesTimes[x][y];
+	}
+	
+	
+	public void paceOfTime() {
+		for (int i = 0; i < getEnvi().getWidth(); i++) {
+			for (int j = 0 ; j < getEnvi().getHeight(); j++) {
+				if (getEnvi().getCellNature(i, j) == Cell.HOL) {
+					if(holesTimes[i][j] + 1 != 15) {
+						holesTimes[i][j] = holesTimes[i][j] + 1;
+					}
+					else {
+						holesTimes[i][j] = 0;
+					}
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void step() {
 		// TODO Auto-generated method stub
-		while(s != Status.WIN) {
+		while(s != Stat.WIN) {
 			containTreasure();
 			if (treasures.size() == 0 ) {
-				s = Status.WIN;
+				s = Stat.WIN;
 			}
 			player.step();
 		}
+		paceOfTime();
 	}
+
 
 }

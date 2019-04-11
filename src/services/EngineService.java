@@ -21,9 +21,9 @@ public interface EngineService {
 	 */
 	public ArrayList<GuardService> getGuards();
 	public ArrayList<ItemService> getTreasures();
-	public Status getStatus();
+	public Stat getStatus();
 	public Command getNextCommand();
-	public void Holes();
+	public int getHoles(int x, int y);
 	
 	/**
 	 * invariants

@@ -1,6 +1,6 @@
 package services;
 
 
-public enum Status {
+public enum Stat {
 	PLAYING, WIN, LOSS;
 }
