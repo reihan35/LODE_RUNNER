@@ -23,6 +23,7 @@ public interface EngineService {
 	public ArrayList<ItemService> getTreasures();
 	public Status getStatus();
 	public Command getNextCommand();
+	public void Holes();
 	
 	/**
 	 * invariants
@@ -32,6 +33,8 @@ public interface EngineService {
 	 * 		g in getEnvi().getCellContentChar(t.getWdt(),t.getHgt())
 	 * getTreasures().size() == 0 implies getStatus() = WIN
 	 * Player p = getPlayer() in getEnvi().getCellContentChar(p.getWdt(), p.getHgt())
+	 * p.willDigRight() implies Holes(x,y) = 0
+	 * p.willDigLeft() implies Holes(x,y) = 0
 	 */
 
 	/**
@@ -58,6 +61,14 @@ public interface EngineService {
 	 * 			implies getStatus() == LOSS
 	 * post: exists Treasure t in getEnvi().getCellContentItem(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
 	 * 			implies not exists t in getTreasures()
+	 * post : forall (x, y) in [0;getWidth()[ X [0;getHeight()[ 
+	 * 			&& getCellNature(x, y) == HOL implies Holes(x,y) == Holes(x,y)@pre + 1
+	 * 
+	 * post : forall (x, y) in [0;getWidth()[ X [0;getHeight()[ 
+	 * 			&& getCellNature(x, y) == HOL && Holes(x,y) == 15 implies getCellNature(x, y) == PLT 
+	 * 															 && getPlayer.getHgt() == x
+	 * 															 &&	getPlayer.getWdt() == y
+	 * 															 implies getStatus() = Status.LOSS
 	 */
 	public void step();
 }

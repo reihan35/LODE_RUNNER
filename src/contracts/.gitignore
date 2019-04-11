@@ -6,3 +6,5 @@
 /PostconditionError.class
 /PreconditionError.class
 /ScreenContract.class
+/PlayerContract.class
+/EngineContract.class
