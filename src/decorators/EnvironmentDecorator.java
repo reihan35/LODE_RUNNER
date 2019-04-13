@@ -17,10 +17,12 @@ public class EnvironmentDecorator extends ScreenContract implements EnvironmentS
 
 	public EnvironmentDecorator(EnvironmentService delegates) {
 		super(delegates);
+		this.delegates = delegates;
 	}
 	
 	@Override
 	public void init(EditableScreenService s) {
+		System.out.println(delegates);
 		delegates.init(s);
 	}
 	@Override
@@ -49,16 +51,10 @@ public class EnvironmentDecorator extends ScreenContract implements EnvironmentS
 	public void removeCellContentItem(int x, int y, ItemService i) {
 		delegates.removeCellContentItem(x, y, i);
 	}
-
 	@Override
-	public void printCellContentItem(int x, int y) {
-		delegates.printCellContentItem(x, y);
-	}
-
-	@Override
-	public EditableScreenService getScreen() {
-		// TODO Auto-generated method stub
-		return delegates.getScreen();
+	public void removeCellContentChar(int x, int y, CharacterService c) {
+		delegates.removeCellContentChar(x, y, c);
+		
 	}
 
 

@@ -14,30 +14,12 @@ public class PlayerDecorator extends CharacterContract implements PlayerService 
 	
 	public PlayerDecorator(PlayerService delegates) {
 		super(delegates);
+		this.delegates = delegates;
 	}
 	
 	@Override
 	public EngineService getEngine() {
 		return delegates.getEngine();
-	}
-
-
-	@Override
-	public boolean willFall() {
-		// TODO Auto-generated method stub
-		return delegates.willFall();
-	}
-
-	@Override
-	public boolean willDigRight() {
-		// TODO Auto-generated method stub
-		return  delegates.willDigLeft();
-	}
-
-	@Override
-	public boolean willDigLeft() {
-		// TODO Auto-generated method stub
-		return delegates.willDigLeft();
 	}
 
 	@Override

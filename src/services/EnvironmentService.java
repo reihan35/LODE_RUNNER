@@ -9,6 +9,16 @@ public interface EnvironmentService extends ScreenService {
 	 * observators
 	 */
 	
+	
+	/**
+	 * 
+	 * pre: s.isPlayable()
+	 * 
+	 * post: getWidth() == s.getWidth()
+	 * post: getHeight() == s.getHeight()
+	 * post: forall (x, y) in [0;getWidth()[,[0:getHeight()[,
+	 * 			getCellNature(x, y) == s.getCellNature(x, y)
+	 */
 	public void init(EditableScreenService s);
 	
 	/**
@@ -24,31 +34,39 @@ public interface EnvironmentService extends ScreenService {
 	public ArrayList<CharacterService> getCellContentChar(int x, int y);
 	
 	/*
-	 * DES PRES ET POST A RAJOUTE !
+	 * pre: isInWindow(int x, int y)
+	 * 
+	 * post: i in getCellContentChar(x, y)
 	 * */
 
 	void addCellContentItem(int x, int y,ItemService i);
 	
 	/*
-	 * DES PRES ET POST A RAJOUTE !
+	 * pre: isInWindow(int x, int y)
+	 * 
+	 * c in getCellContentChar(x, y)
 	 * */
 	
 	void addCellContentChar(int x, int y, CharacterService c);
 	
 	/*
-	 * DES PRES ET POST A RAJOUTE !
+	 * pre: isInWindow(int x, int y)
+	 * pre: i in getCellContentItem(x, y)
+	 * 
+	 * post: i not in getCellContentItem(x, y)
 	 * */
 	
 	public void removeCellContentItem(int x , int y ,ItemService i);
-
-	public void printCellContentItem(int x, int y);
-
-	/**
-	 * AJOUR DE PRES / POST
-	 * @return
-	 */
 	
-	public EditableScreenService getScreen();
+	
+	/*
+	 * pre: isInWindow(int x, int y)
+	 * pre: i in getCellContentChar(x, y)
+	 * 
+	 * post: i not in getCellContentChar(x, y)
+	 * */
+	public void removeCellContentChar(int x, int y, CharacterService c);
+
 	
 	/**
 	 * invariants :

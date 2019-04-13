@@ -1,5 +1,6 @@
 package services;
 
+import util.SetUtil;
 
 public interface CharacterService{
 	/**
@@ -12,20 +13,29 @@ public interface CharacterService{
 	public int getHgt();
 	public int getWdt();	
 	/**
-	 * predicates
+	 * invariants de minimisation
 	 *
 	 */
 	
 	/**
-	 * predicate definition:
+	 * definition:
 	 * exists Character c in getEnvi().getCellContent(x, y)
 	 */
-	public boolean characterAt(int x, int y);
+	default public boolean characterAt(int x, int y) {
+		return getEnvi().getCellContentChar(x, y).size() > 0;
+	}
 	
 	/**
 	 * getEnvi().getCellNature(x, y) in {EMP, LAD, HDR, HOL}
 	 */
-	public boolean isFreeCell(int x, int y);
+	default public boolean isFreeCell(int x, int y) {
+		Cell currCell = getEnvi().getCellNature(x, y);
+		Cell[] free = {Cell.LAD, Cell.EMP, Cell.HDR, Cell.HOL};
+		if(SetUtil.isIn(currCell, free)) {
+			return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * invariants

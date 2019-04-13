@@ -26,21 +26,6 @@ public class Character implements CharacterService {
 	}
 	
 
-	@Override
-	public boolean characterAt(int x, int y) {
-		// TODO Auto-generated method stub
-		return getEnvi().getCellContentChar(x, y).size() > 0;
-	}
-
-	@Override
-	public boolean isFreeCell(int x, int y) {
-		Cell currCell = getEnvi().getCellNature(x, y);
-		Cell[] free = {Cell.LAD, Cell.EMP, Cell.HDR, Cell.HOL};
-		if(SetUtil.isIn(currCell, free)) {
-			return true;
-		}
-		return false;
-	}
 
 	@Override
 	public void init(EnvironmentService s, int x, int y) {

@@ -15,6 +15,16 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		// TODO Auto-generated constructor stub
 	}
 
+	/** post : willFall() implies goDown()
+	 *  post : willDigRight() implies getCellNature(getWdt()+1,getHgt()-1) = HOL 
+	 *  post : willDigLeft() implies getCellNature(getWdt()-1,getHgt()-1) = HOL
+	 *  post : getEngine().getNextCommand() = UP implies goUp()
+	 *  post : getEngine().getNextCommand() = DOWN implies goDown()
+	 *  post : getEngine().getNextCommand() = RIGHT implies goRight()
+	 *  post : getEngine().getNextCommand() = LEFT implies goLeft()
+	 *  post : getEngine().getNextCommand() = NEUTRAL implies stay()
+	 *  
+	 **/
 	@Override
 	public void step() {
 		EngineService engine_at_pre = getEngine();

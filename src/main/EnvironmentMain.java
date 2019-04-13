@@ -15,7 +15,7 @@ public class EnvironmentMain {
 		EnvironmentService e = new Environment();
 		EnvironmentService econtrat = new EnvironmentContract(e);
 		econtrat.init(2, 2);
-		econtrat.printCellContentItem(0, 0);
+		//econtrat.printCellContentItem(0, 0);
 	}
 
 }

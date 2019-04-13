@@ -9,9 +9,7 @@ import java.awt.image.ImageObserver;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
 import javax.swing.JApplet;
@@ -23,23 +21,19 @@ import javax.swing.plaf.basic.BasicTreeUI.KeyHandler;
 import components.EditableScreen;
 import components.Engine;
 import components.Environment;
-import contracts.EditableScreenContract;
-import contracts.EngineContract;
-import contracts.EnvironmentContract;
 import services.Cell;
 import services.Command;
 import services.Coordinates;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
-import services.ItemService;
 import services.PlayerService;
 
 import java.util.ArrayList;
 
 
 //Problems: Agents stay at their position in the window, not in the world --> once out of the window, they disappear!
-public class SpriteDemo extends JPanel implements KeyListener{
+public class SpriteDemo2 extends JPanel implements KeyListener{
 
 	Image emp, mtl, lad, hdr, treas, player, plt, hol;
 
@@ -53,12 +47,12 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	//world seen
 	private EditableScreenService level;
 	private EngineService moteur;
-	private ArrayList<Coordinates> treasures;
+	
 	//whole world
 	private EnvironmentService envi;
 	
 
-	public SpriteDemo()
+	public SpriteDemo2()
 	{
 		try
 		{
@@ -77,14 +71,14 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			System.exit(-1);
 		}
 
-		moteur = new EngineContract(new Engine());
-		level = new EditableScreenContract(new EditableScreen());
-		envi = new EnvironmentContract(new Environment());
-		treasures = new ArrayList<>();
-		level.init(28, 16);
+		moteur = new Engine();
+		level = new EditableScreen();
+		envi = new Environment();
+		level.init(16, 16);
 		parseLevel("Levels/Level1.txt");
 		envi.init(level);
 		ArrayList<Coordinates> guards = new ArrayList<>();
+		ArrayList<Coordinates> treasures = new ArrayList<>();
 		moteur.init(envi, new Coordinates(0, 1), guards, treasures);
 		frame = new JFrame("World of Sprite");
 		frame.add(this);
@@ -110,35 +104,24 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	                String[] tokens = line.split(" ");
 	                System.out.println(tokens[0]);
 	                Cell c = Cell.EMP;
-	                boolean cellNature = false;
-	                boolean treasure = false;
 	                switch(tokens[0]) {
 	                case "EMP":
 	                	c = Cell.EMP;
-	                	cellNature = true;
 	                	break;
 	                case "HDR":
 	                	c = Cell.HDR;
-	                	cellNature = true;
 	                	break;
 	                case "MTL":
 	                	c = Cell.MTL;
-	                	cellNature = true;
 	                	break;
 	                case "LAD":
 	                	c = Cell.LAD;
-	                	cellNature = true;
 	                	break;
 	                case "PLT":
 	                	c = Cell.PLT;
-	                	cellNature = true;
-	                	break;
-	                case "TRE":
-	                	treasures.add(new Coordinates(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
 	                	break;
 	                }
-	                if(cellNature)
-	                	level.setNature(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), c);
+	                level.setNature(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), c);
 	            }
 
 	        } catch (IOException e) {
@@ -161,12 +144,6 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		case KeyEvent.VK_RIGHT:
 			moteur.addCommand(Command.RIGHT);
 			break;
-		case KeyEvent.VK_Z:
-			moteur.addCommand(Command.DIGR);
-			break;
-		case KeyEvent.VK_X:
-			moteur.addCommand(Command.DIGL);
-			break;
 		default:
 			System.out.println("Other key");
 			break;
@@ -187,8 +164,6 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		//g.drawImage(emp,spriteLength*0,(moteur.getEnvi().getHeight()-(0 + 2))*spriteLength,spriteLength,spriteLength, frame);
 		//Graphics2D g2 = (Graphics2D)g;
 		//paints the world (and adds the WeatherTime)
-		
-		
 		
 		for(int i = 0; i < moteur.getEnvi().getWidth(); i++) {
 			for(int j = 0; j < moteur.getEnvi().getHeight(); j++) {
@@ -221,12 +196,6 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				g.drawImage(img,pos_x,pos_y,spriteLength,spriteLength, frame);
 			}
 		}
-		for(ItemService item: moteur.getTreasures()) {
-			int pos_x = item.getWdt()*spriteLength;
-			int pos_y = (moteur.getEnvi().getHeight()-(item.getHgt()+2))*spriteLength;
-		
-			g.drawImage(treas,pos_x,pos_y,spriteLength,spriteLength, frame);
-		}
 		
 		PlayerService p = moteur.getPlayer();
 		int pos_x = p.getWdt()*spriteLength;
@@ -237,7 +206,6 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
-		
 		frame.repaint();
 	}
 
@@ -248,7 +216,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		int nombreDePasMaximum = 10000;
 		int it = 0;
 		
-		SpriteDemo sd = new SpriteDemo();
+		SpriteDemo2 sd = new SpriteDemo2();
 		sd.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//sd.map.initEnv();
 		/*try {

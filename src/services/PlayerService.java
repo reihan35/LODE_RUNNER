@@ -1,5 +1,6 @@
 package services;
 
+import util.SetUtil;
 
 public interface PlayerService extends CharacterService {
 	/**
@@ -15,26 +16,69 @@ public interface PlayerService extends CharacterService {
 	 * && not characterAt(getWdt(), getHgt()-1)
 	 * && getEnvi().getCellNature(getWdt(),getHgt()) not in {LAD, HDR}
 	**/
-	public boolean willFall();
+	default public boolean willFall() {
+		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
+		Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
+		Cell[] emp ={Cell.HOL,Cell.EMP};
+		Cell[] lad ={Cell.LAD,Cell.HDR};
+		return SetUtil.isIn(downCell,emp) && ! characterAt(getWdt(),getHgt()-1) && ! SetUtil.isIn(currCell,lad);
+	}
+	
 	
 	/**
-	 *  def = getEngine().getNextCommand() = DigR
-	 *  not isFreeCell(getWdt(),getHgt()-1)  
-	 *  || not characterAt(getWdt(), getHgt()-1)
+	 *  def = 
+	 *  getWdt() != getEnvi().getWidth()-1
+	 *  && getEnvi().getCellContentItem(getWdt() + 1, getHgt()).size() == 0
+	 *  && getEngine().getNextCommand() == DIGR
+	 *  && (getEnvi().getCellNature(getWdt(),getHgt()-1) not in {EMP,HOL,HDR}  
+	 *  	|| characterAt(getWdt(), getHgt()-1))
 	 *  && isFreeCell(getWdt()+1,getHgt()) 
-	 *  && getEnvi().getCellNature(getWdt()+1,getHgt()-1) = PLT
+	 *  && getEnvi().getCellNature(getWdt()+1,getHgt()-1) == PLT
 	 */
-	public boolean willDigRight();
+	default public boolean willDigRight() {
+		if(getWdt() == getEnvi().getWidth()-1) {
+			return false;
+		}
+		if(getEnvi().getCellContentItem(getWdt() + 1, getHgt()).size() > 0) {
+			return false;
+		}
+		Cell[] canDig ={Cell.LAD,Cell.PLT, Cell.MTL};
+		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
+		if(getEngine().getNextCommand() == Command.DIGR) {
+			if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
+				return isFreeCell(getWdt()+1,getHgt()) && getEnvi().getCellNature(getWdt()+1,  getHgt()-1)==Cell.PLT;
+			}
+		}
+		return false;
+	}
 
 	
 	/**
-	 *  def = getEngine().getNextCommand() = DigL
-	 *  not isFreeCell(getWdt(),getHgt()-1)  
-	 *  || not characterAt(getWdt(), getHgt()-1)
+	 *  def = 
+	 *  getWdt() != 0
+	 *  && getEnvi().getCellContentItem(getWdt() - 1, getHgt()).size() == 0
+	 *  && getEngine().getNextCommand() == DIGR
+	 *  && (getEnvi().getCellNature(getWdt(),getHgt()-1) not in {EMP,HOL,HDR}  
+	 *  	|| characterAt(getWdt(), getHgt()-1))
 	 *  && isFreeCell(getWdt()-1,getHgt()) 
-	 *  && getEnvi().getCellNature(getWdt()-1,getHgt()-1) = PLT
+	 *  && getEnvi().getCellNature(getWdt()-1,getHgt()-1) == PLT
 	 */
-	public boolean willDigLeft();
+	default public boolean willDigLeft() {
+		if(getWdt() == 0) {
+			return false;
+		}
+		if(getEnvi().getCellContentItem(getWdt() - 1, getHgt()).size() > 0) {
+			return false;
+		}
+		Cell[] canDig ={Cell.LAD,Cell.PLT, Cell.MTL};
+		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);		
+		if(getEngine().getNextCommand() == Command.DIGL) {
+			if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
+				return isFreeCell(getWdt()-1,getHgt()) && getEnvi().getCellNature(getWdt()-1,  getHgt()-1)==Cell.PLT;
+			}
+		}
+		return false;
+	}
 	
 	public void init(EngineService e, int w, int h);
 	

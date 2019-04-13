@@ -17,6 +17,10 @@ public class EngineDecorator implements EngineService {
 	EngineService delegates;
 	
 	
+	public EngineDecorator(EngineService delegates) {
+		this.delegates = delegates;
+	}
+
 	@Override
 	public void init(EnvironmentService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
 			ArrayList<Coordinates> treasuresCoord) {

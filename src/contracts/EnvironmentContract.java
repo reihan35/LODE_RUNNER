@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import decorators.EnvironmentDecorator;
 import services.Cell;
 import services.CharacterService;
+import services.EditableScreenService;
 import services.EnvironmentService;
 import services.ItemService;
 import services.ItemType;
@@ -15,6 +16,7 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 	
 	public EnvironmentContract(EnvironmentService delegates) {
 		super(delegates);
+		System.out.println(("yayra"));
 	}
 
 	/**
@@ -40,6 +42,39 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 		return super.getCellContentChar(x, y);
 	}
 	
+	/*
+	 * constructors
+	 */
+	
+	/**
+	 * 
+	 * pre: s.isPlayable()
+	 * 
+	 * post: getWidth() == s.getWidth()
+	 * post: getHeight() == s.getHeight()
+	 * post: forall (x, y) in [0;getWidth()[,[0:getHeight()[,
+	 * 			getCellNature(x, y) == s.getCellNature(x, y)
+	 */
+	public void init(EditableScreenService s) {
+		if(!s.isPlayable()) {
+			throw new PreconditionError("L'ecran n'est pas jouable");
+		}
+		super.init(s);
+		if(s.getWidth() != getWidth()) {
+			throw new PostconditionError("La largeur de l'environnement n'a pas été bien initialisée");
+		}
+		if(s.getHeight() != getHeight()) {
+			throw new PostconditionError("La hauteur de l'environnement n'a pas été bien initialisée");
+		}
+		for(int x = 0; x < getWidth(); x++) {
+			for(int y = 0; y < getHeight(); y++) {
+				if(getCellNature(x, y) != s.getCellNature(x, y)) {
+					throw new PostconditionError("L'état de l'environnement n'a pas été bien initialisé");
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * invariants :
@@ -47,7 +82,7 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 	 *			forall (Character c1, Character c2) in (getCellContent(x,y), getCellContent(x,y)
 	 *				c1 = c2
 	 *
-	 * inv:�forall (int x, int y) in [0;getWidth()[ X [0;getHeight()[
+	 * inv: forall (int x, int y) in [0;getWidth()[ X [0;getHeight()[
 	 * 			getCellNature(x,y) in {MTL, PLT} implies getCellContent(x,y)={}
 	 * 
 	 * inv: forall (int x, int y) in [0;getWidth()[ X [0;getHeight()[
@@ -95,6 +130,87 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 			}
 		}
 	
+	}
+	
+	
+	/*
+	 * pre: isInWindow(int x, int y)
+	 * 
+	 * post: i in getCellContentChar(x, y)
+	 * */
+
+	public void addCellContentItem(int x, int y,ItemService i) {
+		if(!isInWindow(x, y)) {
+			throw new PreconditionError("La position specifiee n'est pas dans la fenetre");
+		}
+		checkInvariants();
+		super.addCellContentItem(x, y, i);
+		checkInvariants();
+		if(!getCellContentItem(x, y).contains(i)) {
+			throw new PostconditionError("L'objet n'a pas été correctement ajouté");
+		}
+	}
+	
+	/*
+	 * pre: isInWindow(int x, int y)
+	 * 
+	 * c in getCellContentChar(x, y)
+	 * */
+	
+	public void addCellContentChar(int x, int y, CharacterService c) {
+		if(!isInWindow(x, y)) {
+			throw new PreconditionError("La position specifiee n'est pas dans la fenetre");
+		}
+		checkInvariants();
+		super.addCellContentChar(x, y, c);
+		checkInvariants();
+		if(!getCellContentChar(x, y).contains(c)) {
+			throw new PostconditionError("Le personnage n'a pas été correctement ajouté dans sa case");
+		}
+	}
+	
+	/*
+	 * pre: isInWindow(int x, int y)
+	 * pre: i in getCellContentItem(x, y)
+	 * 
+	 * post: i not in getCellContentItem(x, y)
+	 * */
+	
+	public void removeCellContentItem(int x , int y ,ItemService i) {
+		if(!isInWindow(x, y)) {
+			throw new PreconditionError("La position specifiee n'est pas dans la fenetre");
+		}
+		if(!getCellContentItem(x, y).contains(i)) {
+			throw new PostconditionError("L'item voulu n'est pas dans la case");
+		}
+		checkInvariants();
+		super.removeCellContentItem(x, y, i);
+		checkInvariants();
+		if(getCellContentItem(x, y).contains(i)) {
+			throw new PostconditionError("L'item n'a pas été enlevé de la case");
+		}
+	}
+	
+	
+	/*
+	 * pre: isInWindow(int x, int y)
+	 * pre: i in getCellContentChar(x, y)
+	 * 
+	 * post: i not in getCellContentChar(x, y)
+	 * */
+	public void removeCellContentChar(int x, int y, CharacterService c) {
+		if(!isInWindow(x, y)) {
+			throw new PreconditionError("La position specifiee n'est pas dans la fenetre");
+		}
+		if(!getCellContentChar(x, y).contains(c)) {
+			throw new PostconditionError("Le personnage voulu n'est pas dans la case");
+		}
+		checkInvariants();
+		super.removeCellContentChar(x, y, c);
+		checkInvariants();
+		if(getCellContentChar(x, y).contains(c)) {
+			throw new PostconditionError("Le personnage n'a pas été enlevé de la case");
+		}
 	}
 
 }

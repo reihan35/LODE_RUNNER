@@ -1,5 +1,11 @@
 package components;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 import services.Cell;
@@ -22,7 +28,7 @@ public class Engine implements EngineService {
 	private ArrayList<GuardService> guards;
 	private ArrayList<ItemService> treasures;
 	private Stat s;
-	private ArrayList<Command> commands;
+	private Command nextCommand;
 	private int[][] holesTimes;
 
 	
@@ -33,14 +39,21 @@ public class Engine implements EngineService {
 		int id = 0;
 		
 		guards = new ArrayList<GuardService>();
-		commands = new ArrayList<Command>();
 		treasures = new ArrayList<ItemService>();
 		holesTimes = new int[screen.getWidth()][screen.getHeight()];
 		
 		for(Coordinates c : treasuresCoord) {
-			Item i = new Item();
+			ItemService i = new Item();
 			i.init(id++,ItemType.TREASURE,c.getX(),c.getY());
 			treasures.add(i);
+			try {
+				String s1 = c.getX() + " " + c.getY() + "\n";
+				Files.write(Paths.get("error.txt"), s1.getBytes(), StandardOpenOption.APPEND);
+			    
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			env.addCellContentItem(c.getX(),c.getY(), i);
 		}
 		
@@ -55,6 +68,7 @@ public class Engine implements EngineService {
 				holesTimes[i][j] = -1;
 			}
 		}
+		nextCommand = Command.NEUTRAL;
 
 	}
 	
@@ -88,21 +102,15 @@ public class Engine implements EngineService {
 	@Override
 	public Command getNextCommand() {
 		// TODO Auto-generated method stub
-		System.out.println("nb items dans commande : " + commands.size());
 
-		if (commands.size() == 0) {
-			commands.add(Command.NEUTRAL);
-		}
-		Command c = commands.get(0);
-		commands.remove(0);
-		return c;
+		return nextCommand;
 	}
 	
 	public void containTreasure() {
-		ArrayList<ItemService> items = getEnvi().getCellContentItem(player.getHgt(),player.getWdt());
+		ArrayList<ItemService> items = getEnvi().getCellContentItem(player.getWdt(),player.getHgt());
 		if(items.size() > 0){
-			treasures.remove(items.get(0).getId());
-			getEnvi().removeCellContentItem(player.getHgt(),player.getWdt(),items.get(0));
+			treasures.remove(items.get(0));
+			getEnvi().removeCellContentItem(player.getWdt(),player.getHgt(),items.get(0));
 		}
 	}
 	
@@ -121,7 +129,8 @@ public class Engine implements EngineService {
 						holesTimes[i][j] = holesTimes[i][j] + 1;
 					}
 					else {
-						holesTimes[i][j] = 0;
+						holesTimes[i][j] = -1;
+						getEnvi().fill(i, j);
 					}
 				}
 			}
@@ -132,21 +141,33 @@ public class Engine implements EngineService {
 	public void step() {
 		// TODO Auto-generated method stub
 		System.out.println("wdt vaut : " + player.getWdt());
+		try {
+			ArrayList<ItemService> items = getEnvi().getCellContentItem(player.getHgt(),player.getWdt());
+			String s1 = "taille liste tresor : " +items.size()+"\n";
+			String s2 = "coordonnees du joueur " + player.getWdt() + " " + player.getHgt()+"\n";
+			String s = s1+s2;
+			Files.write(Paths.get("error.txt"), s.getBytes(), StandardOpenOption.APPEND);
+		    
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
 		if(s != Stat.WIN) {
 			containTreasure();
 			if (treasures.size() == 0 ) {
 				//s = Stat.WIN;
 			}
+			getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
 			player.step();
-		
+			getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
 			paceOfTime();
 		}
 	}
 
 	@Override
 	public void addCommand(Command c) {
-		System.out.println("salut");
-		commands.add(c);
+		nextCommand = c;
 		
 	}
 

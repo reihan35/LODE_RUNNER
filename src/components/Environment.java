@@ -30,12 +30,6 @@ public class Environment extends Screen implements EnvironmentService {
 			}
 		}
 	}
-	
-	@Override
-	public EditableScreenService getScreen() {
-		// TODO Auto-generated method stub
-		return s;
-	}
 
 	@Override
 	public ArrayList<CharacterService> getCellContentChar(int x, int y) {
@@ -57,6 +51,12 @@ public class Environment extends Screen implements EnvironmentService {
 	}
 	
 	@Override
+	public void removeCellContentChar(int x, int y, CharacterService c) {
+		cellContentChar[x][y].remove(c);
+		
+	}
+	
+	
 	public void printCellContentItem(int x, int y) {
 		
 		ArrayList<ItemService> items = cellContentItems[x][y];
