@@ -23,7 +23,12 @@ public class Environment extends Screen implements EnvironmentService {
 	
 	@Override
 	public void init(EditableScreenService s) {
-		this.s = s;
+		this.init(s.getWidth(), s.getHeight());
+		for(int x = 0; x < getWidth(); x++) {
+			for(int y = 0; y < getHeight(); y++) {
+				cellNature[x][y] = s.getCellNature(x, y);
+			}
+		}
 	}
 	
 	@Override
@@ -75,10 +80,6 @@ public class Environment extends Screen implements EnvironmentService {
 		for(int x = 0; x < getWidth(); x++) {
 			for(int y = 0; y < getHeight(); y++) {
 				cellContentItems[x][y] = new ArrayList<ItemService>();
-				ItemService i = new Item();
-				i.init(1,ItemType.TREASURE,x,y);
-				addCellContentItem(x,y,i);
-				printCellContentItem(x,y);
 				cellContentChar[x][y] = new ArrayList<CharacterService>();
 			}
 		}

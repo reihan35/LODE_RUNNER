@@ -24,6 +24,7 @@ public interface EngineService {
 	public Stat getStatus();
 	public Command getNextCommand();
 	public int getHoles(int x, int y);
+	public void addCommand(Command c);
 	
 	/**
 	 * invariants
@@ -48,7 +49,7 @@ public interface EngineService {
 	 * 			exists Treasure t in getTreasures() with t.getWdt() == x && t.getHgt() == y
 	 * post: getStatus() == PLAYING
 	 */
-	public void init(EditableScreenService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
+	public void init(EnvironmentService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
 				ArrayList<Coordinates> treasuresCoord);
 	
 	

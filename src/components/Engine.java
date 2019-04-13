@@ -27,10 +27,16 @@ public class Engine implements EngineService {
 
 	
 	
-	public void init(EditableScreenService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
+	public void init(EnvironmentService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
 			ArrayList<Coordinates> treasuresCoord) {
-		env = (Environment) screen;
+		env = screen;
 		int id = 0;
+		
+		guards = new ArrayList<GuardService>();
+		commands = new ArrayList<Command>();
+		treasures = new ArrayList<ItemService>();
+		holesTimes = new int[screen.getWidth()][screen.getHeight()];
+		
 		for(Coordinates c : treasuresCoord) {
 			Item i = new Item();
 			i.init(id++,ItemType.TREASURE,c.getX(),c.getY());
@@ -40,9 +46,9 @@ public class Engine implements EngineService {
 		
 		int h_play = playerCoord.getX();
 		int w_play = playerCoord.getY();
-		Player p = new Player();
-		p.init(env, h_play, w_play);
-		env.addCellContentChar(h_play,w_play,p);
+		player = new Player();
+		player.init(this, h_play, w_play);
+		env.addCellContentChar(h_play,w_play,player);
 		s = Stat.PLAYING;
 		for(int i = 0 ; i < getEnvi().getWidth() ; i++) {
 			for(int j = 0 ; j < getEnvi().getHeight() ; j++) {
@@ -82,7 +88,14 @@ public class Engine implements EngineService {
 	@Override
 	public Command getNextCommand() {
 		// TODO Auto-generated method stub
-		return commands.get(commands.size());
+		System.out.println("nb items dans commande : " + commands.size());
+
+		if (commands.size() == 0) {
+			commands.add(Command.NEUTRAL);
+		}
+		Command c = commands.get(0);
+		commands.remove(0);
+		return c;
 	}
 	
 	public void containTreasure() {
@@ -118,14 +131,23 @@ public class Engine implements EngineService {
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
-		while(s != Stat.WIN) {
+		System.out.println("wdt vaut : " + player.getWdt());
+		if(s != Stat.WIN) {
 			containTreasure();
 			if (treasures.size() == 0 ) {
-				s = Stat.WIN;
+				//s = Stat.WIN;
 			}
 			player.step();
+		
+			paceOfTime();
 		}
-		paceOfTime();
+	}
+
+	@Override
+	public void addCommand(Command c) {
+		System.out.println("salut");
+		commands.add(c);
+		
 	}
 
 

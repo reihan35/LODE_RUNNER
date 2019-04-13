@@ -36,6 +36,8 @@ public interface PlayerService extends CharacterService {
 	 */
 	public boolean willDigLeft();
 	
+	public void init(EngineService e, int w, int h);
+	
 	/**
 	 * operators
 	 */

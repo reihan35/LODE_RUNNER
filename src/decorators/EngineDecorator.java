@@ -11,14 +11,14 @@ import services.GuardService;
 import services.ItemService;
 import services.PlayerService;
 import services.Stat;
-import services.Status;
+import services.Stat;
 
 public class EngineDecorator implements EngineService {
 	EngineService delegates;
 	
 	
 	@Override
-	public void init(EditableScreenService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
+	public void init(EnvironmentService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
 			ArrayList<Coordinates> treasuresCoord) {
 		// TODO Auto-generated method stub
 		delegates.init(screen, playerCoord, guardsCoord, treasuresCoord);
@@ -71,6 +71,12 @@ public class EngineDecorator implements EngineService {
 	public int getHoles(int x, int y) {
 		// TODO Auto-generated method stub
 		return delegates.getHoles(x, y);
+	}
+
+	@Override
+	public void addCommand(Command c) {
+		delegates.addCommand(c);
+		
 	}
 	
 

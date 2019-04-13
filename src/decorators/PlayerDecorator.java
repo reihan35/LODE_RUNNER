@@ -1,6 +1,5 @@
 package decorators;
 
-import com.sun.org.apache.regexp.internal.CharacterIterator;
 
 import contracts.CharacterContract;
 import services.CharacterService;
@@ -45,6 +44,12 @@ public class PlayerDecorator extends CharacterContract implements PlayerService 
 	public void step() {
 		// TODO Auto-generated method stub
 		delegates.step();
+		
+	}
+
+	@Override
+	public void init(EngineService e, int w, int h) {
+		delegates.init(e, w, h);
 		
 	}
 
