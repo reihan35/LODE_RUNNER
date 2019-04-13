@@ -141,17 +141,6 @@ public class Engine implements EngineService {
 	public void step() {
 		// TODO Auto-generated method stub
 		System.out.println("wdt vaut : " + player.getWdt());
-		try {
-			ArrayList<ItemService> items = getEnvi().getCellContentItem(player.getHgt(),player.getWdt());
-			String s1 = "taille liste tresor : " +items.size()+"\n";
-			String s2 = "coordonnees du joueur " + player.getWdt() + " " + player.getHgt()+"\n";
-			String s = s1+s2;
-			Files.write(Paths.get("error.txt"), s.getBytes(), StandardOpenOption.APPEND);
-		    
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	    
 		if(s != Stat.WIN) {
 			containTreasure();
