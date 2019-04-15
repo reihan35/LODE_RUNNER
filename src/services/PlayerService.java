@@ -12,14 +12,14 @@ public interface PlayerService extends CharacterService {
 	 * predicate definition:
 	**/
 	 
-	/** def = getEnvi().getCellNature(getWdt(),getHgt()-1) in {HOL, EMP} 
+	/** def = getEnvi().getCellNature(getWdt(),getHgt()-1) in {HOL, EMP, HDR,LAD} 
 	 * && not characterAt(getWdt(), getHgt()-1)
 	 * && getEnvi().getCellNature(getWdt(),getHgt()) not in {LAD, HDR}
 	**/
 	default public boolean willFall() {
 		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
 		Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
-		Cell[] emp ={Cell.HOL,Cell.EMP};
+		Cell[] emp ={Cell.HOL,Cell.EMP, Cell.HDR};
 		Cell[] lad ={Cell.LAD,Cell.HDR};
 		return SetUtil.isIn(downCell,emp) && ! characterAt(getWdt(),getHgt()-1) && ! SetUtil.isIn(currCell,lad);
 	}

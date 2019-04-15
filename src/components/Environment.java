@@ -46,7 +46,7 @@ public class Environment extends Screen implements EnvironmentService {
 	
 	@Override
 	public void removeCellContentItem(int x, int y, ItemService i) {
-		cellContentItems[x][y].remove(i.getId());
+		cellContentItems[x][y].remove(i);
 		
 	}
 	
