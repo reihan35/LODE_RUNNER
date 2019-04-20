@@ -86,6 +86,10 @@ public class ScreenContract extends ScreenDecorator {
 				getCellNature_atPre[i][j] = getCellNature(i, j);
 			}
 		}
+
+		if (getCellNature(x, y)== Cell.HOL) {
+			throw new PreconditionError("la case en question est deja un trou !");
+		}
 		
 		super.dig(x, y);
 		if(getHeight_atPre != getHeight() || getWidth_atPre != getWidth()) {
@@ -125,6 +129,12 @@ public class ScreenContract extends ScreenDecorator {
 		for (int i=0; i<getWidth()-1; i++)
 			for(int j=0; j<getHeight()-1; j++)
 				getCellNature_atPre[i][j] = getCellNature(i, j);
+		
+		
+		if (getCellNature(x, y)== Cell.PLT) {
+			throw new PreconditionError("la case en question est deja remplit !");
+		}
+		
 		
 		super.fill(x, y);
 		

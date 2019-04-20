@@ -64,7 +64,7 @@ public class CharacterContract extends CharacterDecorator implements CharacterSe
 	 * post: getWdt() == x
 	 */
 	public void init(EnvironmentService s, int x, int y) {
-		if(!(getEnvi().getCellNature(x, y) == Cell.EMP)) {
+		if(!(s.getCellNature(x, y) == Cell.EMP)) {
 			throw new PreconditionError("Le personnage n'a pas spawn sur une case vide");
 		}
 		super.init(s, x, y);
@@ -193,31 +193,23 @@ public class CharacterContract extends CharacterDecorator implements CharacterSe
 	public void goUp() {
 		EnvironmentService envi_atPre = getEnvi();
 		int getHgt_atPre = getHgt();
-		int getWdt_atPre = getWdt();
-		
+		int getWdt_atPre = getWdt();	
 		checkInvariants();
 		super.goUp();
 		checkInvariants();
 		if(!(envi_atPre == getEnvi())) {
 			throw new InvariantError("La valeur d'une constante a changé");
 		}
-		
 		if(getWdt() != getWdt_atPre) {
 			throw new PostconditionError("La position x du personnage a changé pour une deplacement vers le haut");
 		}
-		
 		if(getHgt_atPre != getEnvi().getHeight()
 			&& getEnvi().getCellNature(getWdt(), getHgt_atPre) == Cell.LAD
 			&& isFreeCell(getWdt(), getHgt_atPre + 1)
 			&& !(characterAt(getWdt(), getHgt_atPre + 1))){
-				if(getHgt_atPre != getHgt() + 1) {
+				if(getHgt() != getHgt_atPre - 1) {
 					throw new PostconditionError("Le personnage ne s'est pas deplace vers le haut alors qu'il aurait du");
-				}
-				else {
-					if(getHgt_atPre != getHgt()) {
-						throw new PostconditionError("Le personnage s'est deplace alors qu'il aurait du rester en position");
-					}
-				}				
+				}		
 		}
 	}
 	
@@ -234,31 +226,29 @@ public class CharacterContract extends CharacterDecorator implements CharacterSe
 	 * 
 	 */
 	public void goDown() {
+
 		EnvironmentService envi_atPre = getEnvi();
 		int getHgt_atPre = getHgt();
 		int getWdt_atPre = getWdt();
-		
+		System.out.println(getHgt_atPre);
+
+		System.out.println("je passe ici");
 		checkInvariants();
 		super.goDown();
 		checkInvariants();
 		if(!(envi_atPre == getEnvi())) {
-			throw new InvariantError("La valeur d'une constante a changé");
+			throw new InvariantError("La valeur d'une constante a change");
 		}
 		
 		if(getWdt() != getWdt_atPre) {
-			throw new PostconditionError("La position x du personnage a changé pour une deplacement vers le haut");
+			throw new PostconditionError("La position x du personnage a changee pour une deplacement vers le haut");
 		}
 		
 		if(getHgt_atPre != 0
 			&& isFreeCell(getWdt(), getHgt_atPre - 1)
 			&& !(characterAt(getWdt(), getHgt_atPre - 1))){
-				if(getHgt_atPre != getHgt() - 1) {
+				if(getHgt() != getHgt_atPre - 1) {
 					throw new PostconditionError("Le personnage ne s'est pas deplace vers le bas alors qu'il aurait du");
-				}
-				else {
-					if(getHgt_atPre != getHgt()) {
-						throw new PostconditionError("Le personnage s'est deplace alors qu'il aurait du rester en position");
-					}
 				}				
 		}
 		
@@ -277,7 +267,7 @@ public class CharacterContract extends CharacterDecorator implements CharacterSe
 		super.stay();
 		checkInvariants();
 		if(!(envi_atPre == getEnvi())) {
-			throw new InvariantError("La valeur d'une constante a changé");
+			throw new InvariantError("La valeur d'une constante a change");
 		}
 		
 		if(getWdt() != getWdt_atPre || getHgt() != getHgt_atPre) {

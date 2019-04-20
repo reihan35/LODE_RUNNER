@@ -15,6 +15,7 @@ public class ScreenMain {
 		int w = scontrat.getWidth();
 		scontrat.fill(0,1 );
 		System.out.println(scontrat.getCellNature(0,1));
+		scontrat.fill(0, 1);
 		System.out.println(scontrat.getCellNature(0,0));
 	}
 

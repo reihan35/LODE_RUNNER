@@ -20,6 +20,7 @@ public class Player extends Character implements PlayerService {
 	@Override
 	public void step() {
 		if(willFall()) {
+			System.out.println("je fais goDown");
 			goDown();
 		}
 		else {

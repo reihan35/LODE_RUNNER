@@ -54,6 +54,7 @@ public interface ScreenService {
 	
 	/**								
 	 * creuse un trou dans la cellule de coordonnes (x, y)
+	 * pre : getCellNatire@pre == PLT
 	 * post: getCellNature(x, y) == HOL
 	 * post: forall (x, y) in [0;getWidth()[ X [0;getHeight()[
  	 *			(x != u || y != v)  
@@ -63,6 +64,7 @@ public interface ScreenService {
 	
 	/**								
 	 * remplit un trou dans la cellule de coordonnes (x, y)
+	 * pre : getCellNature@pre = HOL
 	 * post: getCellNature(x, y) == PLT
 	 * post: forall (x, y) in [0;getWidth()[ X [0;getHeight()[
  	 *			(x != u || y != v)  

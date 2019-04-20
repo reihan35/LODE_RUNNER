@@ -1,5 +1,7 @@
 package components;
 
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
 import services.Cell;
 import services.ScreenService;
 

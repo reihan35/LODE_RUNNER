@@ -30,8 +30,8 @@ public class Character implements CharacterService {
 	@Override
 	public void init(EnvironmentService s, int x, int y) {
 		this.envi = s;
-		this.hgt = y;
 		this.wdt = x;
+		this.hgt = y;
 
 	}
 
@@ -39,13 +39,16 @@ public class Character implements CharacterService {
 	public void goLeft() {
 		Cell currCell = getEnvi().getCellNature(wdt, hgt);
 		Cell downCell = getEnvi().getCellNature(wdt, hgt-1);
+		System.out.println((currCell == Cell.LAD || currCell == Cell.HDR));
 		if(wdt != 0
 			&& isFreeCell(wdt-1, hgt)
-			&& ((currCell == Cell.LAD || currCell == Cell.HDR)
-				|| (downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
-				|| characterAt(wdt, hgt-1))
+			&& (!(currCell == Cell.LAD || currCell == Cell.HDR)
+				|| !(downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
+				|| !characterAt(wdt, hgt-1))
 			&& !characterAt(wdt-1, hgt)) {
-			wdt--;
+			wdt = wdt - 1;
+			System.out.println("je comprends pas ");
+			System.out.println(getWdt());
 		}
 
 	}
@@ -56,11 +59,11 @@ public class Character implements CharacterService {
 		Cell downCell = getEnvi().getCellNature(wdt, hgt-1);
 		if(wdt != getEnvi().getWidth()-1
 			&& isFreeCell(wdt+1, hgt)
-			&& ((currCell == Cell.LAD || currCell == Cell.HDR)
-				|| (downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
-				|| characterAt(wdt, hgt-1))
+			&& (!(currCell == Cell.LAD || currCell == Cell.HDR)
+				|| !(downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
+				||! characterAt(wdt, hgt-1))
 			&& !characterAt(wdt+1, hgt)) {
-			wdt++;
+			wdt = wdt + 1;
 		}
 
 	}
@@ -70,15 +73,19 @@ public class Character implements CharacterService {
 		Cell currCell = getEnvi().getCellNature(wdt, hgt);
 		if(hgt != getEnvi().getHeight()-1 
 			&& isFreeCell(wdt, hgt+1)
-			&& currCell == Cell.LAD)
-			hgt++;
+			&& currCell == Cell.LAD
+			&& !characterAt(wdt, hgt+1))
+			hgt = hgt + 1;
 
 	}
 
 	@Override
 	public void goDown() {
-		if(hgt != 0 && isFreeCell(wdt, hgt-1)) {
-			hgt --;
+		if(hgt != 0 && isFreeCell(wdt, hgt-1) && !characterAt(wdt, hgt-1)) {
+			System.out.println("avant" + hgt);
+			hgt = hgt - 1;
+			System.out.println("apres" + hgt);
+			System.out.println(getHgt());
 		}
 
 	}

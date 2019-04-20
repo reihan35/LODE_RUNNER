@@ -13,7 +13,6 @@ public interface EnvironmentService extends ScreenService {
 	/**
 	 * 
 	 * pre: s.isPlayable()
-	 * 
 	 * post: getWidth() == s.getWidth()
 	 * post: getHeight() == s.getHeight()
 	 * post: forall (x, y) in [0;getWidth()[,[0:getHeight()[,
@@ -52,7 +51,7 @@ public interface EnvironmentService extends ScreenService {
 	/*
 	 * pre: isInWindow(int x, int y)
 	 * pre: i in getCellContentItem(x, y)
-	 * 
+	 * pre : size(getCellContentItem(x, y)) > 0
 	 * post: i not in getCellContentItem(x, y)
 	 * */
 	
@@ -62,6 +61,7 @@ public interface EnvironmentService extends ScreenService {
 	/*
 	 * pre: isInWindow(int x, int y)
 	 * pre: i in getCellContentChar(x, y)
+	 * pre : size(getCellContentChar(x, y)) > 0
 	 * 
 	 * post: i not in getCellContentChar(x, y)
 	 * */

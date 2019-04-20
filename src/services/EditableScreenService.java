@@ -19,7 +19,17 @@ public interface EditableScreenService extends ScreenService {
 	 *
 	 **/
 	
-	public boolean isPlayable();
+	default public boolean isPlayable() {
+		System.out.println("cc");
+		for(int i = 0; i < getWidth(); i++)
+			for(int j = 0; j < getHeight(); j++)
+				if(getCellNature(i, j) == Cell.HOL)
+					return false;
+		for(int i = 0; i < getWidth(); i++)
+			if(getCellNature(i, 0) != Cell.MTL)
+				return false;
+		return true;
+	}
 	
 	/**
 	 * operators

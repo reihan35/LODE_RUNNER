@@ -56,6 +56,7 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 	 * 			getCellNature(x, y) == s.getCellNature(x, y)
 	 */
 	public void init(EditableScreenService s) {
+		System.out.println("dfsfds");
 		if(!s.isPlayable()) {
 			throw new PreconditionError("L'ecran n'est pas jouable");
 		}
@@ -123,8 +124,8 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 					}
 				}
 				if(existTreasure) {
-					if(!(getCellNature(x, y) == Cell.EMP && (getCellNature(x, y-1) == Cell.PLT || getCellNature(x, y-1) == Cell.MTL))) {
-						throw new InvariantError("Un tresor n'est pas situe sur une case vide ou n'est pas au dessus d'une plateforme");
+					if(!(getCellNature(x, y) == Cell.EMP || (getCellNature(x, y-1) == Cell.PLT || getCellNature(x, y-1) == Cell.MTL))) {
+						throw new InvariantError("Un tresor n'est pas situe sur une case vide ou n'est pas au dessus d'une plateforme alors qu'il le fallait ");
 					}
 				}
 			}
@@ -172,7 +173,7 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 	/*
 	 * pre: isInWindow(int x, int y)
 	 * pre: i in getCellContentItem(x, y)
-	 * 
+	 * pre : size(getCellContentItem(x, y)) > 0
 	 * post: i not in getCellContentItem(x, y)
 	 * */
 	
@@ -181,7 +182,10 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 			throw new PreconditionError("La position specifiee n'est pas dans la fenetre");
 		}
 		if(!getCellContentItem(x, y).contains(i)) {
-			throw new PostconditionError("L'item voulu n'est pas dans la case");
+			throw new PreconditionError("L'item voulu n'est pas dans la case");
+		}
+		if (getCellContentItem(x, y).size() == 0) {
+			throw new PreconditionError("La case est vide !");
 		}
 		checkInvariants();
 		super.removeCellContentItem(x, y, i);
@@ -195,6 +199,7 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 	/*
 	 * pre: isInWindow(int x, int y)
 	 * pre: i in getCellContentChar(x, y)
+	 * pre : size(getCellContentChar(x, y)) > 0
 	 * 
 	 * post: i not in getCellContentChar(x, y)
 	 * */
@@ -203,7 +208,10 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 			throw new PreconditionError("La position specifiee n'est pas dans la fenetre");
 		}
 		if(!getCellContentChar(x, y).contains(c)) {
-			throw new PostconditionError("Le personnage voulu n'est pas dans la case");
+			throw new PreconditionError("Le personnage voulu n'est pas dans la case");
+		}
+		if (getCellContentChar(x, y).size() == 0) {
+			throw new PreconditionError("La case est vide !");
 		}
 		checkInvariants();
 		super.removeCellContentChar(x, y, c);
