@@ -90,6 +90,7 @@ public class Character implements CharacterService {
 
 	}
 
+
 	@Override
 	public void stay() {
 

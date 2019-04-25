@@ -1,5 +1,7 @@
 package services;
 
+import components.Player;
+import util.SetUtil;
 
 public interface GuardService extends CharacterService {
 	/**
@@ -19,27 +21,43 @@ public interface GuardService extends CharacterService {
 	 * && not characterAt(getWdt(), getHgt()-1)
 	 * && getEnvi().getCellNature(getWdt(),getHgt()) not in {LAD, HDR}
 	 */
-	public boolean willFall();
+	default public boolean willFall() {
+		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
+		Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
+		Cell[] emp ={Cell.HOL,Cell.EMP};
+		Cell[] lad ={Cell.LAD,Cell.HDR};
+		return SetUtil.isIn(downCell,emp) && ! characterAt(getWdt(),getHgt()-1) && ! SetUtil.isIn(currCell,lad);
+	}
+	
 	
 	/**
-	 * getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Left
+	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Left
 	 */
-	public boolean willClimbLeft();
+	default public boolean willClimbLeft() {
+		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.LEFT;	
+	}
+	
 	
 	/**
-	 * getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Right 
+	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Right 
 	 */
-	public boolean willClimbRight();
+	default public boolean willClimbRight() {
+		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.RIGHT;
+	}
 	
 	/**
-	 * getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Neutral
+	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Neutral
 	 */
-	public boolean willStay();
+	default public boolean willStay() {
+		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.NEUTRAL;
+	}
 	
 	/**
-	 * getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole() < 5 * 5
+	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole() < 5 * 5
 	 */
-	public boolean willAddTime();
+	default public boolean willAddTime() {
+		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() < 5*5 ;
+	}
 	
 	/**
 	 * invariants
@@ -102,9 +120,9 @@ public interface GuardService extends CharacterService {
 	 *post: characterAt(getWdt()@pre-1, getHgt()+1)
 	 * 			implies getWdt() == getWdt()@pre && getHgt() == getHgt()@pre
 	 * 
-	 *post: getWdt()@pre != 0 && getEnvi().getCellNature(getWdt()@pre-1, getHgt()+1) not in {MLT, PLT}
+	 *post: getWdt()@pre != 0 && getEnvi().getCellNature(getWdt()@pre+1, getHgt()+1) not in {MLT, PLT}
 	 *		&& not characterAt(getWdt()@pre-1, getHgt()+1) 
-	 *			implies getWdt() == getWdt()@pre - 1 && etHgt() == getHgt()@pre + 1
+	 *			implies getWdt() == getWdt()@pre - 1 && getHgt() == getHgt()@pre + 1
 	**/
 	public void climbRight();
 	
@@ -118,7 +136,7 @@ public interface GuardService extends CharacterService {
 	 * 
 	 *post: getWdt()@pre != 0 && getEnvi().getCellNature(getWdt()@pre-1, getHgt()+1) not in {MLT, PLT}
 	 *		&& not characterAt(getWdt()@pre+1, getHgt()+1) //AJOUT DE LIBERTE DE CASE A VOIR
-	 *			implies getWdt() == getWdt()@pre - 1 && etHgt() == getHgt()@pre + 1
+	 *			implies getWdt() == getWdt()@pre - 1 && getHgt() == getHgt()@pre + 1
 	**/
 	public void climbLeft();
 	
@@ -135,5 +153,6 @@ public interface GuardService extends CharacterService {
 	 * post : getBehaviour() = Neutral implies stay()
 	 */
 	public void step();
+	void init(EngineService e, int w, int h, PlayerService p);
 
 }

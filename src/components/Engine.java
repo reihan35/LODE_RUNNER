@@ -67,7 +67,16 @@ public class Engine implements EngineService {
 			for(int j = 0 ; j < getEnvi().getHeight() ; j++) {
 				holesTimes[i][j] = -1;
 			}
+		}		
+		//Initialisaiton des gardes 
+		
+		for(Coordinates c : guardsCoord) {
+			GuardService g = new Guard();
+			g.init(this, c.getX(), c.getY(), player);
+			guards.add(g);
+			env.addCellContentChar(c.getX(), c.getY(), g);			
 		}
+
 		nextCommand = Command.NEUTRAL;
 
 	}
@@ -137,18 +146,35 @@ public class Engine implements EngineService {
 		}
 	}
 	
+	public boolean haschased() {
+		for(GuardService g : guards) {
+			if (g.getWdt() == getPlayer().getWdt() && g.getHgt() == getPlayer().getHgt()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
 		System.out.println("wdt vaut : " + player.getWdt());
 	    
-		if(s != Stat.WIN) {
+		if(s != Stat.WIN || s!= Stat.LOSS) {
 			containTreasure();
 			if (treasures.size() == 0 ) {
-				//s = Stat.WIN;
+				s = Stat.WIN;
+			}
+			if(haschased()) {
+				s = Stat.LOSS;
+				System.out.println("je suis pas la dedans");
 			}
 			getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
 			player.step();
+			for (GuardService g : guards ) {
+				System.out.println("on est la !");
+				g.step();
+			}
 			getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
 			paceOfTime();
 		}

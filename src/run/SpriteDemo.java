@@ -1,6 +1,7 @@
 package run;
 
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -17,8 +18,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.plaf.basic.BasicTreeUI.KeyHandler;
+
+import com.sun.org.apache.bcel.internal.generic.POP;
+import com.sun.webkit.PopupMenu;
 
 import components.EditableScreen;
 import components.Engine;
@@ -26,14 +31,19 @@ import components.Environment;
 import contracts.EditableScreenContract;
 import contracts.EngineContract;
 import contracts.EnvironmentContract;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Popup;
 import services.Cell;
 import services.Command;
 import services.Coordinates;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
+import services.GuardService;
 import services.ItemService;
 import services.PlayerService;
+import services.Stat;
 
 import java.util.ArrayList;
 
@@ -41,7 +51,7 @@ import java.util.ArrayList;
 //Problems: Agents stay at their position in the window, not in the world --> once out of the window, they disappear!
 public class SpriteDemo extends JPanel implements KeyListener{
 
-	Image emp, mtl, lad, hdr, treas, player, plt, hol;
+	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2;
 
 	public static final int spriteLength = 32;
 	
@@ -54,6 +64,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	private EditableScreenService level;
 	private EngineService moteur;
 	private ArrayList<Coordinates> treasures;
+	private ArrayList<Coordinates> guards;
 	//whole world
 	private EnvironmentService envi;
 	
@@ -62,14 +73,15 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	{
 		try
 		{
-			emp = ImageIO.read(new File("Sprites/EMP.png"));
-			hol = ImageIO.read(new File("Sprites/EMP.png"));
-			mtl = ImageIO.read(new File("Sprites/MTL.png"));
-			treas = ImageIO.read(new File("Sprites/TREASURE.png"));
-			player = ImageIO.read(new File("Sprites/PERSO.png"));
-			hdr = ImageIO.read(new File("Sprites/HDR.png"));
-			plt = ImageIO.read(new File("Sprites/PLT.png"));
-			lad = ImageIO.read(new File("Sprites/LADDER.png"));
+			emp = ImageIO.read(new File("Sprites/EMP2.png"));
+			hol = ImageIO.read(new File("Sprites/EMP2.png"));
+			mtl = ImageIO.read(new File("Sprites/MTL2.png"));
+			treas = ImageIO.read(new File("Sprites/TREASURE3.png"));
+			player = ImageIO.read(new File("Sprites/PERSO2modif.png"));
+			hdr = ImageIO.read(new File("Sprites/HDR2.png"));
+			plt = ImageIO.read(new File("Sprites/PLT2.png"));
+			lad = ImageIO.read(new File("Sprites/LADDER2.png"));
+			guard =  ImageIO.read(new File("Sprites/GUARD2.png"));
 		}
 		catch(Exception e)
 		{
@@ -81,12 +93,12 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		level = new EditableScreenContract(new EditableScreen());
 		envi = new EnvironmentContract(new Environment());
 		treasures = new ArrayList<>();
+		guards = new ArrayList<>();
 		level.init(28, 16);
 		parseLevel("Levels/Level1.txt");
 		envi.init(level);
-		ArrayList<Coordinates> guards = new ArrayList<>();
 		moteur.init(envi, new Coordinates(0, 1), guards, treasures);
-		frame = new JFrame("World of Sprite");
+		frame = new JFrame("LODE RUNNER");
 		frame.add(this);
 		frame.addKeyListener(this);
 		sizeWindow_x = spriteLength * moteur.getEnvi().getWidth();
@@ -136,6 +148,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	                case "TRE":
 	                	treasures.add(new Coordinates(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
 	                	break;
+	                case "GUA":
+	                	guards.add(new Coordinates(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
 	                }
 	                if(cellNature)
 	                	level.setNature(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), c);
@@ -228,11 +242,58 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			g.drawImage(treas,pos_x,pos_y,spriteLength,spriteLength, frame);
 		}
 		
+		for(GuardService gi: moteur.getGuards()) {
+			int pos_x = gi.getWdt()*spriteLength;
+			int pos_y = (moteur.getEnvi().getHeight()-(gi.getHgt()+2))*spriteLength;
+		
+			g.drawImage(guard,pos_x,pos_y,spriteLength,spriteLength, frame);
+		}
+		
 		PlayerService p = moteur.getPlayer();
+		if (moteur.getPlayer().willFall() && moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.EMP) {
+			try {
+				player2 = ImageIO.read(new File("Sprites/player_fall.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(moteur.getNextCommand()==Command.LEFT) {
+			
+		}
+		if (moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.LAD && (moteur.getNextCommand()==Command.UP || moteur.getNextCommand()==Command.DOWN)) {
+				try {
+					player2 = ImageIO.read(new File("Sprites/player_climb2.png"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}else {
+				if(moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.HDR)
+					try {
+						player2 = ImageIO.read(new File("Sprites/player_cheer1.png"));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				else {
+					player2 = player;
+				}
+				
+		}
 		int pos_x = p.getWdt()*spriteLength;
 		int pos_y = (moteur.getEnvi().getHeight()-(p.getHgt()+2))*spriteLength;
-		g.drawImage(player,pos_x,pos_y,spriteLength,spriteLength, frame);
+		g.drawImage(player2,pos_x,pos_y,spriteLength,spriteLength, frame);
 		moteur.step();
+		if (moteur.getStatus() == Stat.WIN) {
+			//je voulais faire un truc qui stop l'affichage et affiche un truc vous avez gagné j'ai beacoup cherché mais ca a pas marché mes trucs 
+
+		}
+		
+		if (moteur.getStatus() == Stat.LOSS) {
+			//idem
+		}
+		
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -255,7 +316,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			Thread.sleep(500);
 		} catch (InterruptedException e) */
 		while ( it != nombreDePasMaximum )
- 		{
+ 		{	
 			//System.out.println("Nous sommes le "+sd.map.wt.getDay()+"/"+sd.map.wt.getMonth()+", il est "+sd.map.wt.getHour()+" heures");
 
  			it++;

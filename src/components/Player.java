@@ -10,12 +10,19 @@ import util.SetUtil;
 public class Player extends Character implements PlayerService {
 	
 	private EngineService engine;
+	
+	@Override
+	public void init(EngineService e, int w, int h) {
+		super.init(e.getEnvi(), w, h);
+		engine = e;
+		
+	}
+	
 	@Override
 	public EngineService getEngine() {
 		// TODO Auto-generated method stub
 		return engine;
 	}
-	
 
 	@Override
 	public void step() {
@@ -54,14 +61,6 @@ public class Player extends Character implements PlayerService {
 			}
 		}
 
-	}
-
-
-	@Override
-	public void init(EngineService e, int w, int h) {
-		super.init(e.getEnvi(), w, h);
-		engine = e;
-		
 	}
 
 }
