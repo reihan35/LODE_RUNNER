@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 import services.Cell;
+import services.CharacterService;
 import services.Command;
 import services.Coordinates;
 import services.EditableScreenService;
@@ -131,15 +132,27 @@ public class Engine implements EngineService {
 	
 	
 	public void paceOfTime() {
+		System.out.println("je rentre dans pace");
 		for (int i = 0; i < getEnvi().getWidth(); i++) {
 			for (int j = 0 ; j < getEnvi().getHeight(); j++) {
 				if (getEnvi().getCellNature(i, j) == Cell.HOL) {
-					if(holesTimes[i][j] + 1 != 15) {
+					if(holesTimes[i][j] + 1 != 50) {
 						holesTimes[i][j] = holesTimes[i][j] + 1;
 					}
 					else {
-						holesTimes[i][j] = -1;
-						getEnvi().fill(i, j);
+						if(holesTimes[i][j] + 1 == 50) {
+							if(getEnvi().getCellContentChar(i, j).size() != 0) {
+								System.out.println("il s'agit de" + getEnvi().getCellContentChar(i, j));
+								for (CharacterService c : getEnvi().getCellContentChar(i, j)) {
+									if (c instanceof GuardService) {
+										((GuardService) c).Reinitialize();
+									}
+								}
+							holesTimes[i][j] = -1;
+							getEnvi().fill(i, j);
+							}
+							
+						}
 					}
 				}
 			}
@@ -167,15 +180,14 @@ public class Engine implements EngineService {
 			}
 			if(haschased()) {
 				s = Stat.LOSS;
-				System.out.println("je suis pas la dedans");
 			}
-			getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
+			//getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
 			player.step();
 			for (GuardService g : guards ) {
 				System.out.println("on est la !");
 				g.step();
 			}
-			getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
+			//getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
 			paceOfTime();
 		}
 	}

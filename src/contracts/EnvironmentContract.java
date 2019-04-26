@@ -7,6 +7,7 @@ import services.Cell;
 import services.CharacterService;
 import services.EditableScreenService;
 import services.EnvironmentService;
+import services.GuardService;
 import services.ItemService;
 import services.ItemType;
 import services.ScreenService;
@@ -96,7 +97,7 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 			for(int y = 0; y < getHeight(); y++) {
 				for(CharacterService c1: getCellContentChar(x, y)) {
 					for(CharacterService c2: getCellContentChar(x, y)) {
-						if(c1 != c2) {
+						if(c1 != c2 && !(c1 instanceof GuardService) && !(c2 instanceof GuardService)) {
 							throw new InvariantError("2 personnages differents sur la même case");
 						}
 					}

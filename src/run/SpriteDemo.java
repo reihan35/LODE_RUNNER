@@ -51,12 +51,12 @@ import java.util.ArrayList;
 //Problems: Agents stay at their position in the window, not in the world --> once out of the window, they disappear!
 public class SpriteDemo extends JPanel implements KeyListener{
 
-	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2;
+	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2, lost,une,deux,trois,won;
 
 	public static final int spriteLength = 32;
 	
-	final int sizeWindow_x;
-	final int sizeWindow_y;
+	int sizeWindow_x;
+	int sizeWindow_y;
 	
 	
 	private JFrame frame;
@@ -67,7 +67,11 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	private ArrayList<Coordinates> guards;
 	//whole world
 	private EnvironmentService envi;
+	int vie = 3;
 	
+	public int get_vie() {
+		return vie;
+	}
 
 	public SpriteDemo()
 	{
@@ -82,6 +86,11 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			plt = ImageIO.read(new File("Sprites/PLT2.png"));
 			lad = ImageIO.read(new File("Sprites/LADDER2.png"));
 			guard =  ImageIO.read(new File("Sprites/GUARD2.png"));
+			lost = ImageIO.read(new File("Sprites/buttonX.png"));
+			une = ImageIO.read(new File("Sprites/gamepad1.png"));
+			deux = ImageIO.read(new File("Sprites/gamepad2.png"));
+			trois = ImageIO.read(new File("Sprites/gamepad3.png"));
+			won = ImageIO.read(new File("Sprites/trophy.png"));
 		}
 		catch(Exception e)
 		{
@@ -210,31 +219,53 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				int pos_y = (moteur.getEnvi().getHeight()-(j+2))*spriteLength;
 				Image img = emp;
 				switch(moteur.getEnvi().getCellNature(i, j)) {
-				case EMP:
-					img = emp;
-					break;
-				case HDR:
-					img = hdr;
-					break;
-				case HOL:
-					img = hol;
-					break;
-				case LAD:
-					img = lad;
-					break;
-				case MTL:
-					img = mtl;
-					break;
-				case PLT:
-					img = plt;
-					break;
-				default:
-					break;
+					case EMP:
+						img = emp;
+						break;
+					case HDR:
+						img = hdr;
+						break;
+					case HOL:
+						img = hol;
+						break;
+					case LAD:
+						img = lad;
+						break;
+					case MTL:
+						img = mtl;
+						break;
+					case PLT:
+						img = plt;
+						break;
+					default:
+						break;
 				
 				};
 				g.drawImage(img,pos_x,pos_y,spriteLength,spriteLength, frame);
 			}
 		}
+		
+		Image img = emp;
+		
+		switch(vie) {
+			case 0:
+				g.drawImage(lost, 20, 15, 200, 200, frame);
+				System.exit(0);
+
+			case 1:
+				img = une;
+				break;
+			case 2:
+				img = deux;
+				break;
+			case 3:
+				img = trois;
+				break;
+	
+		};
+		
+		g.drawImage(img,22,22,spriteLength,spriteLength, frame);
+		
 		for(ItemService item: moteur.getTreasures()) {
 			int pos_x = item.getWdt()*spriteLength;
 			int pos_y = (moteur.getEnvi().getHeight()-(item.getHgt()+2))*spriteLength;
@@ -286,12 +317,28 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		g.drawImage(player2,pos_x,pos_y,spriteLength,spriteLength, frame);
 		moteur.step();
 		if (moteur.getStatus() == Stat.WIN) {
-			//je voulais faire un truc qui stop l'affichage et affiche un truc vous avez gagné j'ai beacoup cherché mais ca a pas marché mes trucs 
-
+			g.drawImage(won, 20, 20, 200, 200, frame);
 		}
 		
 		if (moteur.getStatus() == Stat.LOSS) {
-			//idem
+				moteur = new EngineContract(new Engine());
+				level = new EditableScreenContract(new EditableScreen());
+				envi = new EnvironmentContract(new Environment());
+				treasures = new ArrayList<>();
+				guards = new ArrayList<>();
+				level.init(28, 16);
+				parseLevel("Levels/Level1.txt");
+				envi.init(level);
+				moteur.init(envi, new Coordinates(18, 7), guards, treasures);
+				frame = new JFrame("LODE RUNNER");
+				frame.add(this);
+				frame.addKeyListener(this);
+				sizeWindow_x = spriteLength * moteur.getEnvi().getWidth();
+				sizeWindow_y = spriteLength * moteur.getEnvi().getHeight();
+				frame.setSize(sizeWindow_x, sizeWindow_y);
+				frame.setVisible(true);
+				vie--;
+				
 		}
 		
 		try {
@@ -315,7 +362,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		/*try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) */
-		while ( it != nombreDePasMaximum )
+		while ( it != nombreDePasMaximum && sd.get_vie()>=1 )
  		{	
 			//System.out.println("Nous sommes le "+sd.map.wt.getDay()+"/"+sd.map.wt.getMonth()+", il est "+sd.map.wt.getHour()+" heures");
 

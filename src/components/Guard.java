@@ -19,6 +19,8 @@ public class Guard extends Character implements GuardService {
 	private EngineService engine;
 	private int id;
 	private PlayerService p;
+	private int first_x;
+	private int first_y;
 	
 	@Override
 	public void init(EngineService e, int w, int h, PlayerService p) {
@@ -26,6 +28,8 @@ public class Guard extends Character implements GuardService {
 		this.p = p;
 		engine = e;
 		id = count++;
+		first_x = w;
+		first_y = h;
 		
 	}
 
@@ -97,18 +101,19 @@ public class Guard extends Character implements GuardService {
 		 Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
 		 Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
 		 Cell[] emp ={Cell.HOL, Cell.HDR};
-		 System.out.println("j'essaeye de travailler");
-		 System.out.println(!isFreeCell(getWdt(), getHgt()-1));
+		 
 		 if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1)) || (isFreeCell(getWdt(), getHgt()-1) && characterAt(getWdt(), getHgt()-1))){
-			
+
 			 if(getTarget().getWdt() < getWdt()) {
 				 return Move.LEFT;
 			 }
 			 if (getTarget().getWdt() > getWdt()) {
+				 System.out.println("JE VAIS A DROITE");
 				 return Move.RIGHT;
 			 }
 			 
 			 else {
+				 	System.out.println("JE VEUX SAVOIR");
 					return Move.NEUTRAL;
 				 
 			 }
@@ -136,8 +141,11 @@ public class Guard extends Character implements GuardService {
 		 }
 		 
 		 System.out.println(!isFreeCell(getWdt(), getHgt() - 1));
+		 System.out.println("HOHOHO");
+
 		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getWdt() < getTarget().getWdt() && (!isFreeCell(getWdt(), getHgt() - 1) 
 																											|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
+			 System.out.println("HOHOHO");
 			 if(getTarget().getHgt() - getHgt() > getTarget().getWdt()) {
 				 return Move.RIGHT;
 			 }
@@ -162,10 +170,12 @@ public class Guard extends Character implements GuardService {
 		 Cell UpCell = getEnvi().getCellNature(getWdt() + 1, getHgt() + 1);
 		 Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
 		 Cell[] fill ={Cell.MTL, Cell.PLT};
+		 System.out.println("je rentre dans climbRight");
 		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL){
+			System.out.println("je rentre meme la");
 			if (getWdt() != 0 && !SetUtil.isIn(UpCell, fill)) {
-				goUp();
-				goRight();
+				System.out.println("j'arrive jusque la");
+				Climb_Right();
 			}
 		}
 	}
@@ -178,59 +188,71 @@ public class Guard extends Character implements GuardService {
 		 Cell[] fill ={Cell.MTL, Cell.PLT};
 		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL){
 			if (getWdt() != 0 && !SetUtil.isIn(UpCell, fill)) {
-				goUp();
-				goLeft();
+				Climb_Left();
 			}
 		}
 		
 	}
-
+	
+	@Override
+	public void Reinitialize() {
+		System.out.println("je suis dans reinitialize");
+		transport(first_x,first_y);
+	}
 
 	@Override
 	public void step() {
 		System.out.println("je rentre dans step");
-		if(willFall()) {
-			System.out.println("je fais goDown");
-			goDown();
+		if(willClimbLeft() || willClimbRight()) {
+			if (willClimbLeft())
+				climbLeft();
+			else
+				climbRight();
 		}
 		else {
 			if(willAddTime() || willStay()) {
 				stay();
 			}
 			else {
-				if(willClimbLeft() || willClimbRight()) {
-					if (willClimbLeft())
-						climbLeft();
-					else
-						climbRight();
+				if (willReinitialize()) {
+					System.out.println("je suis pas venue ici");
+					Reinitialize();
 				}
 				else {
-					System.out.println("je suis ici sometimes");
-					 System.out.println("coucou");
-					 System.out.println(getTarget().getWdt());
-					 System.out.println(getWdt());
-					 System.out.println(getEnvi().getCellNature(getWdt(),getHgt()));
-					 System.out.println(getBehaviour());
-					switch(getBehaviour()) {
-					  case UP:
-						  goUp();
-						  break;
-					  case DOWN:
-						  goDown();
-						  break;
-					  case RIGHT:
-						  goRight();
-						  break;
-					  case LEFT:
-						  goLeft();
-						  break;
-					  case NEUTRAL:
-						  stay();
-						  break;
+					if(willFall()) {
+						System.out.println("*****************************************************\n"
+								+ "*******************************************************************\n"
+								+ "*************************************************************");
+						goDown();
 					}
-				}
-			}
-		}	
+					else {
+						System.out.println("je suis ici sometimes");
+						 System.out.println("coucou");
+						 System.out.println(getTarget().getWdt());
+						 System.out.println(getWdt());
+						 System.out.println(getEnvi().getCellNature(getWdt(),getHgt()));
+						 System.out.println(getBehaviour());
+						switch(getBehaviour()) {
+						  case UP:
+							  goUp();
+							  break;
+						  case DOWN:
+							  goDown();
+							  break;
+						  case RIGHT:
+							  goRight();
+							  break;
+						  case LEFT:
+							  goLeft();
+							  break;
+						  case NEUTRAL:
+							  stay();
+							  break;
+						}
+					}
+				}	
+			}	
+		}
 	}
 
 }

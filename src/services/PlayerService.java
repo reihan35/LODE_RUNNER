@@ -21,6 +21,11 @@ public interface PlayerService extends CharacterService {
 		Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
 		Cell[] emp ={Cell.HOL,Cell.EMP, Cell.HDR};
 		Cell[] lad ={Cell.LAD,Cell.HDR};
+		System.out.println("will fall de palayer");
+		System.out.println(characterAt(getWdt(), getHgt()-1));
+		if (downCell == Cell.HOL && characterAt(getWdt(), getHgt()-1)){
+			return false;
+		}
 		return SetUtil.isIn(downCell,emp) && ! characterAt(getWdt(),getHgt()-1) && ! SetUtil.isIn(currCell,lad);
 	}
 	

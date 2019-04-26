@@ -34,6 +34,7 @@ public interface GuardService extends CharacterService {
 	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Left
 	 */
 	default public boolean willClimbLeft() {
+		System.out.println("on est dans willClimbLeft : "  + getEnvi().getCellNature(getWdt(), getHgt()) + getBehaviour() );
 		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.LEFT;	
 	}
 	
@@ -42,6 +43,7 @@ public interface GuardService extends CharacterService {
 	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Right 
 	 */
 	default public boolean willClimbRight() {
+		 System.out.println("on est dans willClimbRight : "  + getEnvi().getCellNature(getWdt(), getHgt()) + getBehaviour() );
 		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.RIGHT;
 	}
 	
@@ -56,8 +58,17 @@ public interface GuardService extends CharacterService {
 	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole() < 5 * 5
 	 */
 	default public boolean willAddTime() {
+		System.out.println("le guard est dans : " + getWdt()+ getHgt());
+		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
 		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() < 5*5 ;
 	}
+	
+	default public boolean willReinitialize() {
+		System.out.println("le guard est dans reinitaze : " + getWdt()+ getHgt());
+		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
+		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == (5*2);
+	}
+	
 	
 	/**
 	 * invariants
@@ -154,5 +165,6 @@ public interface GuardService extends CharacterService {
 	 */
 	public void step();
 	void init(EngineService e, int w, int h, PlayerService p);
+	void Reinitialize();
 
 }
