@@ -1,6 +1,6 @@
 package services;
 
 public enum Cell {
-	EMP, PLT, HOL, LAD, HDR, MTL;
+	EMP, PLT, HOL, LAD, HDR, MTL, DOR;
 	
 }

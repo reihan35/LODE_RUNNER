@@ -26,6 +26,10 @@ public class Player extends Character implements PlayerService {
 
 	@Override
 	public void step() {
+		if(getEnvi().getCellNature(getWdt(), getHgt()) == Cell.DOR) {
+			System.out.println("je rentre avant trans");
+			transport(7, 10);
+		}
 		if(willFall()) {
 			System.out.println("je fais goDown");
 			goDown();

@@ -3,12 +3,16 @@ package components;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.sun.corba.se.impl.ior.GenericTaggedProfile;
+
 import services.Cell;
 import services.CharacterService;
 import services.Command;
 import services.EngineService;
 import services.EnvironmentService;
 import services.GuardService;
+import services.ItemService;
+import services.ItemType;
 import services.Move;
 import services.PlayerService;
 import util.SetUtil;
@@ -21,15 +25,17 @@ public class Guard extends Character implements GuardService {
 	private PlayerService p;
 	private int first_x;
 	private int first_y;
+	private boolean has_treasure;
 	
 	@Override
-	public void init(EngineService e, int w, int h, PlayerService p) {
+	public void init(EngineService e, int w, int h, PlayerService p,boolean has) {
 		super.init(e.getEnvi(), w, h);
 		this.p = p;
 		engine = e;
 		id = count++;
 		first_x = w;
 		first_y = h;
+		has_treasure = has;
 		
 	}
 
@@ -39,6 +45,22 @@ public class Guard extends Character implements GuardService {
 		return  id;
 
 	}
+	
+	@Override
+	public PlayerService getPlayer() {
+		return p;
+	}
+	
+	@Override
+	public EngineService getEngine() {
+		return engine;
+	}
+	
+	@Override
+	public boolean hasTreasure() {
+		return has_treasure;
+	}
+	
 	/**
 	 * invariants
 	 * inv: getEnvi().getCellNature(getWdt(),getHgt()) = LAD && getHgt() < getTarget().getHgt() 
@@ -102,7 +124,8 @@ public class Guard extends Character implements GuardService {
 		 Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
 		 Cell[] emp ={Cell.HOL, Cell.HDR};
 		 
-		 if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1)) || (isFreeCell(getWdt(), getHgt()-1) && characterAt(getWdt(), getHgt()-1))){
+		// if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1)) || (isFreeCell(getWdt(), getHgt()-1) && characterAt(getWdt(), getHgt()-1))){
+		if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1)) || (isFreeCell(getWdt(), getHgt()-1))){
 
 			 if(getTarget().getWdt() < getWdt()) {
 				 return Move.LEFT;
@@ -194,9 +217,18 @@ public class Guard extends Character implements GuardService {
 		
 	}
 	
+	public void drop_off() {
+		if(hasTreasure()) {
+			has_treasure = false;
+			getEngine().addTreasure( getWdt(), getHgt()+1);
+		}
+	}
+	
 	@Override
 	public void Reinitialize() {
 		System.out.println("je suis dans reinitialize");
+		System.out.println(first_x);
+		System.out.println(first_y);
 		transport(first_x,first_y);
 	}
 
@@ -220,10 +252,9 @@ public class Guard extends Character implements GuardService {
 				}
 				else {
 					if(willFall()) {
-						System.out.println("*****************************************************\n"
-								+ "*******************************************************************\n"
-								+ "*************************************************************");
 						goDown();
+						System.out.println("VAS-YYYYYY");
+						drop_off();
 					}
 					else {
 						System.out.println("je suis ici sometimes");

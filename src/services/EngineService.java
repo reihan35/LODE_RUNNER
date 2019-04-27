@@ -74,4 +74,5 @@ public interface EngineService {
 	 * post: Player p = getPlayer() in p.willDigLeft()@pre implies getHoles(p.getWdt()@pre-1,p.getHgt()@pre-1) = 0
 	 */
 	public void step();
+	void addTreasure(int wdt, int hgt);
 }

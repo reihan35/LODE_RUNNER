@@ -1,5 +1,7 @@
 package services;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard;
+
 import components.Player;
 import util.SetUtil;
 
@@ -25,7 +27,7 @@ public interface GuardService extends CharacterService {
 		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
 		Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
 		Cell[] emp ={Cell.HOL,Cell.EMP};
-		Cell[] lad ={Cell.LAD,Cell.HDR};
+		Cell[] lad ={Cell.LAD,Cell.HDR, Cell.HOL};
 		return SetUtil.isIn(downCell,emp) && ! characterAt(getWdt(),getHgt()-1) && ! SetUtil.isIn(currCell,lad);
 	}
 	
@@ -60,15 +62,26 @@ public interface GuardService extends CharacterService {
 	default public boolean willAddTime() {
 		System.out.println("le guard est dans : " + getWdt()+ getHgt());
 		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
-		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() < 5*5 ;
+		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() < 45 ;
 	}
 	
 	default public boolean willReinitialize() {
 		System.out.println("le guard est dans reinitaze : " + getWdt()+ getHgt());
 		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
-		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == (5*2);
+		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 45;
 	}
 	
+	default public boolean GuardAt(int x, int y) {
+		if (!characterAt(x, y)) {
+			return false;
+		}
+		for(CharacterService c : getEnvi().getCellContentChar(x, y)) {
+			if (c instanceof GuardService) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/**
 	 * invariants
@@ -164,7 +177,10 @@ public interface GuardService extends CharacterService {
 	 * post : getBehaviour() = Neutral implies stay()
 	 */
 	public void step();
-	void init(EngineService e, int w, int h, PlayerService p);
+	void init(EngineService e, int w, int h, PlayerService p, boolean has);
 	void Reinitialize();
+	PlayerService getPlayer();
+	EngineService getEngine();
+	boolean hasTreasure();
 
 }

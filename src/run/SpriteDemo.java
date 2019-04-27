@@ -46,13 +46,14 @@ import services.PlayerService;
 import services.Stat;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 //Problems: Agents stay at their position in the window, not in the world --> once out of the window, they disappear!
 public class SpriteDemo extends JPanel implements KeyListener{
 
-	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2, lost,une,deux,trois,won;
-
+	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2, lost,une,deux,trois,won, door;
+	
 	public static final int spriteLength = 32;
 	
 	int sizeWindow_x;
@@ -68,6 +69,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	//whole world
 	private EnvironmentService envi;
 	int vie = 3;
+	Random rand = new Random();
+	int n = 0;
 	
 	public int get_vie() {
 		return vie;
@@ -91,6 +94,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			deux = ImageIO.read(new File("Sprites/gamepad2.png"));
 			trois = ImageIO.read(new File("Sprites/gamepad3.png"));
 			won = ImageIO.read(new File("Sprites/trophy.png"));
+			door = ImageIO.read(new File("Sprites/DOOR.png"));
 		}
 		catch(Exception e)
 		{
@@ -106,7 +110,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		level.init(28, 16);
 		parseLevel("Levels/Level1.txt");
 		envi.init(level);
-		moteur.init(envi, new Coordinates(0, 1), guards, treasures);
+		moteur.init(envi, new Coordinates(12, 7), guards, treasures);
 		frame = new JFrame("LODE RUNNER");
 		frame.add(this);
 		frame.addKeyListener(this);
@@ -136,6 +140,10 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	                switch(tokens[0]) {
 	                case "EMP":
 	                	c = Cell.EMP;
+	                	cellNature = true;
+	                	break;
+	                case "DOR":
+	                	c = Cell.DOR;
 	                	cellNature = true;
 	                	break;
 	                case "HDR":
@@ -184,10 +192,10 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		case KeyEvent.VK_RIGHT:
 			moteur.addCommand(Command.RIGHT);
 			break;
-		case KeyEvent.VK_Z:
+		case KeyEvent.VK_X:
 			moteur.addCommand(Command.DIGR);
 			break;
-		case KeyEvent.VK_X:
+		case KeyEvent.VK_W:
 			moteur.addCommand(Command.DIGL);
 			break;
 		default:
@@ -237,6 +245,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 					case PLT:
 						img = plt;
 						break;
+					case DOR:
+						img = door;
 					default:
 						break;
 				

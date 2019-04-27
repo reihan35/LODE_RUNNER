@@ -29,7 +29,7 @@ public interface PlayerService extends CharacterService {
 		return SetUtil.isIn(downCell,emp) && ! characterAt(getWdt(),getHgt()-1) && ! SetUtil.isIn(currCell,lad);
 	}
 	
-	
+
 	/**
 	 *  def = 
 	 *  getWdt() != getEnvi().getWidth()-1

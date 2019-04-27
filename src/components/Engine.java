@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Random;
 
 import services.Cell;
 import services.CharacterService;
@@ -31,6 +32,8 @@ public class Engine implements EngineService {
 	private Stat s;
 	private Command nextCommand;
 	private int[][] holesTimes;
+	Random rand = new Random();
+
 
 	
 	
@@ -72,8 +75,15 @@ public class Engine implements EngineService {
 		//Initialisaiton des gardes 
 		
 		for(Coordinates c : guardsCoord) {
+			int n = rand.nextInt(2);
+			n++;
 			GuardService g = new Guard();
-			g.init(this, c.getX(), c.getY(), player);
+			if (n==2) {
+				g.init(this, c.getX(), c.getY(), player,true);
+			}
+			else {
+				g.init(this, c.getX(), c.getY(), player,false);
+			}
 			guards.add(g);
 			env.addCellContentChar(c.getX(), c.getY(), g);			
 		}
@@ -85,6 +95,15 @@ public class Engine implements EngineService {
 	@Override
 	public EnvironmentService getEnvi() {
 		return env;
+	}
+	
+	@Override
+	public void addTreasure(int wdt, int hgt) {
+		System.out.println("j'ajoute un treasure");
+		ItemService i = new Item();
+		i.init(treasures.size()+1, ItemType.TREASURE, wdt, hgt);
+		treasures.add(i);
+		getEnvi().addCellContentItem(wdt, hgt,i);
 	}
 
 	@Override
@@ -118,7 +137,9 @@ public class Engine implements EngineService {
 	
 	public void containTreasure() {
 		ArrayList<ItemService> items = getEnvi().getCellContentItem(player.getWdt(),player.getHgt());
+		System.out.println("je passe dans containTreasure");
 		if(items.size() > 0){
+			System.out.println("ma taille est inf a 0");
 			treasures.remove(items.get(0));
 			getEnvi().removeCellContentItem(player.getWdt(),player.getHgt(),items.get(0));
 		}
@@ -141,15 +162,9 @@ public class Engine implements EngineService {
 					}
 					else {
 						if(holesTimes[i][j] + 1 == 50) {
-							if(getEnvi().getCellContentChar(i, j).size() != 0) {
-								System.out.println("il s'agit de" + getEnvi().getCellContentChar(i, j));
-								for (CharacterService c : getEnvi().getCellContentChar(i, j)) {
-									if (c instanceof GuardService) {
-										((GuardService) c).Reinitialize();
-									}
-								}
 							holesTimes[i][j] = -1;
 							getEnvi().fill(i, j);
+							System.out.println("je repasse par la");
 							}
 							
 						}
@@ -157,7 +172,6 @@ public class Engine implements EngineService {
 				}
 			}
 		}
-	}
 	
 	public boolean haschased() {
 		for(GuardService g : guards) {

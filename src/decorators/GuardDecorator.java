@@ -61,15 +61,33 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 	}
 
 	@Override
-	public void init(EngineService e, int w, int h, PlayerService p) {
+	public void init(EngineService e, int w, int h, PlayerService p,boolean has) {
 		// TODO Auto-generated method stub
-		delegates.init(e, w, h, p);
+		delegates.init(e, w, h, p,has);
 	}
 
 	@Override
 	public void Reinitialize() {
 		// TODO Auto-generated method stub
 		delegates.Reinitialize();
+	}
+
+	@Override
+	public PlayerService getPlayer() {
+		// TODO Auto-generated method stub
+		return delegates.getPlayer();
+	}
+
+	@Override
+	public EngineService getEngine() {
+		// TODO Auto-generated method stub
+		return delegates.getEngine();
+	}
+
+	@Override
+	public boolean hasTreasure() {
+		// TODO Auto-generated method stub
+		return delegates.hasTreasure();
 	}
 
 	

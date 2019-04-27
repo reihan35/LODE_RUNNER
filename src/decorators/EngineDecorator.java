@@ -82,7 +82,13 @@ public class EngineDecorator implements EngineService {
 		delegates.addCommand(c);
 		
 	}
-	
+
+	@Override
+	public void addTreasure(int wdt, int hgt) {
+		delegates.addTreasure(wdt, hgt);
+		
+	}
+
 
 
 }
