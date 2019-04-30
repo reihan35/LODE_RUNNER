@@ -24,9 +24,9 @@ public interface PlayerService extends CharacterService {
 		System.out.println("will fall de palayer");
 		System.out.println(characterAt(getWdt(), getHgt()-1));
 		if (downCell == Cell.HOL && characterAt(getWdt(), getHgt()-1)){
-			return false;
+			return false; //pour que le player puisse marcher sur la tete du gardien quand ce dernier tombe dans un troue
 		}
-		return SetUtil.isIn(downCell,emp) && ! characterAt(getWdt(),getHgt()-1) && ! SetUtil.isIn(currCell,lad);
+		return SetUtil.isIn(downCell,emp) && ! SetUtil.isIn(currCell,lad);
 	}
 	
 

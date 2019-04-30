@@ -186,7 +186,7 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		EngineService engine_at_pre = getEngine();
 		PlayerService p_at_pre = getPlayer();
 		GuardService g = new Guard();
-		g.init(engine_at_pre,getWdt(),getHgt(),p_at_pre, false);
+		g.init(engine_at_pre,getWdt(),getHgt(),p_at_pre);
 		int t_at_pre = -10000;
 		if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL){
 			t_at_pre = getEngine().getHoles(getWdt(), getHgt());

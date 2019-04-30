@@ -172,9 +172,7 @@ public class Character implements CharacterService {
 		wdt = w;
 		hgt = h;
 		getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-		System.out.println("je rentre pas labaaaaa");
 		getEnvi().addCellContentChar(wdt, hgt, this);
-		System.out.println("je fini meme caaaaaa");
 	}
 
 	@Override
@@ -182,7 +180,7 @@ public class Character implements CharacterService {
 		int wdt_b = wdt;
 		int hgt_b = hgt;
 		boolean pas_gardien = true;
-		if(hgt != 0 && isFreeCell(wdt, hgt-1) && !characterAt(wdt, hgt-1)) {
+		if(hgt != 0 && isFreeCell(wdt, hgt-1)) {
 			if(this instanceof GuardService ) {
 				for(CharacterService c : getEnvi().getCellContentChar(wdt,hgt-1)) {
 					if(c instanceof GuardService) {

@@ -89,6 +89,11 @@ public class EngineDecorator implements EngineService {
 		
 	}
 
+	@Override
+	public void removeTreasure() {
+		delegates.removeTreasure();
+	}
+
 
 
 }

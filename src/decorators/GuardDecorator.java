@@ -5,6 +5,7 @@ import contracts.GuardContrtact;
 import services.CharacterService;
 import services.EngineService;
 import services.GuardService;
+import services.ItemService;
 import services.Move;
 import services.PlayerService;
 
@@ -61,9 +62,9 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 	}
 
 	@Override
-	public void init(EngineService e, int w, int h, PlayerService p,boolean has) {
+	public void init(EngineService e, int w, int h, PlayerService p) {
 		// TODO Auto-generated method stub
-		delegates.init(e, w, h, p,has);
+		delegates.init(e, w, h, p);
 	}
 
 	@Override
@@ -84,10 +85,11 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 		return delegates.getEngine();
 	}
 
+
 	@Override
-	public boolean hasTreasure() {
+	public void setTreasure(ItemService i) {
 		// TODO Auto-generated method stub
-		return delegates.hasTreasure();
+		delegates.setTreasure(i);
 	}
 
 	

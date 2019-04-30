@@ -24,18 +24,18 @@ public class Guard extends Character implements GuardService {
 	private PlayerService p;
 	private int first_x;
 	private int first_y;
-	private boolean has_treasure;
+	private ItemService treasure;
 	private int move = 0;
+	private int can_hold_t;
 	
 	@Override
-	public void init(EngineService e, int w, int h, PlayerService p,boolean has) {
+	public void init(EngineService e, int w, int h, PlayerService p) {
 		super.init(e.getEnvi(), w, h);
 		this.p = p;
 		engine = e;
 		id = count++;
 		first_x = w;
 		first_y = h;
-		has_treasure = has;
 		
 	}
 
@@ -57,8 +57,9 @@ public class Guard extends Character implements GuardService {
 	}
 	
 	@Override
-	public boolean hasTreasure() {
-		return has_treasure;
+	public void setTreasure(ItemService i ) {
+		treasure = i;
+		
 	}
 	
 	/**
@@ -216,9 +217,11 @@ public class Guard extends Character implements GuardService {
 	}
 	
 	public void drop_off() {
-		if(hasTreasure()) {
-			has_treasure = false;
+		if(treasure != null) {
+			getEngine().removeTreasure();
 			getEngine().addTreasure( getWdt(), getHgt()+1);
+			getEngine().getEnvi().addCellContentItem(getWdt(), getHgt()+1, treasure);
+			treasure = null;
 		}
 	}
 	
@@ -263,7 +266,9 @@ public class Guard extends Character implements GuardService {
 					if(willFall()) {
 						goDown();
 						System.out.println("VAS-YYYYYY");
-						drop_off();
+						if(getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL) {
+							drop_off();
+						}
 					}
 					else {
 						System.out.println("je suis ici sometimes");

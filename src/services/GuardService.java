@@ -176,10 +176,10 @@ public interface GuardService extends CharacterService {
 	 * post : getBehaviour() = Neutral implies stay()
 	 */
 	public void step();
-	void init(EngineService e, int w, int h, PlayerService p, boolean has);
 	void Reinitialize();
 	PlayerService getPlayer();
 	EngineService getEngine();
-	boolean hasTreasure();
+	void init(EngineService e, int w, int h, PlayerService p);
+	void setTreasure(ItemService i);
 
 }

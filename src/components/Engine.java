@@ -75,21 +75,19 @@ public class Engine implements EngineService {
 		//Initialisaiton des gardes 
 		
 		for(Coordinates c : guardsCoord) {
-			int n = rand.nextInt(2);
-			n++;
 			GuardService g = new Guard();
-			if (n==2) {
-				g.init(this, c.getX(), c.getY(), player,true);
-			}
-			else {
-				g.init(this, c.getX(), c.getY(), player,false);
-			}
+			g.init(this, c.getX(), c.getY(), player);
 			guards.add(g);
 			env.addCellContentChar(c.getX(), c.getY(), g);			
 		}
 
 		nextCommand = Command.NEUTRAL;
 
+	}
+	
+	@Override
+	public void removeTreasure() {
+		treasures.remove(0);
 	}
 	
 	@Override
@@ -135,13 +133,21 @@ public class Engine implements EngineService {
 		return nextCommand;
 	}
 	
-	public void containTreasure() {
-		ArrayList<ItemService> items = getEnvi().getCellContentItem(player.getWdt(),player.getHgt());
+	public void containTreasure(CharacterService c ) {
+		ArrayList<ItemService> items = getEnvi().getCellContentItem(c.getWdt(),c.getHgt());
 		System.out.println("je passe dans containTreasure");
 		if(items.size() > 0){
-			System.out.println("ma taille est inf a 0");
-			treasures.remove(items.get(0));
-			getEnvi().removeCellContentItem(player.getWdt(),player.getHgt(),items.get(0));
+			if (c instanceof PlayerService) {
+				treasures.remove(items.get(0));
+				getEnvi().removeCellContentItem(c.getWdt(),c.getHgt(),items.get(0));
+			}
+			
+			if (c instanceof GuardService) {
+				System.out.println(items.get(0));
+				((GuardService) c).setTreasure(items.get(0));
+				treasures.remove(items.get(0));
+				getEnvi().removeCellContentItem(c.getWdt(),c.getHgt(),items.get(0));
+			}
 		}
 	}
 	
@@ -176,6 +182,7 @@ public class Engine implements EngineService {
 	public boolean haschased() {
 		for(GuardService g : guards) {
 			if (g.getWdt() == getPlayer().getWdt() && g.getHgt() == getPlayer().getHgt()) {
+				System.out.println("j'aimerais etre la mais pas sur");
 				return true;
 			}
 		}
@@ -188,18 +195,26 @@ public class Engine implements EngineService {
 		System.out.println("wdt vaut : " + player.getWdt());
 	    
 		if(s != Stat.WIN || s!= Stat.LOSS) {
-			containTreasure();
+			containTreasure(player);
 			if (treasures.size() == 0 ) {
 				s = Stat.WIN;
 			}
-			if(haschased()) {
-				s = Stat.LOSS;
-			}
+			
 			//getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
 			player.step();
 			for (GuardService g : guards ) {
-				System.out.println("on est la !");
+				containTreasure(g);
 				g.step();
+			}
+			
+			for (GuardService g : guards ) {
+				System.out.println("on est la et on affiche les coordonee des !");
+				System.out.println(g.getHgt());
+				System.out.println(g.getWdt());
+			}
+			
+			if(haschased()) {
+				s = Stat.LOSS;
 			}
 			//getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
 			paceOfTime();
