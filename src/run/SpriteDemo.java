@@ -15,15 +15,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
-import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.plaf.basic.BasicTreeUI.KeyHandler;
 
-import com.sun.org.apache.bcel.internal.generic.POP;
-import com.sun.webkit.PopupMenu;
 
 import components.EditableScreen;
 import components.Engine;
@@ -31,9 +28,6 @@ import components.Environment;
 import contracts.EditableScreenContract;
 import contracts.EngineContract;
 import contracts.EnvironmentContract;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Popup;
 import services.Cell;
 import services.Command;
 import services.Coordinates;

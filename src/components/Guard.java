@@ -3,7 +3,6 @@ package components;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.sun.corba.se.impl.ior.GenericTaggedProfile;
 
 import services.Cell;
 import services.CharacterService;
@@ -26,6 +25,7 @@ public class Guard extends Character implements GuardService {
 	private int first_x;
 	private int first_y;
 	private boolean has_treasure;
+	private int move = 0;
 	
 	@Override
 	public void init(EngineService e, int w, int h, PlayerService p,boolean has) {
@@ -110,15 +110,13 @@ public class Guard extends Character implements GuardService {
 
 	@Override
 	public Move getBehaviour() {
+		Cell[] full = {Cell.MTL, Cell.PLT};
 		
 		 if (getEnvi().getCellNature(getWdt(),getHgt()) == Cell.LAD && getHgt() < getTarget().getHgt()) {
 			 return Move.UP;
 		 }
-		 if ((((getEnvi().getCellNature(getWdt(),getHgt()-1) == Cell.LAD) && (getEnvi().getCellNature(getWdt(),getHgt()-1) == Cell.LAD) )|| getEnvi().getCellNature(getWdt(),getHgt()-1) == Cell.LAD )&& getHgt() > getTarget().getHgt()) {
+		 if ((!SetUtil.isIn(getEnvi().getCellNature(getWdt(), getHgt()-1), full)) && getHgt() > getTarget().getHgt()) {
 			 return Move.DOWN;
-		 }
-		 if (getEnvi().getCellNature(getWdt(),getHgt()) == Cell.LAD && getHgt() == getTarget().getHgt()) {
-			 return Move.NEUTRAL;
 		 }
 		 Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
 		 Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
@@ -231,9 +229,20 @@ public class Guard extends Character implements GuardService {
 		System.out.println(first_y);
 		transport(first_x,first_y);
 	}
+	
+	public boolean willMove() {
+		if (move++ > 2) {
+			move = 0;
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public void step() {
+		if(!willMove()) {
+			return;
+		}
 		System.out.println("je rentre dans step");
 		if(willClimbLeft() || willClimbRight()) {
 			if (willClimbLeft())
