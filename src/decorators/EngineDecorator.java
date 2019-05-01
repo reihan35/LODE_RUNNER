@@ -94,6 +94,12 @@ public class EngineDecorator implements EngineService {
 		delegates.removeTreasure();
 	}
 
+	@Override
+	public int getScore() {
+		// TODO Auto-generated method stub
+		return delegates.getScore();
+	}
+
 
 
 }

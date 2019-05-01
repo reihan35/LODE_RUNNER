@@ -76,4 +76,5 @@ public interface EngineService {
 	public void step();
 	void addTreasure(int wdt, int hgt);
 	void removeTreasure();
+	int getScore();
 }

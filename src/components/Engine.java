@@ -33,6 +33,7 @@ public class Engine implements EngineService {
 	private Command nextCommand;
 	private int[][] holesTimes;
 	Random rand = new Random();
+	private int score = 0;
 
 
 	
@@ -140,6 +141,7 @@ public class Engine implements EngineService {
 			if (c instanceof PlayerService) {
 				treasures.remove(items.get(0));
 				getEnvi().removeCellContentItem(c.getWdt(),c.getHgt(),items.get(0));
+				score = score + 10;
 			}
 			
 			if (c instanceof GuardService) {
@@ -187,6 +189,11 @@ public class Engine implements EngineService {
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public int getScore () {
+		return score;
 	}
 	
 	@Override
