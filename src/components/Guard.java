@@ -243,9 +243,8 @@ public class Guard extends Character implements GuardService {
 
 	@Override
 	public void step() {
-		if(!willMove()) {
-			return;
-		}
+		
+		
 		System.out.println("je rentre dans step");
 		if(willClimbLeft() || willClimbRight()) {
 			if (willClimbLeft())
@@ -271,33 +270,29 @@ public class Guard extends Character implements GuardService {
 						}
 					}
 					else {
-						System.out.println("je suis ici sometimes");
-						 System.out.println("coucou");
-						 System.out.println(getTarget().getWdt());
-						 System.out.println(getWdt());
-						 System.out.println(getEnvi().getCellNature(getWdt(),getHgt()));
-						 System.out.println(getBehaviour());
-						switch(getBehaviour()) {
-						  case UP:
-							  goUp();
-							  break;
-						  case DOWN:
-							  goDown();
-							  break;
-						  case RIGHT:
-							  goRight();
-							  break;
-						  case LEFT:
-							  goLeft();
-							  break;
-						  case NEUTRAL:
-							  stay();
-							  break;
+							switch(getBehaviour()) {
+							  case UP:
+								  goUp();
+								  break;
+							  case DOWN:
+								  goDown();
+								  break;
+							  case RIGHT:
+								 
+								  goRight();
+								  break;
+							  case LEFT:
+								
+								  goLeft();
+								  break;
+							  case NEUTRAL:
+								  stay();
+								  break;
+							}
 						}
 					}
 				}	
-			}	
+			}
 		}
-	}
 
 }

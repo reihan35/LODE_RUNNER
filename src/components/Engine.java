@@ -34,6 +34,7 @@ public class Engine implements EngineService {
 	private int[][] holesTimes;
 	Random rand = new Random();
 	private int score = 0;
+	private int first_t_n = 0;
 
 
 	
@@ -61,6 +62,7 @@ public class Engine implements EngineService {
 			}
 			env.addCellContentItem(c.getX(),c.getY(), i);
 		}
+		first_t_n = treasures.size();
 		
 		int h_play = playerCoord.getX();
 		int w_play = playerCoord.getY();
@@ -195,7 +197,7 @@ public class Engine implements EngineService {
 	public int getScore () {
 		return score;
 	}
-	
+
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
@@ -203,12 +205,14 @@ public class Engine implements EngineService {
 	    
 		if(s != Stat.WIN || s!= Stat.LOSS) {
 			containTreasure(player);
-			if (treasures.size() == 0 ) {
+			if (score == first_t_n*10) {
 				s = Stat.WIN;
 			}
 			
 			//getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
 			player.step();
+			
+			
 			for (GuardService g : guards ) {
 				containTreasure(g);
 				g.step();

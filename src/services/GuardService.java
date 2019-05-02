@@ -67,7 +67,7 @@ public interface GuardService extends CharacterService {
 	default public boolean willReinitialize() {
 		System.out.println("le guard est dans reinitaze : " + getWdt()+ getHgt());
 		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
-		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 45;
+		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 45 && getEngine().getNextCommand()==Command.NEUTRAL;
 	}
 	
 	default public boolean GuardAt(int x, int y) {

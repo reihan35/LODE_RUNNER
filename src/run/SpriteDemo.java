@@ -104,12 +104,12 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		level.init(28, 16);
 		parseLevel("../Levels/Level1.txt");
 		envi.init(level);
-		moteur.init(envi, new Coordinates(12, 7), guards, treasures);
+		moteur.init(envi, new Coordinates(5, 7), guards, treasures);
 		frame = new JFrame("LODE RUNNER");
 		frame.add(this);
 		frame.addKeyListener(this);
-		sizeWindow_x = spriteLength * moteur.getEnvi().getWidth();
-		sizeWindow_y = spriteLength * moteur.getEnvi().getHeight();
+		sizeWindow_x = spriteLength * moteur.getEnvi().getWidth() ;
+		sizeWindow_y = spriteLength * moteur.getEnvi().getHeight() ;
 		frame.setSize(sizeWindow_x, sizeWindow_y);
 		frame.setVisible(true);
 
@@ -138,6 +138,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	                	break;
 	                case "DOR":
 	                	c = Cell.DOR;
+	                	System.out.println("DOOOOOOR");
 	                	cellNature = true;
 	                	break;
 	                case "HDR":
@@ -192,6 +193,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		case KeyEvent.VK_W:
 			moteur.addCommand(Command.DIGL);
 			break;
+		case KeyEvent.VK_ENTER:
+			moteur.addCommand(Command.OPEND);
 		default:
 			System.out.println("Other key");
 			break;
@@ -287,7 +290,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		PlayerService p = moteur.getPlayer();
 		if (moteur.getPlayer().willFall() && moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.EMP) {
 			try {
-				player2 = ImageIO.read(new File("Sprites/player_fall.png"));
+				player2 = ImageIO.read(new File("../Sprites/player_fall.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -298,7 +301,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		}
 		if (moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.LAD && (moteur.getNextCommand()==Command.UP || moteur.getNextCommand()==Command.DOWN)) {
 				try {
-					player2 = ImageIO.read(new File("Sprites/player_climb2.png"));
+					player2 = ImageIO.read(new File("../Sprites/player_climb2.png"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -306,7 +309,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		}else {
 				if(moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.HDR)
 					try {
-						player2 = ImageIO.read(new File("Sprites/player_cheer1.png"));
+						player2 = ImageIO.read(new File("../Sprites/player_cheer1.png"));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -321,7 +324,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		g.drawImage(player2,pos_x,pos_y,spriteLength,spriteLength, frame);
 		moteur.step();
 		g.drawString("Score", 18, 15);
-		g.drawString(Integer.toString(moteur.getScore()), 60, 15);
+		g.drawString(Integer.toString(moteur.getScore()), 50, 15);
 		if (moteur.getStatus() == Stat.WIN) {
 			g.drawImage(won, 20, 20, 200, 200, frame);
 		}

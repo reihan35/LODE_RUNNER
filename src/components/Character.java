@@ -129,7 +129,7 @@ public class Character implements CharacterService {
 		int wdt_b = wdt;
 		int hgt_b = hgt;
 		if(this instanceof GuardService ) {
-			for(CharacterService c : getEnvi().getCellContentChar(wdt-11,hgt+1)) {
+			for(CharacterService c : getEnvi().getCellContentChar(wdt-1,hgt+1)) {
 				if(c instanceof GuardService) {
 					pas_gardien = false;
 				}
