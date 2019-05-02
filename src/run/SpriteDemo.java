@@ -65,6 +65,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	int vie = 3;
 	Random rand = new Random();
 	int n = 0;
+	boolean p_c;
 	
 	public int get_vie() {
 		return vie;
@@ -293,32 +294,45 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				player2 = ImageIO.read(new File("../Sprites/player_fall.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+					e.printStackTrace();
 			}
 		}
-		if(moteur.getNextCommand()==Command.LEFT) {
-			
-		}
-		if (moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.LAD && (moteur.getNextCommand()==Command.UP || moteur.getNextCommand()==Command.DOWN)) {
-				try {
-					player2 = ImageIO.read(new File("../Sprites/player_climb2.png"));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}else {
-				if(moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.HDR)
+		else {
+		
+			if (moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.LAD && (moteur.getNextCommand()==Command.UP || moteur.getNextCommand()==Command.DOWN)) {
 					try {
-						player2 = ImageIO.read(new File("../Sprites/player_cheer1.png"));
+						player2 = ImageIO.read(new File("../Sprites/player_climb2.png"));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				else {
-					player2 = player;
+			}else {
+					if(moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.HDR) {
+						try {
+							player2 = ImageIO.read(new File("../Sprites/player_cheer1.png"));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					else {
+						if(moteur.getNextCommand()==Command.LEFT) {
+							try {
+								player2 = ImageIO.read(new File("../Sprites/left_perso2.png"));
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						else {
+								player2 = player;
+							}
+						}
+					}
 				}
+			
 				
-		}
+		
 		int pos_x = p.getWdt()*spriteLength;
 		int pos_y = (moteur.getEnvi().getHeight()-(p.getHgt()+2))*spriteLength;
 		g.drawImage(player2,pos_x,pos_y,spriteLength,spriteLength, frame);
