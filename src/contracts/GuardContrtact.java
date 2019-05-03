@@ -194,30 +194,9 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 
 		super.step();
 		
-		if (engine_at_pre != getEnvi()) {
+
+		if (engine_at_pre != getEngine()) {
 			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
-		}
-		
-				
-		if(g.willFall()) {
-			
-			g.goDown();
-			
-			if (g.getHgt() != getHgt())  {
-				throw new PostconditionError("Le gardien n'est pas tombé alors qu'il le fallait ! ");
-			}
-			
-			
-			if (g.getWdt() != getWdt())  {
-				throw new PostconditionError("Le gardien n'est pas tombé alors qu'il le fallait ! ");
-			}
-			
-		}
-		
-		if(g.willAddTime()) {
-			if(t_at_pre + 1 !=  getEngine().getHoles(getWdt(), getHgt())) {
-				throw new PostconditionError("Le gardien n'est pas resté dans le trou");
-			}
 		}
 		
 		if(g.willClimbLeft()) {
@@ -250,6 +229,14 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		
 		}
 		
+		if(g.willAddTime()) {
+			if(t_at_pre + 1 !=  getEngine().getHoles(getWdt(), getHgt())) {
+				throw new PostconditionError("Le gardien n'est pas resté dans le trou");
+			}
+		}
+		
+		
+		
 		if(g.willStay()) {
 			
 			g.stay();
@@ -264,6 +251,39 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 			}
 		
 		}
+		
+		if(g.willReinitialize()) {
+			g.Reinitialize();
+			
+
+			if (g.getHgt() != getHgt())  {
+				throw new PostconditionError("Le gardien ne s'est pas reinitialise ");
+			}
+			
+			
+			if (g.getWdt() != getWdt())  {
+				throw new PostconditionError("Le gardien ne s'est pas reinitialise ");
+			}
+			
+		}
+		
+		System.out.println("WILLL FALLLLLL");
+		System.out.println(g.willFall());
+		if(g.willFall()) {
+			
+			g.goDown();
+			
+			if (g.getHgt() != getHgt())  {
+				throw new PostconditionError("Le gardien n'est pas tombé alors qu'il le fallait ! ");
+			}
+			
+			
+			if (g.getWdt() != getWdt())  {
+				throw new PostconditionError("Le gardien n'est pas tombé alors qu'il le fallait ! ");
+			}
+			
+		}
+		
 		
 		if(g.getBehaviour() == Move.UP) {
 			
@@ -312,11 +332,13 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		
 		
 		}
-		
 		if(g.getBehaviour() == Move.LEFT) {
-			
-			g.goRight();
-			
+			System.out.println("JE VEUX MOVE LEFT");
+			System.out.println(g.getWdt());
+			g.goLeft();
+			System.out.println(g.getWdt());
+			System.out.println(getWdt());
+
 			if (g.getHgt() != getHgt())  {
 				throw new PostconditionError("Le gardien ne s'est pas deplace vers la gauche ! ");
 			}

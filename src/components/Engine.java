@@ -1,5 +1,6 @@
 package components;
 
+import java.awt.event.ItemListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +10,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Random;
 
+import contracts.GuardContrtact;
 import contracts.PlayerContract;
 import services.Cell;
 import services.CharacterService;
@@ -95,7 +97,7 @@ public class Engine implements EngineService {
 		//Initialisaiton des gardes 
 		
 		for(Coordinates c : guardsCoord) {
-			GuardService g = new Guard();
+			GuardService g = new GuardContrtact(new Guard());
 			g.init(this, c.getX(), c.getY(), player);
 			guards.add(g);
 			env.addCellContentChar(c.getX(), c.getY(), g);			
@@ -156,7 +158,7 @@ public class Engine implements EngineService {
 	public void containTreasure(CharacterService c ) {
 		ArrayList<ItemService> items = getEnvi().getCellContentItem(c.getWdt(),c.getHgt());
 		System.out.println("je passe dans containTreasure");
-		if(items.size() > 0){
+		if(items.size() > 0 && items.get(0).getNature()!=ItemType.BOMB){
 			if (c instanceof PlayerService) {
 				treasures.remove(items.get(0));
 				getEnvi().removeCellContentItem(c.getWdt(),c.getHgt(),items.get(0));
@@ -217,8 +219,7 @@ public class Engine implements EngineService {
 	public boolean haschased() {
 		for(GuardService g : guards) {
 			if (g.getWdt() == getPlayer().getWdt() && g.getHgt() == getPlayer().getHgt()) {
-				System.out.println("j'aimerais etre la mais pas sur");
-				return true;
+					return true;
 			}
 		}
 		return false;
@@ -228,7 +229,17 @@ public class Engine implements EngineService {
 	public int getScore () {
 		return score;
 	}
-
+	
+	public void fight_guard(GuardService g) {
+		if (getPlayer().getWdt() + 1 == g.getWdt() || getPlayer().getWdt() - 1 == g.getWdt()) {
+			if(getPlayer().getBomb() != null) {
+				getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
+				guards.remove(0);
+				getPlayer().setBomb(null);
+			}
+		}
+	}
+	
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
@@ -253,10 +264,9 @@ public class Engine implements EngineService {
 			}
 			
 			for (GuardService g : guards ) {
-				System.out.println("on est la et on affiche les coordonee des !");
-				System.out.println(g.getHgt());
-				System.out.println(g.getWdt());
+				fight_guard(g);
 			}
+			
 			
 			if(haschased()) {
 				s = Stat.LOSS;

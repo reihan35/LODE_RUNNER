@@ -21,6 +21,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.plaf.basic.BasicTreeUI.KeyHandler;
 
+import com.sun.media.jfxmediaimpl.platform.Platform;
 
 import components.EditableScreen;
 import components.Engine;
@@ -28,6 +29,8 @@ import components.Environment;
 import contracts.EditableScreenContract;
 import contracts.EngineContract;
 import contracts.EnvironmentContract;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import services.Cell;
 import services.Command;
 import services.Coordinates;
@@ -76,21 +79,22 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	{
 		try
 		{
-			emp = ImageIO.read(new File("Sprites/EMP2.png"));
-			hol = ImageIO.read(new File("Sprites/EMP2.png"));
-			mtl = ImageIO.read(new File("Sprites/MTL2.png"));
-			treas = ImageIO.read(new File("Sprites/TREASURE3.png"));
-			player = ImageIO.read(new File("Sprites/PERSO2modif.png"));
-			hdr = ImageIO.read(new File("Sprites/HDR2.png"));
-			plt = ImageIO.read(new File("Sprites/PLT2.png"));
-			lad = ImageIO.read(new File("Sprites/LADDER2.png"));
-			guard =  ImageIO.read(new File("Sprites/GUARD2.png"));
-			lost = ImageIO.read(new File("Sprites/buttonX.png"));
-			une = ImageIO.read(new File("Sprites/gamepad1.png"));
-			deux = ImageIO.read(new File("Sprites/gamepad2.png"));
-			trois = ImageIO.read(new File("Sprites/gamepad3.png"));
-			won = ImageIO.read(new File("Sprites/trophy.png"));
-			door = ImageIO.read(new File("Sprites/DOOR.png"));
+			emp = ImageIO.read(new File("../Sprites/EMP2.png"));
+			hol = ImageIO.read(new File("../Sprites/EMP2.png"));
+			mtl = ImageIO.read(new File("../Sprites/MTL2.png"));
+			treas = ImageIO.read(new File("../Sprites/TREASURE3.png"));
+			player = ImageIO.read(new File("../Sprites/PERSO2modif.png"));
+			hdr = ImageIO.read(new File("../Sprites/HDR2.png"));
+			plt = ImageIO.read(new File("../Sprites/PLT2.png"));
+			lad = ImageIO.read(new File("../Sprites/LADDER2.png"));
+			guard =  ImageIO.read(new File("../Sprites/GUARD2.png"));
+			lost = ImageIO.read(new File("../Sprites/buttonX.png"));
+			une = ImageIO.read(new File("../Sprites/gamepad1.png"));
+			deux = ImageIO.read(new File("../Sprites/gamepad2.png"));
+			trois = ImageIO.read(new File("../Sprites/gamepad3.png"));
+			won = ImageIO.read(new File("../Sprites/trophy.png"));
+			door = ImageIO.read(new File("../Sprites/DOOR.png"));
+			bomb = ImageIO.read(new File("../Sprites/sword.png"));
 		}
 		catch(Exception e)
 		{
@@ -105,7 +109,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		guards = new ArrayList<>();
 		bombs = new ArrayList<>();
 		level.init(28, 16);
-		parseLevel("Levels/Level1.txt");
+		parseLevel("../Levels/Level1.txt");
 		envi.init(level);
 		moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs);
 		frame = new JFrame("LODE RUNNER");
@@ -202,6 +206,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			break;
 		case KeyEvent.VK_ENTER:
 			moteur.addCommand(Command.OPEND);
+		case KeyEvent.VK_SPACE:
+			moteur.addCommand(Command.FIGHT);
 		default:
 			System.out.println("Other key");
 			break;
@@ -223,8 +229,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		//Graphics2D g2 = (Graphics2D)g;
 		//paints the world (and adds the WeatherTime)
 		
-		
-		
+			    
 		for(int i = 0; i < moteur.getEnvi().getWidth(); i++) {
 			for(int j = 0; j < moteur.getEnvi().getHeight(); j++) {
 				int pos_x = spriteLength * i;
@@ -305,7 +310,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		PlayerService p = moteur.getPlayer();
 		if (moteur.getPlayer().willFall() && moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.EMP) {
 			try {
-				player2 = ImageIO.read(new File("Sprites/player_fall.png"));
+				player2 = ImageIO.read(new File("../Sprites/player_fall.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -315,7 +320,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		
 			if (moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.LAD && (moteur.getNextCommand()==Command.UP || moteur.getNextCommand()==Command.DOWN)) {
 					try {
-						player2 = ImageIO.read(new File("Sprites/player_climb2.png"));
+						player2 = ImageIO.read(new File("../Sprites/player_climb2.png"));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -323,7 +328,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			}else {
 					if(moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.HDR) {
 						try {
-							player2 = ImageIO.read(new File("Sprites/player_cheer1.png"));
+							player2 = ImageIO.read(new File("../Sprites/player_cheer1.png"));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -332,7 +337,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 					else {
 						if(moteur.getNextCommand()==Command.LEFT) {
 							try {
-								player2 = ImageIO.read(new File("Sprites/left_perso2.png"));
+								player2 = ImageIO.read(new File("../Sprites/left_perso2.png"));
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -358,15 +363,16 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		}
 		
 		if (moteur.getStatus() == Stat.LOSS) {
+				frame.setVisible(false); //you can't see me!
 				moteur = new EngineContract(new Engine());
 				level = new EditableScreenContract(new EditableScreen());
 				envi = new EnvironmentContract(new Environment());
 				treasures = new ArrayList<>();
 				guards = new ArrayList<>();
 				level.init(28, 16);
-				parseLevel("Levels/Level1.txt");
+				parseLevel("../Levels/Level1.txt");
 				envi.init(level);
-				moteur.init(envi, new Coordinates(18, 7), guards, treasures,bombs);
+				moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs);
 				frame = new JFrame("LODE RUNNER");
 				frame.add(this);
 				frame.addKeyListener(this);
@@ -376,7 +382,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				frame.setVisible(true);
 				vie--;
 				
-		}
+		 }
 		
 		try {
 			Thread.sleep(100);
