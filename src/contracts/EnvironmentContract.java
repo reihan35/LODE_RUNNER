@@ -210,10 +210,10 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 		}
 		/*if(!getCellContentChar(x, y).contains(c)) {
 			throw new PreconditionError("Le personnage voulu n'est pas dans la case");
-		}*/
+		}
 		if (getCellContentChar(x, y).size() == 0) {
 			throw new PreconditionError("La case ne contient pas de perso !");
-		}
+		}*/
 		checkInvariants();
 		super.removeCellContentChar(x, y, c);
 		checkInvariants();

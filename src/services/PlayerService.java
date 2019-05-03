@@ -109,5 +109,5 @@ public interface PlayerService extends CharacterService {
 
 	public ItemService getBomb();
 
-	public void setBomb(ItemService itemService);
+	public void setBomb(int i, ItemType bomb, int wdt, int hgt);
 }

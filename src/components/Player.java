@@ -5,6 +5,7 @@ import services.Command;
 import services.EngineService;
 import services.EnvironmentService;
 import services.ItemService;
+import services.ItemType;
 import services.PlayerService;
 import util.SetUtil;
 
@@ -19,6 +20,17 @@ public class Player extends Character implements PlayerService {
 		engine = e;
 		
 	}
+	@Override
+	public void setBomb(int id, ItemType t,int x, int y) {
+		System.out.println("ici c'est setBomb");
+		if(id > -1) {
+			bomb = new Item();
+			bomb.init(id, t, x, y);
+		}
+		else {
+			bomb = null;
+		}
+	}
 	
 	@Override
 	public EngineService getEngine() {
@@ -28,6 +40,8 @@ public class Player extends Character implements PlayerService {
 
 	@Override
 	public void step() {
+		System.out.println("je suis la nature");
+		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
 		if(getEnvi().getCellNature(getWdt(), getHgt()) == Cell.DOR && getEngine().getNextCommand() == Command.OPEND) {
 			System.out.println("je rentre avant trans");
 			if (getWdt()==15 && getHgt()==13) {
@@ -87,10 +101,4 @@ public class Player extends Character implements PlayerService {
 		
 		return bomb;
 	}
-
-	@Override
-	public void setBomb(ItemService i) {
-		bomb = i;
-	}
-
 }

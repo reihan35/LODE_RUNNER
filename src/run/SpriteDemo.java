@@ -21,7 +21,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.plaf.basic.BasicTreeUI.KeyHandler;
 
-import com.sun.media.jfxmediaimpl.platform.Platform;
 
 import components.EditableScreen;
 import components.Engine;
@@ -29,8 +28,6 @@ import components.Environment;
 import contracts.EditableScreenContract;
 import contracts.EngineContract;
 import contracts.EnvironmentContract;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import services.Cell;
 import services.Command;
 import services.Coordinates;
@@ -206,8 +203,10 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			break;
 		case KeyEvent.VK_ENTER:
 			moteur.addCommand(Command.OPEND);
+			break;
 		case KeyEvent.VK_SPACE:
 			moteur.addCommand(Command.FIGHT);
+			break;
 		default:
 			System.out.println("Other key");
 			break;
@@ -369,6 +368,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				envi = new EnvironmentContract(new Environment());
 				treasures = new ArrayList<>();
 				guards = new ArrayList<>();
+				bombs = new ArrayList<>();
 				level.init(28, 16);
 				parseLevel("Levels/Level1.txt");
 				envi.init(level);

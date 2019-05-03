@@ -7,6 +7,7 @@ import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
 import services.ItemService;
+import services.ItemType;
 import services.PlayerService;
 
 public class PlayerDecorator extends CharacterContract implements PlayerService {
@@ -43,8 +44,9 @@ public class PlayerDecorator extends CharacterContract implements PlayerService 
 	}
 
 	@Override
-	public void setBomb(ItemService itemService) {
-		delegates.getBomb();
+	public void setBomb(int i, ItemType bomb, int wdt, int hgt) {
+		delegates.setBomb(i, bomb, wdt, hgt);
 	}
+
 
 }

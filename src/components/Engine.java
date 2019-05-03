@@ -83,7 +83,7 @@ public class Engine implements EngineService {
 		int h_play = playerCoord.getX();
 		int w_play = playerCoord.getY();
 		player = new PlayerContract(new Player());
-
+		//player = new Player();
 		player.init(this, h_play, w_play);
 		env.addCellContentChar(h_play,w_play,player);
 		System.out.println("la size est : ");
@@ -177,18 +177,22 @@ public class Engine implements EngineService {
 	public void containBomb() {
 		System.out.println("j'arrive a renter dans containB");
 		ArrayList<ItemService> items = getEnvi().getCellContentItem(getPlayer().getWdt(),getPlayer().getHgt());
+		System.out.println("wdt vaut : " + player.getWdt());
+
 		if(items.size() > 0){
 			System.out.println("je rentre meme ici avec");
-
 			if (getPlayer().getBomb()==null){
-				getPlayer().setBomb(items.get(0));
-				treasures.remove(items.get(0));
+				System.out.println("HELLO");
+				int wdt = items.get(0).getWdt();
+				int hgt = items.get(0).getHgt();
+				getPlayer().setBomb(1,ItemType.BOMB,wdt,hgt);
+				System.out.println(getPlayer().getBomb());
 				getEnvi().removeCellContentItem(getPlayer().getWdt(),getPlayer().getHgt(),items.get(0));
 				bombs.remove(0);
 			}
 		}
 	}
-
+	
 	@Override
 	public int getHoles(int x , int y) {
 		return holesTimes[x][y];
@@ -225,17 +229,29 @@ public class Engine implements EngineService {
 		return false;
 	}
 	
+	public GuardService can_fight() {
+		for(GuardService g : guards) {
+			System.out.println("j'y arrive");
+			System.out.println(g.getWdt());
+			System.out.println(getPlayer().getWdt());
+			if(g.getWdt()== getPlayer().getWdt() + 1 || g.getWdt() == getPlayer().getWdt() - 1) {
+				return g;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public int getScore () {
 		return score;
 	}
 	
 	public void fight_guard(GuardService g) {
-		if (getPlayer().getWdt() + 1 == g.getWdt() || getPlayer().getWdt() - 1 == g.getWdt()) {
+		if (getPlayer().getWdt() + 3 == g.getWdt() || getPlayer().getWdt() - 3 == g.getWdt()) {
 			if(getPlayer().getBomb() != null) {
 				getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
 				guards.remove(0);
-				getPlayer().setBomb(null);
+				getPlayer().setBomb(-1,ItemType.BOMB,-1,-1);
 			}
 		}
 	}
@@ -244,6 +260,9 @@ public class Engine implements EngineService {
 	public void step() {
 		// TODO Auto-generated method stub
 		System.out.println("wdt vaut : " + player.getWdt());
+		//if (player.getWdt() > 5) {
+			//throw new Error("je peux augmenter");
+		//}
 	    
 		if(s != Stat.WIN || s!= Stat.LOSS) {
 			containTreasure(player);
@@ -258,12 +277,17 @@ public class Engine implements EngineService {
 			
 			for (GuardService g : guards ) {
 				getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
+				containTreasure(g);
 				g.step();
 				getEnvi().addCellContentChar(g.getWdt(), g.getHgt(), g);
 			}
-			
-			for (GuardService g : guards ) {
-				fight_guard(g);
+			if(can_fight() != null) {
+				GuardService g = can_fight();
+				if(getPlayer().getBomb() != null && getNextCommand()==Command.FIGHT) {
+					getPlayer().setBomb(-1,ItemType.BOMB,-1,-1);
+					getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
+					guards.remove(g);
+				}
 			}
 			
 			
