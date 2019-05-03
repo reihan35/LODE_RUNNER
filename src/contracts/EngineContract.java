@@ -27,9 +27,9 @@ public class EngineContract extends EngineDecorator implements EngineService{
 
 
 	public void init(EnvironmentService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
-			ArrayList<Coordinates> treasuresCoord) {
+			ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord) {
 		
-		super.init(screen, playerCoord, guardsCoord, treasuresCoord);
+		super.init(screen, playerCoord, guardsCoord, treasuresCoord,bombCoord);
 		
 		
 		if(getPlayer().getWdt() != playerCoord.getX() || getPlayer().getHgt() != playerCoord.getY()) {
@@ -159,11 +159,11 @@ public class EngineContract extends EngineDecorator implements EngineService{
 		 */
 		
 		//only one player so 2 at the same place means at least one is guard
-		if(cellContentChar_atPre.size()>1) {
+		/*if(cellContentChar_atPre.size()>1) {
 			if(getStatus() != Stat.LOSS) {
 				throw new PostconditionError("La partie devrait etre perdue");
 			}
-		}
+		}*/
 		/* post: exists Treasure t in getEnvi().getCellContentItem(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
 		 * 			implies not exists t in getTreasures()
 		 */

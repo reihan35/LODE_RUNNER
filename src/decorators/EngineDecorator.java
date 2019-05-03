@@ -23,9 +23,9 @@ public class EngineDecorator implements EngineService {
 
 	@Override
 	public void init(EnvironmentService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
-			ArrayList<Coordinates> treasuresCoord) {
+			ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord) {
 		// TODO Auto-generated method stub
-		delegates.init(screen, playerCoord, guardsCoord, treasuresCoord);
+		delegates.init(screen, playerCoord, guardsCoord, treasuresCoord,bombCoord);
 
 	}
 	
@@ -98,6 +98,12 @@ public class EngineDecorator implements EngineService {
 	public int getScore() {
 		// TODO Auto-generated method stub
 		return delegates.getScore();
+	}
+
+	@Override
+	public ArrayList<ItemService> getBombs() {
+		// TODO Auto-generated method stub
+		return delegates.getBombs();
 	}
 
 

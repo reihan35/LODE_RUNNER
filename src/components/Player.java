@@ -4,12 +4,14 @@ import services.Cell;
 import services.Command;
 import services.EngineService;
 import services.EnvironmentService;
+import services.ItemService;
 import services.PlayerService;
 import util.SetUtil;
 
 public class Player extends Character implements PlayerService {
 	
 	private EngineService engine;
+	private ItemService bomb = null ;
 	
 	@Override
 	public void init(EngineService e, int w, int h) {
@@ -78,6 +80,17 @@ public class Player extends Character implements PlayerService {
 			}
 		}
 
+	}
+
+	@Override
+	public ItemService getBomb() {
+		
+		return bomb;
+	}
+
+	@Override
+	public void setBomb(ItemService i) {
+		bomb = i;
 	}
 
 }

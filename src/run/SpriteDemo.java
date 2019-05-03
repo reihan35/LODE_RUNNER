@@ -46,7 +46,7 @@ import java.util.Random;
 //Problems: Agents stay at their position in the window, not in the world --> once out of the window, they disappear!
 public class SpriteDemo extends JPanel implements KeyListener{
 
-	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2, lost,une,deux,trois,won, door;
+	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2, lost,une,deux,trois,won, door, bomb;
 	
 	public static final int spriteLength = 32;
 	
@@ -60,6 +60,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	private EngineService moteur;
 	private ArrayList<Coordinates> treasures;
 	private ArrayList<Coordinates> guards;
+	private ArrayList<Coordinates> bombs;
 	//whole world
 	private EnvironmentService envi;
 	int vie = 3;
@@ -102,10 +103,11 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		envi = new EnvironmentContract(new Environment());
 		treasures = new ArrayList<>();
 		guards = new ArrayList<>();
+		bombs = new ArrayList<>();
 		level.init(28, 16);
 		parseLevel("Levels/Level1.txt");
 		envi.init(level);
-		moteur.init(envi, new Coordinates(5, 7), guards, treasures);
+		moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs);
 		frame = new JFrame("LODE RUNNER");
 		frame.add(this);
 		frame.addKeyListener(this);
@@ -163,6 +165,10 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	                	break;
 	                case "GUA":
 	                	guards.add(new Coordinates(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+	                	break;
+	                case "BOM":
+	                	bombs.add(new Coordinates(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+	                	break;
 	                }
 	                if(cellNature)
 	                	level.setNature(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), c);
@@ -281,6 +287,14 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			g.drawImage(treas,pos_x,pos_y,spriteLength,spriteLength, frame);
 		}
 		
+		for(ItemService item: moteur.getBombs()) {
+			System.out.println("je rentre pas dans le bombes");
+			int pos_x = item.getWdt()*spriteLength;
+			int pos_y = (moteur.getEnvi().getHeight()-(item.getHgt()+2))*spriteLength;
+		
+			g.drawImage(bomb,pos_x,pos_y,spriteLength,spriteLength, frame);
+		}
+		
 		for(GuardService gi: moteur.getGuards()) {
 			int pos_x = gi.getWdt()*spriteLength;
 			int pos_y = (moteur.getEnvi().getHeight()-(gi.getHgt()+2))*spriteLength;
@@ -352,7 +366,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				level.init(28, 16);
 				parseLevel("Levels/Level1.txt");
 				envi.init(level);
-				moteur.init(envi, new Coordinates(18, 7), guards, treasures);
+				moteur.init(envi, new Coordinates(18, 7), guards, treasures,bombs);
 				frame = new JFrame("LODE RUNNER");
 				frame.add(this);
 				frame.addKeyListener(this);
