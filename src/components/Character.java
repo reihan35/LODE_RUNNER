@@ -59,8 +59,6 @@ public class Character implements CharacterService {
 			}
 			if (pas_gardien) {
 				wdt = wdt - 1;
-				getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-				getEnvi().addCellContentChar(wdt, hgt, this);
 			}
 		}
 		
@@ -89,8 +87,6 @@ public class Character implements CharacterService {
 			}
 			if (pas_gardien) {
 				wdt = wdt + 1;
-				getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-				getEnvi().addCellContentChar(wdt, hgt, this);
 			}
 			
 		}
@@ -117,8 +113,6 @@ public class Character implements CharacterService {
 			}
 			if (pas_gardien) {
 				hgt = hgt + 1;
-				getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-				getEnvi().addCellContentChar(wdt, hgt, this);
 			}
 			
 		}
@@ -138,8 +132,6 @@ public class Character implements CharacterService {
 		if (pas_gardien) {
 			hgt = hgt + 1;
 			wdt = wdt - 1;
-			getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-			getEnvi().addCellContentChar(wdt, hgt, this);
 
 		}
 	}
@@ -158,8 +150,6 @@ public class Character implements CharacterService {
 		if (pas_gardien) {
 			hgt = hgt + 1;
 			wdt = wdt + 1;
-			getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-			getEnvi().addCellContentChar(wdt, hgt, this);
 
 		}
 	}
@@ -171,8 +161,6 @@ public class Character implements CharacterService {
 		System.out.println(hgt_b);
 		wdt = w;
 		hgt = h;
-		getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-		getEnvi().addCellContentChar(wdt, hgt, this);
 	}
 
 	@Override
@@ -190,8 +178,6 @@ public class Character implements CharacterService {
 			}
 			if (pas_gardien) {
 				hgt = hgt - 1;
-				getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
-				getEnvi().addCellContentChar(wdt, hgt, this);
 
 			}
 		}

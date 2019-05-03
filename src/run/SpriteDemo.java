@@ -75,21 +75,21 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	{
 		try
 		{
-			emp = ImageIO.read(new File("../Sprites/EMP2.png"));
-			hol = ImageIO.read(new File("../Sprites/EMP2.png"));
-			mtl = ImageIO.read(new File("../Sprites/MTL2.png"));
-			treas = ImageIO.read(new File("../Sprites/TREASURE3.png"));
-			player = ImageIO.read(new File("../Sprites/PERSO2modif.png"));
-			hdr = ImageIO.read(new File("../Sprites/HDR2.png"));
-			plt = ImageIO.read(new File("../Sprites/PLT2.png"));
-			lad = ImageIO.read(new File("../Sprites/LADDER2.png"));
-			guard =  ImageIO.read(new File("../Sprites/GUARD2.png"));
-			lost = ImageIO.read(new File("../Sprites/buttonX.png"));
-			une = ImageIO.read(new File("../Sprites/gamepad1.png"));
-			deux = ImageIO.read(new File("../Sprites/gamepad2.png"));
-			trois = ImageIO.read(new File("../Sprites/gamepad3.png"));
-			won = ImageIO.read(new File("../Sprites/trophy.png"));
-			door = ImageIO.read(new File("../Sprites/DOOR.png"));
+			emp = ImageIO.read(new File("Sprites/EMP2.png"));
+			hol = ImageIO.read(new File("Sprites/EMP2.png"));
+			mtl = ImageIO.read(new File("Sprites/MTL2.png"));
+			treas = ImageIO.read(new File("Sprites/TREASURE3.png"));
+			player = ImageIO.read(new File("Sprites/PERSO2modif.png"));
+			hdr = ImageIO.read(new File("Sprites/HDR2.png"));
+			plt = ImageIO.read(new File("Sprites/PLT2.png"));
+			lad = ImageIO.read(new File("Sprites/LADDER2.png"));
+			guard =  ImageIO.read(new File("Sprites/GUARD2.png"));
+			lost = ImageIO.read(new File("Sprites/buttonX.png"));
+			une = ImageIO.read(new File("Sprites/gamepad1.png"));
+			deux = ImageIO.read(new File("Sprites/gamepad2.png"));
+			trois = ImageIO.read(new File("Sprites/gamepad3.png"));
+			won = ImageIO.read(new File("Sprites/trophy.png"));
+			door = ImageIO.read(new File("Sprites/DOOR.png"));
 		}
 		catch(Exception e)
 		{
@@ -103,7 +103,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		treasures = new ArrayList<>();
 		guards = new ArrayList<>();
 		level.init(28, 16);
-		parseLevel("../Levels/Level1.txt");
+		parseLevel("Levels/Level1.txt");
 		envi.init(level);
 		moteur.init(envi, new Coordinates(5, 7), guards, treasures);
 		frame = new JFrame("LODE RUNNER");
@@ -291,7 +291,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		PlayerService p = moteur.getPlayer();
 		if (moteur.getPlayer().willFall() && moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.EMP) {
 			try {
-				player2 = ImageIO.read(new File("../Sprites/player_fall.png"));
+				player2 = ImageIO.read(new File("Sprites/player_fall.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -301,7 +301,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		
 			if (moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.LAD && (moteur.getNextCommand()==Command.UP || moteur.getNextCommand()==Command.DOWN)) {
 					try {
-						player2 = ImageIO.read(new File("../Sprites/player_climb2.png"));
+						player2 = ImageIO.read(new File("Sprites/player_climb2.png"));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -309,7 +309,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			}else {
 					if(moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.HDR) {
 						try {
-							player2 = ImageIO.read(new File("../Sprites/player_cheer1.png"));
+							player2 = ImageIO.read(new File("Sprites/player_cheer1.png"));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -318,7 +318,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 					else {
 						if(moteur.getNextCommand()==Command.LEFT) {
 							try {
-								player2 = ImageIO.read(new File("../Sprites/left_perso2.png"));
+								player2 = ImageIO.read(new File("Sprites/left_perso2.png"));
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -350,7 +350,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				treasures = new ArrayList<>();
 				guards = new ArrayList<>();
 				level.init(28, 16);
-				parseLevel("../Levels/Level1.txt");
+				parseLevel("Levels/Level1.txt");
 				envi.init(level);
 				moteur.init(envi, new Coordinates(18, 7), guards, treasures);
 				frame = new JFrame("LODE RUNNER");

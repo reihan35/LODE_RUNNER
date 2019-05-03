@@ -50,7 +50,7 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			if (p.getWdt() != getWdt())  {
 				throw new PostconditionError("Le joueur n'est pas tombé alors qu'il le fallait ! ");
 			}
-			
+			return;
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.DIGL) {
@@ -73,7 +73,7 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		}
 		if(p.getEngine().getNextCommand() == Command.DOWN) {
 			p.goDown();
-			System.out.println("je passe ici");
+			System.out.println(p.getHgt() + " " + getHgt());
 
 			if (p.getHgt() != getHgt())  {
 

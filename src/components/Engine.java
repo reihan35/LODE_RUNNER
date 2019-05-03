@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Random;
 
+import contracts.PlayerContract;
 import services.Cell;
 import services.CharacterService;
 import services.Command;
@@ -66,7 +67,7 @@ public class Engine implements EngineService {
 		
 		int h_play = playerCoord.getX();
 		int w_play = playerCoord.getY();
-		player = new Player();
+		player = new PlayerContract(new Player());
 		player.init(this, h_play, w_play);
 		env.addCellContentChar(h_play,w_play,player);
 		s = Stat.PLAYING;
@@ -209,13 +210,15 @@ public class Engine implements EngineService {
 				s = Stat.WIN;
 			}
 			
-			//getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
+			getEnvi().removeCellContentChar(player.getWdt(), player.getHgt(), player);
 			player.step();
-			
+			getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
 			
 			for (GuardService g : guards ) {
 				containTreasure(g);
+				getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
 				g.step();
+				getEnvi().addCellContentChar(g.getWdt(), g.getHgt(), g);
 			}
 			
 			for (GuardService g : guards ) {
