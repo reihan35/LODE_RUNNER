@@ -92,5 +92,10 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 		delegates.setTreasure(i);
 	}
 
+	@Override
+	public boolean willMove() {
+		return delegates.willMove();
+	}
+
 	
 }

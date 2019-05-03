@@ -257,7 +257,6 @@ public class Engine implements EngineService {
 			getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
 			
 			for (GuardService g : guards ) {
-				containTreasure(g);
 				getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
 				g.step();
 				getEnvi().addCellContentChar(g.getWdt(), g.getHgt(), g);

@@ -25,8 +25,9 @@ public class Guard extends Character implements GuardService {
 	private int first_x;
 	private int first_y;
 	private ItemService treasure;
-	private int move = 0;
+	private int move;
 	private int can_hold_t;
+	private int timeInHole;
 	
 	@Override
 	public void init(EngineService e, int w, int h, PlayerService p) {
@@ -36,6 +37,8 @@ public class Guard extends Character implements GuardService {
 		id = count++;
 		first_x = w;
 		first_y = h;
+		timeInHole = 0;
+		move = 0;
 		
 	}
 
@@ -111,7 +114,14 @@ public class Guard extends Character implements GuardService {
 
 	@Override
 	public Move getBehaviour() {
+		
 		Cell[] full = {Cell.MTL, Cell.PLT};
+		
+		if(getEnvi().getCellNature(getWdt(),getHgt()) == Cell.HOL) {
+			if(getTarget().getWdt() < getWdt())
+				return Move.LEFT;
+			return Move.RIGHT;
+		}
 		
 		 if (getEnvi().getCellNature(getWdt(),getHgt()) == Cell.LAD && getHgt() < getTarget().getHgt()) {
 			 return Move.UP;
@@ -124,7 +134,7 @@ public class Guard extends Character implements GuardService {
 		 Cell[] emp ={Cell.HOL, Cell.HDR};
 		 
 		// if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1)) || (isFreeCell(getWdt(), getHgt()-1) && characterAt(getWdt(), getHgt()-1))){
-		if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1)) || (isFreeCell(getWdt(), getHgt()-1))){
+		//if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1))){
 
 			 if(getTarget().getWdt() < getWdt()) {
 				 return Move.LEFT;
@@ -133,46 +143,8 @@ public class Guard extends Character implements GuardService {
 				 System.out.println("JE VAIS A DROITE");
 				 return Move.RIGHT;
 			 }
-			 
-			 else {
-				 	System.out.println("JE VEUX SAVOIR");
-					return Move.NEUTRAL;
-				 
-			 }
-		 }
-		 Cell[] f ={Cell.PLT, Cell.MTL};
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getHgt() < getTarget().getHgt() && (!isFreeCell(getWdt(), getHgt() - 1) 
-				 																							|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 if(getTarget().getHgt() - getHgt() < getTarget().getWdt()) {
-				 return Move.UP;
-			 }
-		 }
-		 
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getWdt() > getTarget().getWdt() && (!isFreeCell(getWdt(), getHgt() - 1) 
-																											|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 if(getTarget().getHgt() - getHgt() < getTarget().getWdt()) {
-				 return Move.DOWN;
-			 }
-		 }
-		 
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getHgt() > getTarget().getHgt() &&(!isFreeCell(getWdt(), getHgt() - 1) 
-				 																								|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 if(getTarget().getHgt() - getHgt() < getTarget().getWdt()) {
-				 return Move.LEFT;
-			 }
-		 }
-		 
-		 System.out.println(!isFreeCell(getWdt(), getHgt() - 1));
-		 System.out.println("HOHOHO");
-
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getWdt() < getTarget().getWdt() && (!isFreeCell(getWdt(), getHgt() - 1) 
-																											|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 System.out.println("HOHOHO");
-			 if(getTarget().getHgt() - getHgt() > getTarget().getWdt()) {
-				 return Move.RIGHT;
-			 }
-		 }
-		 return Move.NEUTRAL;
+		 //}
+		return Move.NEUTRAL;
 	}
 
 
@@ -184,7 +156,43 @@ public class Guard extends Character implements GuardService {
 
 	@Override
 	public int getTimeInHole() {
-		return engine.getHoles(getWdt(), getHgt());
+		return timeInHole;
+	}
+	
+	public void Climb_Left() {
+		boolean pas_gardien = true;
+		int wdt_b = wdt;
+		int hgt_b = hgt;
+		if(this instanceof GuardService ) {
+			for(CharacterService c : getEnvi().getCellContentChar(wdt-1,hgt+1)) {
+				if(c instanceof GuardService) {
+					pas_gardien = false;
+				}
+			}
+		}
+		if (pas_gardien) {
+			hgt = hgt + 1;
+			wdt = wdt - 1;
+
+		}
+	}
+	
+	public void Climb_Right() {
+		int wdt_b = wdt;
+		int hgt_b = hgt;
+		boolean pas_gardien = true;
+		if(this instanceof GuardService ) {
+			for(CharacterService c : getEnvi().getCellContentChar(wdt+1,hgt+1)) {
+				if(c instanceof GuardService) {
+					pas_gardien = false;
+				}
+			}
+		}
+		if (pas_gardien) {
+			hgt = hgt + 1;
+			wdt = wdt + 1;
+
+		}
 	}
 	
 	@Override
@@ -234,7 +242,7 @@ public class Guard extends Character implements GuardService {
 	}
 	
 	public boolean willMove() {
-		if (move++ > 2) {
+		if (move > 2) {
 			move = 0;
 			return true;
 		}
@@ -243,14 +251,18 @@ public class Guard extends Character implements GuardService {
 
 	@Override
 	public void step() {
-		
-		
+
+ 		move++;
+		if(!willMove()) return;
+		if(getEnvi().getCellNature(getWdt(),getHgt()) == Cell.HOL)
+			timeInHole++;
 		System.out.println("je rentre dans step");
 		if(willClimbLeft() || willClimbRight()) {
 			if (willClimbLeft())
 				climbLeft();
 			else
 				climbRight();
+			timeInHole = 0;
 		}
 		else {
 			if(willAddTime() || willStay()) {

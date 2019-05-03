@@ -10,7 +10,8 @@ import util.SetUtil;
 public class Character implements CharacterService {
 
 	private EnvironmentService envi;
-	private int hgt, wdt;
+	protected int hgt;
+	protected int wdt;
 	@Override
 	public EnvironmentService getEnvi() {
 		return envi;
@@ -118,41 +119,7 @@ public class Character implements CharacterService {
 		}
 
 	}
-	public void Climb_Left() {
-		boolean pas_gardien = true;
-		int wdt_b = wdt;
-		int hgt_b = hgt;
-		if(this instanceof GuardService ) {
-			for(CharacterService c : getEnvi().getCellContentChar(wdt-1,hgt+1)) {
-				if(c instanceof GuardService) {
-					pas_gardien = false;
-				}
-			}
-		}
-		if (pas_gardien) {
-			hgt = hgt + 1;
-			wdt = wdt - 1;
 
-		}
-	}
-	
-	public void Climb_Right() {
-		int wdt_b = wdt;
-		int hgt_b = hgt;
-		boolean pas_gardien = true;
-		if(this instanceof GuardService ) {
-			for(CharacterService c : getEnvi().getCellContentChar(wdt+1,hgt+1)) {
-				if(c instanceof GuardService) {
-					pas_gardien = false;
-				}
-			}
-		}
-		if (pas_gardien) {
-			hgt = hgt + 1;
-			wdt = wdt + 1;
-
-		}
-	}
 	
 	public void transport(int w,int h) {
 		int wdt_b = wdt;

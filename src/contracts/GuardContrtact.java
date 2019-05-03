@@ -5,6 +5,7 @@ import components.Player;
 import decorators.GuardDecorator;
 import services.Cell;
 import services.CharacterService;
+import services.Command;
 import services.EngineService;
 import services.EnvironmentService;
 import services.GuardService;
@@ -182,7 +183,7 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 	
 	@Override
 	public void step() {
-		
+
 		EngineService engine_at_pre = getEngine();
 		PlayerService p_at_pre = getPlayer();
 		GuardService g = new Guard();
@@ -191,7 +192,7 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL){
 			t_at_pre = getEngine().getHoles(getWdt(), getHgt());
 		}
-
+		Move behaviour = getBehaviour();
 		super.step();
 		
 
@@ -199,6 +200,8 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
 		}
 		
+		//traduire par des if else dans la specif...
+		if (!willMove()) return;
 		if(g.willClimbLeft()) {
 			
 			g.climbLeft();
@@ -281,11 +284,13 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 			if (g.getWdt() != getWdt())  {
 				throw new PostconditionError("Le gardien n'est pas tombé alors qu'il le fallait ! ");
 			}
+			//beware not to execute the rest...
+			return;
 			
 		}
 		
 		
-		if(g.getBehaviour() == Move.UP) {
+		if(behaviour == Move.UP) {
 			
 			g.goUp();
 			
@@ -301,43 +306,46 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		
 		}
 		
-		if(g.getBehaviour() == Move.DOWN) {
+		if(behaviour== Move.DOWN) {
 			
+
 			g.goDown();
+			
+			System.out.println(g.getHgt());
+			System.out.println(getHgt());
+			System.out.println(g.getBehaviour());
+			System.out.println(behaviour);
 			
 			if (g.getHgt() != getHgt())  {
 				throw new PostconditionError("Le gardien ne s'est pas deplace vers le bas ! ");
 			}
 			
-			
+
 			if (g.getWdt() != getWdt())  {
-				throw new PostconditionError("Le gardien ne s'est pas deplace vers le bas ! ");
+				throw new PostconditionError("Le gadien ne s'est pas deplace vers le bas ! ");
 			}
 		
 		
 		}
 		
-		if(g.getBehaviour() == Move.RIGHT) {
+		if(behaviour == Move.RIGHT) {
+			System.out.println("le joueur a comme coordonnees " + g.getWdt() + ", " + g.getHgt() + " actual " +getWdt() + "," + getHgt() );
 			
 			g.goRight();
-			
 			if (g.getHgt() != getHgt())  {
 				throw new PostconditionError("Le gardien ne s'est pas deplace vers la droite ! ");
 			}
 			
-			
+
 			if (g.getWdt() != getWdt())  {
 				throw new PostconditionError("Le gardien ne s'est pas deplace vers la drpite ! ");
 			}
 		
 		
 		}
-		if(g.getBehaviour() == Move.LEFT) {
-			System.out.println("JE VEUX MOVE LEFT");
-			System.out.println(g.getWdt());
+		if(behaviour == Move.LEFT) {
 			g.goLeft();
-			System.out.println(g.getWdt());
-			System.out.println(getWdt());
+
 
 			if (g.getHgt() != getHgt())  {
 				throw new PostconditionError("Le gardien ne s'est pas deplace vers la gauche ! ");
@@ -350,7 +358,7 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		
 		}
 		
-		if(g.getBehaviour() == Move.NEUTRAL) {
+		if(behaviour == Move.NEUTRAL) {
 			
 			g.stay();
 			

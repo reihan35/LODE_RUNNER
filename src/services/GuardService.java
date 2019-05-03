@@ -36,7 +36,7 @@ public interface GuardService extends CharacterService {
 	 */
 	default public boolean willClimbLeft() {
 		System.out.println("on est dans willClimbLeft : "  + getEnvi().getCellNature(getWdt(), getHgt()) + getBehaviour() );
-		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.LEFT;	
+		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() >= 5 && getBehaviour() == Move.LEFT;	
 	}
 	
 	
@@ -45,7 +45,7 @@ public interface GuardService extends CharacterService {
 	 */
 	default public boolean willClimbRight() {
 		 System.out.println("on est dans willClimbRight : "  + getEnvi().getCellNature(getWdt(), getHgt()) + getBehaviour() );
-		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.RIGHT;
+		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() >= 5 && getBehaviour() == Move.RIGHT;
 	}
 	
 	/**
@@ -181,5 +181,7 @@ public interface GuardService extends CharacterService {
 	EngineService getEngine();
 	void init(EngineService e, int w, int h, PlayerService p);
 	void setTreasure(ItemService i);
+	
+	boolean willMove();
 
 }
