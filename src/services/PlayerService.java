@@ -106,4 +106,8 @@ public interface PlayerService extends CharacterService {
 	 *  
 	 **/
 	public void step();
+
+	public ItemService getBomb();
+
+	public void setBomb(ItemService itemService);
 }

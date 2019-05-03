@@ -119,6 +119,7 @@ public class Character implements CharacterService {
 				hgt = hgt + 1;
 				getEnvi().removeCellContentChar(wdt_b, hgt_b, this);
 				getEnvi().addCellContentChar(wdt, hgt, this);
+
 			}
 			
 		}

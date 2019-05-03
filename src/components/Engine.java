@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Random;
 
+import contracts.PlayerContract;
 import services.Cell;
 import services.CharacterService;
 import services.Command;
@@ -29,6 +30,7 @@ public class Engine implements EngineService {
 	private PlayerService player;
 	private ArrayList<GuardService> guards;
 	private ArrayList<ItemService> treasures;
+	private ArrayList<ItemService> bombs;
 	private Stat s;
 	private Command nextCommand;
 	private int[][] holesTimes;
@@ -40,35 +42,51 @@ public class Engine implements EngineService {
 	
 	
 	public void init(EnvironmentService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
-			ArrayList<Coordinates> treasuresCoord) {
+			ArrayList<Coordinates> treasuresCoord, ArrayList<Coordinates> bombCoord) {
 		env = screen;
 		int id = 0;
 		
 		guards = new ArrayList<GuardService>();
 		treasures = new ArrayList<ItemService>();
+		bombs = new ArrayList<ItemService>();
 		holesTimes = new int[screen.getWidth()][screen.getHeight()];
 		
 		for(Coordinates c : treasuresCoord) {
 			ItemService i = new Item();
 			i.init(id++,ItemType.TREASURE,c.getX(),c.getY());
 			treasures.add(i);
-			try {
+			/*try {
 				String s1 = c.getX() + " " + c.getY() + "\n";
 				Files.write(Paths.get("error.txt"), s1.getBytes(), StandardOpenOption.APPEND);
 			    
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			env.addCellContentItem(c.getX(),c.getY(), i);
 		}
+		
+
+		for(Coordinates c : bombCoord) {
+			ItemService i = new Item();
+			i.init(id++,ItemType.BOMB,c.getX(),c.getY());
+			bombs.add(i);
+			env.addCellContentItem(c.getX(),c.getY(), i);
+		}
+		
+		System.out.println("au moment");
+		System.out.println(env.getCellContentItem(6, 7).size());
 		first_t_n = treasures.size();
 		
 		int h_play = playerCoord.getX();
 		int w_play = playerCoord.getY();
+		//player = new PlayerContract(new Player());
+		//player.init(this, h_play, w_play);
 		player = new Player();
 		player.init(this, h_play, w_play);
 		env.addCellContentChar(h_play,w_play,player);
+		System.out.println("la size est : ");
+		System.out.println(env.getCellContentChar(h_play,w_play).size());
 		s = Stat.PLAYING;
 		for(int i = 0 ; i < getEnvi().getWidth() ; i++) {
 			for(int j = 0 ; j < getEnvi().getHeight() ; j++) {
@@ -155,6 +173,20 @@ public class Engine implements EngineService {
 		}
 	}
 	
+	public void containBomb() {
+		System.out.println("j'arrive a renter dans containB");
+		ArrayList<ItemService> items = getEnvi().getCellContentItem(getPlayer().getWdt(),getPlayer().getHgt());
+		if(items.size() > 0){
+			System.out.println("je rentre meme ici avec");
+
+			if (getPlayer().getBomb()==null){
+				getPlayer().setBomb(items.get(0));
+				treasures.remove(items.get(0));
+				getEnvi().removeCellContentItem(getPlayer().getWdt(),getPlayer().getHgt(),items.get(0));
+				bombs.remove(0);
+			}
+		}
+	}
 
 	@Override
 	public int getHoles(int x , int y) {
@@ -205,6 +237,7 @@ public class Engine implements EngineService {
 	    
 		if(s != Stat.WIN || s!= Stat.LOSS) {
 			containTreasure(player);
+			containBomb();
 			if (score == first_t_n*10) {
 				s = Stat.WIN;
 			}
@@ -236,6 +269,12 @@ public class Engine implements EngineService {
 	public void addCommand(Command c) {
 		nextCommand = c;
 		
+	}
+
+	@Override
+	public ArrayList<ItemService> getBombs() {
+		// TODO Auto-generated method stub
+		return bombs;
 	}
 
 

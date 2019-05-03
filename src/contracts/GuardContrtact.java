@@ -198,9 +198,7 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
 		}
 		
-		
-		super.step();
-		
+				
 		if(g.willFall()) {
 			
 			g.goDown();

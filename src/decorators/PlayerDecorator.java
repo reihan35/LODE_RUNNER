@@ -6,6 +6,7 @@ import services.CharacterService;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
+import services.ItemService;
 import services.PlayerService;
 
 public class PlayerDecorator extends CharacterContract implements PlayerService {
@@ -33,6 +34,17 @@ public class PlayerDecorator extends CharacterContract implements PlayerService 
 	public void init(EngineService e, int w, int h) {
 		delegates.init(e, w, h);
 		
+	}
+
+	@Override
+	public ItemService getBomb() {
+		// TODO Auto-generated method stub
+		return delegates.getBomb();
+	}
+
+	@Override
+	public void setBomb(ItemService itemService) {
+		delegates.getBomb();
 	}
 
 }

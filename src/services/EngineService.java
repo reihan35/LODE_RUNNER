@@ -48,7 +48,7 @@ public interface EngineService {
 	 * post: getStatus() == PLAYING
 	 */
 	public void init(EnvironmentService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
-				ArrayList<Coordinates> treasuresCoord);
+				ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord);
 	
 	
 	/**
@@ -77,4 +77,5 @@ public interface EngineService {
 	void addTreasure(int wdt, int hgt);
 	void removeTreasure();
 	int getScore();
+	public ArrayList<ItemService> getBombs();
 }

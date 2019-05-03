@@ -31,6 +31,8 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		PlayerService p = new Player();
 		boolean will_dig_right_at_pre = willDigRight();
 		boolean will_dig_left_at_pre = willDigLeft();
+		boolean will_fall = willFall();
+		Command command_at_pre = getEngine().getNextCommand();
 		p.init(engine_at_pre,getWdt(),getHgt());
 
 		super.step();
@@ -39,18 +41,11 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
 		}
 		if(p.willFall()) {
-			
-			p.goDown();
-			
-			if (p.getHgt() != getHgt())  {
-				throw new PostconditionError("Le joueur n'est pas tombé alors qu'il le fallait ! ");
+			if(!will_fall) {
+				throw new PostconditionError("Le joueur ne peut pas tomber");
+
 			}
-			
-			
-			if (p.getWdt() != getWdt())  {
-				throw new PostconditionError("Le joueur n'est pas tombé alors qu'il le fallait ! ");
-			}
-			
+	
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.DIGL) {
@@ -72,75 +67,35 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			}
 		}
 		if(p.getEngine().getNextCommand() == Command.DOWN) {
-			p.goDown();
-			System.out.println("je passe ici");
-
-			if (p.getHgt() != getHgt())  {
-
-				throw new PostconditionError("Le joueur n'est pas allé en bas alors qu'il le fallait ! ");
+			if(command_at_pre != Command.DOWN) {
+				throw new PostconditionError("Le joueur n'est pas allee en bas alors qu'il le fallait ! ");
 			}
-			
-			if (p.getWdt() != getWdt())  {
-				throw new PostconditionError("Le joueur n'est pas allé en bas qu'il le fallait ! ");
-			}
-			
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.UP) {
-			
-			p.goUp();
-			
-			System.out.println("BONJOUE A TOUS");
-			System.out.println(p.getHgt());
-			System.out.println(getHgt());
-			if (p.getHgt() != getHgt())  {
-				throw new PostconditionError("Le joueur n'est pas allé en haut alors qu'il le fallait ! ");
+			if(command_at_pre != Command.UP) {
+				throw new PostconditionError("Le joueur n'est pas allee en haut alors qu'il le fallait ! ");
 			}
-			
-			if (p.getWdt() != getWdt())  {
-				throw new PostconditionError("Le joueur n'est pas allé en haut qu'il le fallait ! ");
-			}
-			
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.RIGHT) {
 			
-			p.goRight();
-			
-			if (p.getHgt() != getHgt())  {
-				throw new PostconditionError("Le joueur n'est pas allé à droite alors qu'il le fallait ! ");
+			if(command_at_pre != Command.RIGHT) {
+				throw new PostconditionError("Le joueur n'est pas allee a droite alors qu'il le fallait ! ");
 			}
-			
-			if (p.getWdt() != getWdt())  {
-				throw new PostconditionError("Le joueur n'est pas allé à droite qu'il le fallait ! ");
-			}
-			
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.LEFT) {
 			
-			p.goLeft();
-			
-			if (p.getHgt() != getHgt())  {
-				throw new PostconditionError("Le joueur n'est pas allé à gauche alors qu'il le fallait ! ");
+			if(command_at_pre != Command.LEFT) {
+				throw new PostconditionError("Le joueur n'est pas allee a gauche alors qu'il le fallait ! ");
 			}
-			
-			if (p.getWdt() != getWdt())  {
-				throw new PostconditionError("Le joueur n'est pas allé à gauche qu'il le fallait ! ");
-			}
-			
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.NEUTRAL) {
 			
-			p.stay();
-			
-			if (p.getHgt() != getHgt())  {
-				throw new PostconditionError("Le joueur n'est pas resté à sa place alors qu'il le fallait ! ");
-			}
-			
-			if (p.getWdt() != getWdt())  {
-				throw new PostconditionError("Le joueur n'est pas resté à sa place alors qu'il le fallait ! ");
+			if(command_at_pre != Command.NEUTRAL) {
+				throw new PostconditionError("Le joueur n'est pas reste a sa place alors qu'il le fallait ! ");
 			}
 			
 		}

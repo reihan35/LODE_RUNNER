@@ -97,7 +97,7 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 			for(int y = 0; y < getHeight(); y++) {
 				for(CharacterService c1: getCellContentChar(x, y)) {
 					for(CharacterService c2: getCellContentChar(x, y)) {
-						if(c1 != c2 && !(c1 instanceof GuardService) && !(c2 instanceof GuardService)) {
+						if(c1 != c2 && (c1 instanceof GuardService) && (c2 instanceof GuardService)) {
 							throw new InvariantError("2 personnages differents sur la même case");
 						}
 					}
@@ -208,11 +208,11 @@ public class EnvironmentContract extends EnvironmentDecorator implements Environ
 		if(!isInWindow(x, y)) {
 			throw new PreconditionError("La position specifiee n'est pas dans la fenetre");
 		}
-		if(!getCellContentChar(x, y).contains(c)) {
+		/*if(!getCellContentChar(x, y).contains(c)) {
 			throw new PreconditionError("Le personnage voulu n'est pas dans la case");
-		}
+		}*/
 		if (getCellContentChar(x, y).size() == 0) {
-			throw new PreconditionError("La case est vide !");
+			throw new PreconditionError("La case ne contient pas de perso !");
 		}
 		checkInvariants();
 		super.removeCellContentChar(x, y, c);
