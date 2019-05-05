@@ -83,6 +83,10 @@ public interface PlayerService extends CharacterService {
 		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);	
 		if(getEngine().getNextCommand() == Command.DIGL) {
 			if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
+				System.out.println("wow omg !");
+				System.out.println(isFreeCell(getWdt()-1,getHgt()));
+				System.out.println( getEnvi().getCellNature(getWdt()-1,  getHgt()-1));
+				System.out.println("MAIS JE COMPRENDS PAAS");
 				return isFreeCell(getWdt()-1,getHgt()) && getEnvi().getCellNature(getWdt()-1,  getHgt()-1)==Cell.PLT;
 			}
 		}

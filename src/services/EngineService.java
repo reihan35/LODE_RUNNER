@@ -78,4 +78,5 @@ public interface EngineService {
 	void removeTreasure();
 	int getScore();
 	public ArrayList<ItemService> getBombs();
+	public int get_nb_first_tres();
 }

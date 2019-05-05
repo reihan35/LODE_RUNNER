@@ -179,7 +179,7 @@ public class Engine implements EngineService {
 		ArrayList<ItemService> items = getEnvi().getCellContentItem(getPlayer().getWdt(),getPlayer().getHgt());
 		System.out.println("wdt vaut : " + player.getWdt());
 
-		if(items.size() > 0){
+		if(items.size() > 0 && items.get(0).getNature()==ItemType.BOMB){
 			System.out.println("je rentre meme ici avec");
 			if (getPlayer().getBomb()==null){
 				System.out.println("HELLO");
@@ -254,6 +254,11 @@ public class Engine implements EngineService {
 				getPlayer().setBomb(-1,ItemType.BOMB,-1,-1);
 			}
 		}
+	}
+	
+	@Override
+	public int get_nb_first_tres() {
+		return first_t_n;
 	}
 	
 	@Override

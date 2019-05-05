@@ -226,7 +226,7 @@ public class Guard extends Character implements GuardService {
 	
 	public void drop_off() {
 		if(treasure != null) {
-			getEngine().removeTreasure();
+			//getEngine().removeTreasure();
 			getEngine().addTreasure( getWdt(), getHgt()+1);
 			getEngine().getEnvi().addCellContentItem(getWdt(), getHgt()+1, treasure);
 			treasure = null;
@@ -265,7 +265,7 @@ public class Guard extends Character implements GuardService {
 			timeInHole = 0;
 		}
 		else {
-			if(willAddTime() || willStay()) {
+			if(/*willAddTime()*/ willStay()) {
 				stay();
 			}
 			else {

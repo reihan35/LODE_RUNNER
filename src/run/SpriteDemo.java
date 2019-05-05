@@ -1,10 +1,13 @@
 package run;
 
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
 import java.awt.event.*;
 import java.awt.image.ImageObserver;
 import java.io.BufferedReader;
@@ -13,9 +16,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Time;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.plaf.basic.BasicTreeUI;
@@ -41,6 +47,7 @@ import services.Stat;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 
 //Problems: Agents stay at their position in the window, not in the world --> once out of the window, they disappear!
@@ -67,6 +74,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	Random rand = new Random();
 	int n = 0;
 	boolean p_c;
+	int s = 3;
 	
 	public int get_vie() {
 		return vie;
@@ -227,8 +235,6 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		//g.drawImage(emp,spriteLength*0,(moteur.getEnvi().getHeight()-(0 + 2))*spriteLength,spriteLength,spriteLength, frame);
 		//Graphics2D g2 = (Graphics2D)g;
 		//paints the world (and adds the WeatherTime)
-		
-			    
 		for(int i = 0; i < moteur.getEnvi().getWidth(); i++) {
 			for(int j = 0; j < moteur.getEnvi().getHeight(); j++) {
 				int pos_x = spriteLength * i;
@@ -267,8 +273,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		
 		switch(vie) {
 			case 0:
-				g.drawImage(lost, 20, 15, 200, 200, frame);
-				System.exit(0);
+				//JOptionPane j = new JOptionPane();
+				//j.showMessageDialog(frame, "see you next time !", "GameOver", 1);
 
 			case 1:
 				img = une;
@@ -362,7 +368,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		}
 		
 		if (moteur.getStatus() == Stat.LOSS) {
-				frame.setVisible(false); //you can't see me!
+				vie--;
+				frame.setContentPane( new JPanel( new BorderLayout() ) );
 				moteur = new EngineContract(new Engine());
 				level = new EditableScreenContract(new EditableScreen());
 				envi = new EnvironmentContract(new Environment());
@@ -373,23 +380,27 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				parseLevel("Levels/Level1.txt");
 				envi.init(level);
 				moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs);
-				frame = new JFrame("LODE RUNNER");
 				frame.add(this);
 				frame.addKeyListener(this);
 				sizeWindow_x = spriteLength * moteur.getEnvi().getWidth();
 				sizeWindow_y = spriteLength * moteur.getEnvi().getHeight();
 				frame.setSize(sizeWindow_x, sizeWindow_y);
 				frame.setVisible(true);
-				vie--;
-				
-		 }
-		
+				}
+
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 		
 		frame.repaint();
+		g.drawString("You have only " + vie + "lives left", 150, 15);
+		s++;
+		if (true) {
+			//throw new Error ("je pass ici");
+			g.clearRect(150, 15, 40,10 );
+		}
+
 	}
 
 	

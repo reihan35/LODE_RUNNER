@@ -106,6 +106,12 @@ public class EngineDecorator implements EngineService {
 		return delegates.getBombs();
 	}
 
+	@Override
+	public int get_nb_first_tres() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 
 }

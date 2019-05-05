@@ -1,5 +1,6 @@
 package contracts;
 
+import components.Character;
 import components.Player;
 import decorators.PlayerDecorator;
 import services.Cell;
@@ -33,11 +34,19 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		boolean will_dig_left_at_pre = willDigLeft();
 		p.init(engine_at_pre,getWdt(),getHgt());
 		Command c = getEngine().getNextCommand();
+				
 		super.step();
+		
 		
 		if (engine_at_pre != getEngine()) {
 			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
 		}
+	
+		if(p.getEnvi().getCellNature(getWdt(), getHgt()) != Cell.DOR && p.getEngine().getNextCommand() == Command.OPEND){
+			throw new PostconditionError("La porte n'existe pas ! ");
+
+		}
+		
 		if(p.willFall()) {
 			
 			p.goDown();
@@ -54,14 +63,21 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.DIGL) {
-			System.out.println(c);
-			System.out.println(p.getEngine().getNextCommand());
+			System.out.println("salut toi");
+			System.out.println(will_dig_left_at_pre);
+			if (!will_dig_left_at_pre) {
+				throw new PostconditionError("Le joueur ne peut pas creuser a gauche ");
+			}
 			if(will_dig_left_at_pre && getEnvi().getCellNature(getWdt()-1,getHgt()-1) != Cell.HOL) {
 				throw new PostconditionError("Le joueur n'a pas creusé à gauche alors qu'il le fallait ");
 			}
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.DIGR) {
+			if (!will_dig_right_at_pre) {
+				throw new PostconditionError("Le joueur ne peut pas creuser a droite ");
+			}
+			
 			if(will_dig_right_at_pre && getEnvi().getCellNature(getWdt()+1,getHgt()-1) != Cell.HOL) {
 				throw new PostconditionError("Le joueur n'a pas creuse a droite alors qu'il le fallait ");
 			}
@@ -137,103 +153,26 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			if (p.getWdt() != getWdt())  {
 				throw new PostconditionError("Le joueur n'est pas resté à sa place alors qu'il le fallait ! ");
 			}
-			
 		}
 		
+			
+		if(p.getEnvi().getCellNature(getWdt(), getHgt()) == Cell.DOR && p.getEngine().getNextCommand() == Command.OPEND) {				if (getWdt()==15 && getHgt()==13) {
+				((Character) p).transport(13, 7);
+			}
+			else {
+				((Character) p).transport(15, 13);
+			}
+			
+				
+			if (p.getHgt() != getHgt())  {
+				throw new PostconditionError("Le joueur ne peut pas ouvrire la porte ! ");
+			}
+				
+			if (p.getWdt() != getWdt())  {
+				throw new PostconditionError("Le joueur ne peut pas ouvrire la porte ! ");				}
+			
+			}
 		
 	}
 
 }
-/*package contracts;
-
-import components.Player;
-import decorators.PlayerDecorator;
-import services.Cell;
-import services.Command;
-import services.EngineService;
-import services.EnvironmentService;
-import services.PlayerService;
-
-public class PlayerContract extends PlayerDecorator implements PlayerService {
-
-	public PlayerContract(PlayerService delegates) {
-		super(delegates);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void step() {
-		EngineService engine_at_pre = getEngine();
-		PlayerService p = new Player();
-		boolean will_dig_right_at_pre = willDigRight();
-		boolean will_dig_left_at_pre = willDigLeft();
-		boolean will_fall = willFall();
-		Command command_at_pre = getEngine().getNextCommand();
-		p.init(engine_at_pre,getWdt(),getHgt());
-
-		super.step();
-		
-		if (engine_at_pre != getEngine()) {
-			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
-		}
-		if(p.willFall()) {
-			if(!will_fall) {
-				throw new PostconditionError("Le joueur ne peut pas tomber");
-
-			}
-	
-		}
-		
-		if(p.getEngine().getNextCommand() == Command.DIGL) {
-			if(!will_dig_left_at_pre) {
-				throw new PostconditionError("Le joueur ne peut pas creuser a gauche");
-
-			}
-			if(will_dig_left_at_pre && getEnvi().getCellNature(getWdt()-1,getHgt()-1) != Cell.HOL) {
-				throw new PostconditionError("Le joueur n'a pas creusé à gauche alors qu'il le fallait ");
-			}
-		}
-		
-		if(p.getEngine().getNextCommand() == Command.DIGR) {
-			if (!will_dig_right_at_pre) {
-				throw new PostconditionError("le joueur ne peut pas creuser a doite ");
-			}
-			if(will_dig_right_at_pre && getEnvi().getCellNature(getWdt()+1,getHgt()-1) != Cell.HOL) {
-				throw new PostconditionError("Le joueur n'a pas creuse a droite alors qu'il le fallait ");
-			}
-		}
-		if(p.getEngine().getNextCommand() == Command.DOWN) {
-			if(command_at_pre != Command.DOWN) {
-				throw new PostconditionError("Le joueur n'est pas allee en bas alors qu'il le fallait ! ");
-			}
-		}
-		
-		if(p.getEngine().getNextCommand() == Command.UP) {
-			if(command_at_pre != Command.UP) {
-				throw new PostconditionError("Le joueur n'est pas allee en haut alors qu'il le fallait ! ");
-			}
-		}
-		
-		if(p.getEngine().getNextCommand() == Command.RIGHT) {
-			
-			if(command_at_pre != Command.RIGHT) {
-				throw new PostconditionError("Le joueur n'est pas allee a droite alors qu'il le fallait ! ");
-			}
-		}
-		
-		if(p.getEngine().getNextCommand() == Command.LEFT) {
-			
-			if(command_at_pre != Command.LEFT) {
-				throw new PostconditionError("Le joueur n'est pas allee a gauche alors qu'il le fallait ! ");
-			}
-		}
-		
-		if(p.getEngine().getNextCommand() == Command.NEUTRAL) {
-			
-			if(command_at_pre != Command.NEUTRAL) {
-				throw new PostconditionError("Le joueur n'est pas reste a sa place alors qu'il le fallait ! ");
-			}
-			
-		}
-	}
-*/

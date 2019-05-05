@@ -2,6 +2,7 @@ package contracts;
 
 import java.util.ArrayList;
 
+import javax.net.ssl.HostnameVerifier;
 
 import components.Item;
 import decorators.EngineDecorator;
@@ -31,8 +32,11 @@ public class EngineContract extends EngineDecorator implements EngineService{
 		
 		super.init(screen, playerCoord, guardsCoord, treasuresCoord,bombCoord);
 		
-		
-		if(getPlayer().getWdt() != playerCoord.getX() || getPlayer().getHgt() != playerCoord.getY()) {
+		System.out.println("On est la !!!");
+		System.out.println(getPlayer().getWdt());
+		System.out.println(playerCoord.getX() );
+		System.out.println(getPlayer().getWdt() != playerCoord.getX());
+		if((getPlayer().getWdt() != playerCoord.getX() )||( getPlayer().getHgt() != playerCoord.getY())) {
 			System.out.println(playerCoord.getX()+ " " + playerCoord.getY());
 			System.out.println(playerCoord.getX()+ " " + playerCoord.getY());
 			throw new PostconditionError("La position initiale du joueur ne correspond pas a celle passee en parametre ! ");
@@ -108,8 +112,10 @@ public class EngineContract extends EngineDecorator implements EngineService{
 
 		}
 		//getTreasures().size() == 0 implies getStatus() = WIN
-		if ((getTreasures().size() == 0) && (getStatus() != Stat.WIN)) {
+		
+		if ((getScore() != 0) && (getScore() == get_nb_first_tres()*10) && (getStatus() != Stat.WIN)) {
 			 throw new InvariantError("La partie n'a pas ete gagnee alors que il y a plus de tresors");
+
 		}
 		
 		//Player p = getPlayer() in getEnvi().getCellContentChar(p.getWdt(), p.getHgt())
@@ -117,99 +123,73 @@ public class EngineContract extends EngineDecorator implements EngineService{
 		int x_play = getPlayer().getWdt();
 		int y_play = getPlayer().getHgt();
 		if (!getEnvi().getCellContentChar(x_play,y_play).contains(getPlayer())) {
-			 throw new InvariantError("Le joueur n'est pas � la bonne place !");
+			 throw new InvariantError("Le joueur n'est pas a la bonne place !");
 		}
 		
 		
 	}
 	
 	
-	/**
-	 * post: exists Guard g in getEnvi().getCellContentChar(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
-	 * 			implies getStatus() == LOSS
-	 * post: exists Treasure t in getEnvi().getCellContentItem(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
-	 * 			implies not exists t in getTreasures()
-	 * post : forall (x, y) in [0;getWidth()[ X [0;getHeight()[ 
-	 * 			&& getCellNature(x, y) == HOL implies getHoles(x,y) == Holes(x,y)@pre + 1
-	 * 
-	 * post : forall (x, y) in [0;getWidth()[ X [0;getHeight()[ 
-	 * 			&& getCellNature(x, y) == HOL && getHoles(x,y) == 15 implies getCellNature(x, y) == PLT 
-	 * 															 && getPlayer.getHgt() == x
-	 * 															 &&	getPlayer.getWdt() == y
-	 * 															 implies getStatus() = Status.LOSS
-	 * 
-	 * post:Player p = getPlayer() in p.willDigRight()@pre implies Holes(p.getWdt()@pre+1,p.getHgt()-1) = 0
-	 * 
-	 * post: Player p = getPlayer() in p.willDigLeft()@pre implies Holes(p.getWdt()@pre-1,p.getHgt()@pre-1) = 0
-	 */
 	public void step() {
 		
 		int hgt_player_at_pre = getPlayer().getHgt();
 		int wdt_player_at_pre = getPlayer().getWdt();
 		boolean will_dig_right_atPre = getPlayer().willDigRight();
 		boolean will_dig_left_atPre = getPlayer().willDigLeft();
-		
 		ArrayList<CharacterService> cellContentChar_atPre = (ArrayList<CharacterService>) getEnvi().getCellContentChar(wdt_player_at_pre, hgt_player_at_pre).clone(); 
 		ArrayList<ItemService> cellContentItem_atPre = (ArrayList<ItemService>) getEnvi().getCellContentItem(wdt_player_at_pre, hgt_player_at_pre).clone(); 
-
-		super.step();
-		
-		/* post: exists Guard g in getEnvi().getCellContentChar(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
-		 * 			implies getStatus() == LOSS
-		 */
-		
-		//only one player so 2 at the same place means at least one is guard
-		/*if(cellContentChar_atPre.size()>1) {
-			if(getStatus() != Stat.LOSS) {
-				throw new PostconditionError("La partie devrait etre perdue");
+		int treasure_size_at_pre = getTreasures().size();
+		int[][] holes_time_at_pre;
+		holes_time_at_pre = new int[getEnvi().getWidth()][getEnvi().getHeight()];
+		ArrayList<Coordinates> holes_at_pre = new ArrayList<Coordinates>();
+		int bombs_size_at_pre = getBombs().size();
+		for(int x = 0; x < getEnvi().getWidth(); x++) {
+			for(int y = 0; y < getEnvi().getHeight(); y++) {
+				if(getEnvi().getCellNature(x, y) == Cell.HOL) {
+					holes_time_at_pre[x][y] = getHoles(x, y);
+					holes_at_pre.add(new Coordinates(x, y));
+				}
 			}
-		}*/
-		/* post: exists Treasure t in getEnvi().getCellContentItem(getPlayer().getWdt()@pre, getPlayer().getHgt()@pre)@pre
-		 * 			implies not exists t in getTreasures()
-		 */
+		}
+				
+		super.step();
+		//checkInvariants();
+		
+		ArrayList<CharacterService> a = getEnvi().getCellContentChar(getPlayer().getWdt(), getPlayer().getHgt());
+		for (CharacterService c : cellContentChar_atPre) {
+			if (c instanceof GuardService && getStatus() != Stat.LOSS) {
+				throw new PostconditionError("Le statu n'a pas mis a loos alors que le player a perdu");
+			}
+		}
 		
 		for(ItemService it: cellContentItem_atPre) {
-			if (it.getNature() == ItemType.TREASURE) {
-				for(ItemService treas:getTreasures()) {
-					if(it.getWdt() == treas.getWdt() && it.getHgt() == treas.getWdt()) {
-						throw new PostconditionError("Le tresor n'a pas ete enleve de la liste des tresors");
-					}
-				}
-				for(ItemService obj:getEnvi().getCellContentItem(wdt_player_at_pre, hgt_player_at_pre)) {
-					if(obj == it) {
-						throw new PostconditionError("Le tresor n'a pas ete enleve de l'environnement");
-					}
-				}
-				break;
+			if (it.getNature() == ItemType.TREASURE && getTreasures().size() != treasure_size_at_pre - 1 ) {
+					throw new PostconditionError("Le tresor n'a pas ete enleve de l'environnement");
+			}
+			if (it.getNature() == ItemType.BOMB && getBombs().size() != bombs_size_at_pre - 1) {
+				throw new PostconditionError("L'arme n'a pas ete enleve de l'environnement");
 			}
 		}
 		
-		/* post : forall (x, y) in [0;getWidth()[ X [0;getHeight()[ 
-		 * 			&& getCellNature(x, y) == HOL implies getHoles(x,y) == Holes(x,y)@pre + 1
-		 */
-		
-		
-		/*	  post : forall (x, y) in [0;getWidth()[ X [0;getHeight()[ 
-		 * 			&& getCellNature(x, y) == HOL && getHoles(x,y) == 15 implies getCellNature(x, y) == PLT 
-		 * 															 && getPlayer.getHgt() == x
-		 * 															 &&	getPlayer.getWdt() == y
-		 * 															 implies getStatus() = Status.LOSS
-		 */
-		
-		
-		 //post:Player p = getPlayer() in p.willDigRight()@pre implies getHoles(p.getWdt()@pre+1,p.getHgt()-1) = 0
-		if(will_dig_right_atPre) {
-			if(getHoles(wdt_player_at_pre+1, hgt_player_at_pre-1) != 0) {
-				throw new PostconditionError("Le timelapse du trou n'a pas été mis à 0 alors que le joueur a du creuser a droite");
+		for(Coordinates c : holes_at_pre) {
+			System.out.println( getHoles(c.getX(), c.getY()));
+			System.out.println(holes_time_at_pre[c.getX()][c.getY()]);
+			if (holes_time_at_pre[c.getX()][c.getY()] == -1 && getHoles(c.getX(), c.getY()) != 1 ) {
+				throw new PostconditionError("blablabla Un des trous est rebouche alors qu'il ne le fallait pas !");
 			}
-		}
-		//post: Player p = getPlayer() in p.willDigLeft()@pre implies getHoles(p.getWdt()@pre-1,p.getHgt()@pre-1) = 0
-		if(will_dig_left_atPre) {
-			if(getHoles(wdt_player_at_pre-1, hgt_player_at_pre-1) != 0) {
-				throw new PostconditionError("Le timelapse du trou n'a pas été mis à 0 alors que le joueur a du creuser a gauche");
+			else {
+				System.out.println( getHoles(c.getX(), c.getY()));
+				System.out.println(holes_time_at_pre[c.getX()][c.getY()]);
+				if (holes_time_at_pre[c.getX()][c.getY()] < 48 && holes_time_at_pre[c.getX()][c.getY()] != -1 && holes_time_at_pre[c.getX()][c.getY()] != getHoles(c.getX(), c.getY()) -1 ) {
+					throw new PostconditionError("Un des trous est rebouche alors qu'il ne le fallait pas !");
+				}
+				else {
+					if(holes_time_at_pre[c.getX()][c.getY()] == 49 && getEnvi().getCellNature(c.getX(), c.getY()) == Cell.HOL){
+						throw new PostconditionError("Un des trous n'a pas ete rebouche alors qu'il le fallait");
+					}
+				}
 			}
 		}
 	}
-	
 	
 }

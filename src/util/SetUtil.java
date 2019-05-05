@@ -1,9 +1,19 @@
 package util;
 
+import java.util.ArrayList;
+
 import components.EditableScreen;
+import components.Engine;
+import components.Environment;
 import contracts.EditableScreenContract;
+import contracts.EngineContract;
+import contracts.EnvironmentContract;
+import contracts.PlayerContract;
 import services.Cell;
+import services.Coordinates;
 import services.EditableScreenService;
+import services.EngineService;
+import services.EnvironmentService;
 
 public class SetUtil {
 
@@ -26,5 +36,32 @@ public class SetUtil {
 		
 		return scontrat;
 	}
-		
+	
+	public static EnvironmentContract EnviMaker(EditableScreenContract s) {
+		EnvironmentService e = new Environment();
+		EnvironmentContract econtrat = new EnvironmentContract(e);
+		econtrat.init(s);
+		return econtrat;
+	}
+	
+	public static EngineContract Engine_maker(EnvironmentContract econtrat, Coordinates player) {
+		EngineService en = new Engine();
+		EngineContract enconrat = new EngineContract(en);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		ArrayList<Coordinates> g = new ArrayList<>();
+		ArrayList<Coordinates> b = new ArrayList<>();
+		enconrat.init(econtrat, player, g, t, b);
+		return enconrat;
+	}
+	
+	public static EngineContract Engine_maker(EnvironmentContract econtrat, Coordinates player, Coordinates guard) {
+		EngineService en = new Engine();
+		EngineContract enconrat = new EngineContract(en);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(guard);
+		ArrayList<Coordinates> b = new ArrayList<>();
+		enconrat.init(econtrat, player, g, t, b);
+		return enconrat;
+	}
 }

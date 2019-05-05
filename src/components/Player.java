@@ -43,9 +43,7 @@ public class Player extends Character implements PlayerService {
 		System.out.println("je suis la nature");
 		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
 		if(getEnvi().getCellNature(getWdt(), getHgt()) == Cell.DOR && getEngine().getNextCommand() == Command.OPEND) {
-			System.out.println("je rentre avant trans");
 			if (getWdt()==15 && getHgt()==13) {
-				System.out.println("je rentre dans la porte");
 				transport(13, 7);
 			}
 			else {
