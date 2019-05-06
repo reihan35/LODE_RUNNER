@@ -37,6 +37,7 @@ import contracts.EnvironmentContract;
 import services.Cell;
 import services.Command;
 import services.Coordinates;
+import services.Door;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
@@ -53,7 +54,7 @@ import java.util.Timer;
 //Problems: Agents stay at their position in the window, not in the world --> once out of the window, they disappear!
 public class SpriteDemo extends JPanel implements KeyListener{
 
-	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2, lost,une,deux,trois,won, door, bomb;
+	Image emp, mtl, lad, hdr, treas, player, plt, hol, guard,player2, lost,une,deux,trois,won, doorSprite, bomb;
 	
 	public static final int spriteLength = 32;
 	
@@ -68,6 +69,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	private ArrayList<Coordinates> treasures;
 	private ArrayList<Coordinates> guards;
 	private ArrayList<Coordinates> bombs;
+	private ArrayList<Door> doors;
 	//whole world
 	private EnvironmentService envi;
 	int vie = 3;
@@ -98,7 +100,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			deux = ImageIO.read(new File("Sprites/gamepad2.png"));
 			trois = ImageIO.read(new File("Sprites/gamepad3.png"));
 			won = ImageIO.read(new File("Sprites/trophy.png"));
-			door = ImageIO.read(new File("Sprites/DOOR.png"));
+			doorSprite = ImageIO.read(new File("Sprites/DOOR.png"));
 			bomb = ImageIO.read(new File("Sprites/sword.png"));
 		}
 		catch(Exception e)
@@ -113,10 +115,11 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		treasures = new ArrayList<>();
 		guards = new ArrayList<>();
 		bombs = new ArrayList<>();
+		doors = new ArrayList<>();
 		level.init(28, 16);
 		parseLevel("Levels/Level1.txt");
 		envi.init(level);
-		moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs);
+		moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs, doors);
 		frame = new JFrame("LODE RUNNER");
 		frame.add(this);
 		frame.addKeyListener(this);
@@ -149,9 +152,8 @@ public class SpriteDemo extends JPanel implements KeyListener{
 	                	cellNature = true;
 	                	break;
 	                case "DOR":
-	                	c = Cell.DOR;
-	                	System.out.println("DOOOOOOR");
-	                	cellNature = true;
+	                	System.out.println(line);
+	                	doors.add(new Door(new Coordinates(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])), new Coordinates(Integer.parseInt(tokens[3]), Integer.parseInt(tokens[4]))));
 	                	break;
 	                case "HDR":
 	                	c = Cell.HDR;
@@ -259,8 +261,6 @@ public class SpriteDemo extends JPanel implements KeyListener{
 					case PLT:
 						img = plt;
 						break;
-					case DOR:
-						img = door;
 					default:
 						break;
 				
@@ -290,6 +290,18 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		
 		g.drawImage(img,22,22,spriteLength,spriteLength, frame);
 		
+		for(Door d: moteur.getDoors()) {
+			int pos_x_in = d.getIn().getX()*spriteLength;
+			int pos_y_in = (moteur.getEnvi().getHeight()-(d.getIn().getY()+2))*spriteLength;
+			
+			int pos_x_out = d.getOut().getX()*spriteLength;
+			int pos_y_out = (moteur.getEnvi().getHeight()-(d.getOut().getY()+2))*spriteLength;
+		
+			g.drawImage(doorSprite,pos_x_in,pos_y_in,spriteLength,spriteLength, frame);
+			g.drawImage(doorSprite,pos_x_out,pos_y_out,spriteLength,spriteLength, frame);
+		}
+		
+		
 		for(ItemService item: moteur.getTreasures()) {
 			int pos_x = item.getWdt()*spriteLength;
 			int pos_y = (moteur.getEnvi().getHeight()-(item.getHgt()+2))*spriteLength;
@@ -312,6 +324,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 			g.drawImage(guard,pos_x,pos_y,spriteLength,spriteLength, frame);
 		}
 		
+
 		PlayerService p = moteur.getPlayer();
 		if (moteur.getPlayer().willFall() && moteur.getEnvi().getCellNature(p.getWdt(), p.getHgt()) == Cell.EMP) {
 			try {
@@ -376,10 +389,11 @@ public class SpriteDemo extends JPanel implements KeyListener{
 				treasures = new ArrayList<>();
 				guards = new ArrayList<>();
 				bombs = new ArrayList<>();
+				doors = new ArrayList<>();
 				level.init(28, 16);
 				parseLevel("Levels/Level1.txt");
 				envi.init(level);
-				moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs);
+				moteur.init(envi, new Coordinates(5, 7), guards, treasures,bombs, doors);
 				frame.add(this);
 				frame.addKeyListener(this);
 				sizeWindow_x = spriteLength * moteur.getEnvi().getWidth();

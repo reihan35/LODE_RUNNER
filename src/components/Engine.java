@@ -16,6 +16,7 @@ import services.Cell;
 import services.CharacterService;
 import services.Command;
 import services.Coordinates;
+import services.Door;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
@@ -33,6 +34,7 @@ public class Engine implements EngineService {
 	private ArrayList<GuardService> guards;
 	private ArrayList<ItemService> treasures;
 	private ArrayList<ItemService> bombs;
+	private ArrayList<Door> doors;
 	private Stat s;
 	private Command nextCommand;
 	private int[][] holesTimes;
@@ -44,7 +46,7 @@ public class Engine implements EngineService {
 	
 	
 	public void init(EnvironmentService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
-			ArrayList<Coordinates> treasuresCoord, ArrayList<Coordinates> bombCoord) {
+			ArrayList<Coordinates> treasuresCoord, ArrayList<Coordinates> bombCoord, ArrayList<Door> doorCoord) {
 		env = screen;
 		int id = 0;
 		
@@ -52,6 +54,7 @@ public class Engine implements EngineService {
 		treasures = new ArrayList<ItemService>();
 		bombs = new ArrayList<ItemService>();
 		holesTimes = new int[screen.getWidth()][screen.getHeight()];
+		this.doors = doorCoord;
 		
 		for(Coordinates c : treasuresCoord) {
 			ItemService i = new Item();
@@ -314,6 +317,12 @@ public class Engine implements EngineService {
 	public ArrayList<ItemService> getBombs() {
 		// TODO Auto-generated method stub
 		return bombs;
+	}
+	
+	@Override
+	public ArrayList<Door> getDoors() {
+		// TODO Auto-generated method stub
+		return doors;
 	}
 
 

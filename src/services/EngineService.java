@@ -48,9 +48,9 @@ public interface EngineService {
 	 * post: getStatus() == PLAYING
 	 */
 	public void init(EnvironmentService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
-				ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord);
+				ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord, ArrayList<Door> doors);
 	
-	
+
 	/**
 	 * Operators
 	 */
@@ -79,4 +79,6 @@ public interface EngineService {
 	int getScore();
 	public ArrayList<ItemService> getBombs();
 	public int get_nb_first_tres();
+	public ArrayList<Door> getDoors();
+
 }

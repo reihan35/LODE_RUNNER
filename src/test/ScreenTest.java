@@ -65,7 +65,7 @@ public class ScreenTest {
 	}
 	
 	//Paire des transitions
-	
+	@Test
 	public void dig_fill() {
 		ScreenService s = new Screen();
 		ScreenContract scontrat = new ScreenContract(s);
@@ -73,7 +73,7 @@ public class ScreenTest {
 		scontrat.dig(9, 2);
 		scontrat.fill(9, 2);
 	}
-	
+	@Test
 	public void fill_dig() {
 		ScreenService s = new Screen();
 		ScreenContract scontrat = new ScreenContract(s);

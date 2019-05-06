@@ -2,6 +2,8 @@ package components;
 
 import services.Cell;
 import services.Command;
+import services.Coordinates;
+import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
 import services.ItemService;
@@ -42,20 +44,27 @@ public class Player extends Character implements PlayerService {
 	public void step() {
 		System.out.println("je suis la nature");
 		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
-		if(getEnvi().getCellNature(getWdt(), getHgt()) == Cell.DOR && getEngine().getNextCommand() == Command.OPEND) {
-			if (getWdt()==15 && getHgt()==13) {
-				transport(13, 7);
+		
+		if(getEngine().getNextCommand() == Command.OPEND) {
+			for (Door d: getEngine().getDoors()) {	
+				if(d.isOnIn(new Coordinates(wdt, hgt))) {
+					wdt = d.getOut().getX();
+					hgt = d.getOut().getY();
+					break;
+				}
+				else if(d.isOnOut(new Coordinates(wdt, hgt))) {
+					wdt = d.getIn().getX();
+					hgt = d.getIn().getY();
+					break;
+				}
 			}
-			else {
-				
-				transport(15, 13);
-			}
-			
 		}
 		if(willFall()) {
 			System.out.println("je fais goDown");
 			goDown();
 		}
+		
+		
 		else {
 			if(willDigRight()) {
 				getEnvi().dig(getWdt() + 1, getHgt() - 1 );

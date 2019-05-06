@@ -79,7 +79,7 @@ public class PlayerTest {
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
 	}
-	
+	@Test
 	public void step_up_door() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
 		s.setNature(2, 2, Cell.DOR);
@@ -195,6 +195,7 @@ public class PlayerTest {
 	}
 	
 	//Scenario
+	@Test
 	public void scenario() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
 		s.setNature(4, 3, Cell.PLT);

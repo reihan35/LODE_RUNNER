@@ -11,6 +11,7 @@ import contracts.EnvironmentContract;
 import contracts.PlayerContract;
 import services.Cell;
 import services.Coordinates;
+import services.Door;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
@@ -50,7 +51,8 @@ public class SetUtil {
 		ArrayList<Coordinates> t = new ArrayList<>();
 		ArrayList<Coordinates> g = new ArrayList<>();
 		ArrayList<Coordinates> b = new ArrayList<>();
-		enconrat.init(econtrat, player, g, t, b);
+		ArrayList<Door> d = new ArrayList<>();
+		enconrat.init(econtrat, player, g, t, b, d);
 		return enconrat;
 	}
 	
@@ -61,7 +63,8 @@ public class SetUtil {
 		ArrayList<Coordinates> g = new ArrayList<>();
 		g.add(guard);
 		ArrayList<Coordinates> b = new ArrayList<>();
-		enconrat.init(econtrat, player, g, t, b);
+		ArrayList<Door> d = new ArrayList<>();
+		enconrat.init(econtrat, player, g, t, b, d);
 		return enconrat;
 	}
 }

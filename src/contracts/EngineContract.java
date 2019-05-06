@@ -10,6 +10,7 @@ import services.Cell;
 import services.CharacterService;
 import services.Command;
 import services.Coordinates;
+import services.Door;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
@@ -26,11 +27,11 @@ public class EngineContract extends EngineDecorator implements EngineService{
 		// TODO Auto-generated constructor stub
 	}
 
-
+	@Override
 	public void init(EnvironmentService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
-			ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord) {
+			ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord, ArrayList<Door> doorCoord) {
 		
-		super.init(screen, playerCoord, guardsCoord, treasuresCoord,bombCoord);
+		super.init(screen, playerCoord, guardsCoord, treasuresCoord,bombCoord, doorCoord);
 		
 		System.out.println("On est la !!!");
 		System.out.println(getPlayer().getWdt());

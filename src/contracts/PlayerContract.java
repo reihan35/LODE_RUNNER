@@ -5,6 +5,8 @@ import components.Player;
 import decorators.PlayerDecorator;
 import services.Cell;
 import services.Command;
+import services.Coordinates;
+import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
 import services.PlayerService;
@@ -42,10 +44,7 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
 		}
 	
-		if(p.getEnvi().getCellNature(getWdt(), getHgt()) != Cell.DOR && p.getEngine().getNextCommand() == Command.OPEND){
-			throw new PostconditionError("La porte n'existe pas ! ");
 
-		}
 		
 		if(p.willFall()) {
 			
@@ -155,24 +154,33 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			}
 		}
 		
-			
-		if(p.getEnvi().getCellNature(getWdt(), getHgt()) == Cell.DOR && p.getEngine().getNextCommand() == Command.OPEND) {				if (getWdt()==15 && getHgt()==13) {
-				((Character) p).transport(13, 7);
+		if(getEngine().getNextCommand() == Command.OPEND) {
+			int new_pos_x = p.getWdt();
+			int new_pos_y = p.getHgt();
+			for (Door d: getEngine().getDoors()) {	
+				if(d.isOnIn(new Coordinates(p.getWdt(), p.getHgt()))) {
+					new_pos_x = d.getOut().getX();
+					new_pos_y = d.getOut().getY();
+					break;
+				}
+				else if(d.isOnOut(new Coordinates(p.getWdt(), p.getHgt()))) {
+					new_pos_x = d.getIn().getX();
+					new_pos_y = d.getIn().getY();;
+					break;
+				}
 			}
-			else {
-				((Character) p).transport(15, 13);
+			System.out.println(new_pos_y + " " + getHgt());
+			if (new_pos_y!= getHgt())  {
+				throw new PostconditionError("Probleme de porte");
 			}
-			
 				
-			if (p.getHgt() != getHgt())  {
-				throw new PostconditionError("Le joueur ne peut pas ouvrire la porte ! ");
-			}
-				
-			if (p.getWdt() != getWdt())  {
-				throw new PostconditionError("Le joueur ne peut pas ouvrire la porte ! ");				}
+			if (new_pos_x != getWdt())  {
+				throw new PostconditionError("Probleme de porte ");				
 			
 			}
-		
+			
+		}
 	}
+			
 
 }

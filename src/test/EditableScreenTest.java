@@ -25,6 +25,7 @@ public class EditableScreenTest {
 		scontrat.setNature(4, 5, Cell.HDR);
 	}
 	
+	@Test
 	public void setNature_pre2() {
 		EditableScreenService s = new EditableScreen();
 		EditableScreenContract scontrat = new EditableScreenContract(s);

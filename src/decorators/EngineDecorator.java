@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import services.Command;
 import services.Coordinates;
+import services.Door;
 import services.EditableScreenService;
 import services.EngineService;
 import services.EnvironmentService;
@@ -23,9 +24,9 @@ public class EngineDecorator implements EngineService {
 
 	@Override
 	public void init(EnvironmentService screen, Coordinates playerCoord, ArrayList<Coordinates> guardsCoord,
-			ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord) {
+			ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord, ArrayList<Door> doorCoord) {
 		// TODO Auto-generated method stub
-		delegates.init(screen, playerCoord, guardsCoord, treasuresCoord,bombCoord);
+		delegates.init(screen, playerCoord, guardsCoord, treasuresCoord, bombCoord, doorCoord);
 
 	}
 	
@@ -110,6 +111,12 @@ public class EngineDecorator implements EngineService {
 	public int get_nb_first_tres() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public ArrayList<Door> getDoors() {
+		// TODO Auto-generated method stub
+		return delegates.getDoors();
 	}
 
 
