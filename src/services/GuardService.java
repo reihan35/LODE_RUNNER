@@ -52,6 +52,11 @@ public interface GuardService extends CharacterService {
 	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole = 5 && getBehaviour = Neutral
 	 */
 	default public boolean willStay() {
+		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL) {
+			if(getEnvi().getCellNature(getWdt()-1, getHgt()) == Cell.HOL || getEnvi().getCellNature(getWdt()+1, getHgt()) == Cell.HOL) {
+				return true;
+			}
+		 }
 		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 5 && getBehaviour() == Move.NEUTRAL;
 	}
 	
@@ -183,5 +188,8 @@ public interface GuardService extends CharacterService {
 	void setTreasure(ItemService i);
 	
 	boolean willMove();
+	void drop_off();
+	boolean has_treasure();
+	ItemService get_treasure();
 
 }

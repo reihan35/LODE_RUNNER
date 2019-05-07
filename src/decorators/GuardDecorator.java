@@ -97,5 +97,22 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 		return delegates.willMove();
 	}
 
+	@Override
+	public void drop_off() {
+		delegates.drop_off();
+	}
+
+	@Override
+	public boolean has_treasure() {
+		// TODO Auto-generated method stub
+		return delegates.has_treasure();
+	}
+
+	@Override
+	public ItemService get_treasure() {
+		// TODO Auto-generated method stub
+		return delegates.get_treasure();
+	}
+
 	
 }

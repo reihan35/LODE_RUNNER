@@ -119,6 +119,12 @@ public class EngineDecorator implements EngineService {
 		return delegates.getDoors();
 	}
 
+	@Override
+	public GuardService can_fight() {
+		// TODO Auto-generated method stub
+		return delegates.can_fight();
+	}
+
 
 
 

@@ -7,6 +7,7 @@ import org.junit.Test;
 import components.Screen;
 import contracts.PreconditionError;
 import contracts.ScreenContract;
+import services.Cell;
 import services.ScreenService;
 
 public class ScreenTest {
@@ -47,6 +48,7 @@ public class ScreenTest {
 		ScreenContract scontrat = new ScreenContract(s);
 		scontrat.init(10,10);
 		scontrat.dig(9, 2);
+		assert scontrat.getCellNature(9, 2) == Cell.HOL;
 	}
 	@Test(expected = PreconditionError.class)
 	public void fill_transition1() {
@@ -56,7 +58,7 @@ public class ScreenTest {
 	}
 	
 	
-	@Test
+	@Test(expected = PreconditionError.class)
 	public void fill_transition2() {
 		ScreenService s = new Screen();
 		ScreenContract scontrat = new ScreenContract(s);
@@ -72,14 +74,16 @@ public class ScreenTest {
 		scontrat.init(10,10);
 		scontrat.dig(9, 2);
 		scontrat.fill(9, 2);
+		assert s.getCellNature(9, 2) == Cell.PLT;
 	}
-	@Test
+	@Test(expected = PreconditionError.class)
 	public void fill_dig() {
 		ScreenService s = new Screen();
 		ScreenContract scontrat = new ScreenContract(s);
 		scontrat.init(10,10);
 		scontrat.fill(9, 2);
 		scontrat.dig(9, 2);
+		
 	}
 	
 	@Test(expected = PreconditionError.class)	
@@ -102,7 +106,7 @@ public class ScreenTest {
 	
 	//Scenario
 	
-	@Test
+	@Test(expected = PreconditionError.class)
 	public void fill_dig_fill() {
 		ScreenService s = new Screen();
 		ScreenContract scontrat = new ScreenContract(s);

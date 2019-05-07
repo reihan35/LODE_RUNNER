@@ -1,4 +1,6 @@
 package test;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -40,6 +42,7 @@ public class PlayerTest {
 		PlayerContract pcontrat = new PlayerContract(p);
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
+		assert(pcontrat.getHgt() == 1);
 	}
 	
 	@Test(expected = contracts.PreconditionError.class)
@@ -57,6 +60,7 @@ public class PlayerTest {
 	@Test
 	public void step_up_lad() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
+		s.setNature(2, 2, Cell.LAD);
 		s.setNature(2, 3, Cell.LAD);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		PlayerService p = new Player();
@@ -65,6 +69,7 @@ public class PlayerTest {
 		PlayerContract pcontrat = new PlayerContract(p);
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
+		assert(pcontrat.getHgt() == 3);
 	}
 	
 
@@ -80,8 +85,10 @@ public class PlayerTest {
 		en.addCommand(Command.RIGHT);
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
+		assert(pcontrat.getWdt()==3);
 	}
-	@Test
+	
+	/*@Test
 	public void step_up_door() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
 		s.setNature(2, 2, Cell.DOR);
@@ -92,7 +99,8 @@ public class PlayerTest {
 		en.addCommand(Command.OPEND);
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
-	}
+		assert(pcontrat.getWdt()==3);
+	}*/
 	
 	@Test
 	public void step_up_door_2() {
@@ -111,13 +119,14 @@ public class PlayerTest {
 	@Test
 	public void step_fall() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
-		s.setNature(5, 5, Cell.HOL);
+		s.setNature(5, 4, Cell.HOL);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		PlayerService p = new Player();
 		EngineContract en = SetUtil.Engine_maker(env,new Coordinates(5,5));
 		PlayerContract pcontrat = new PlayerContract(p);
 		pcontrat.init(en, 5, 5);
 		pcontrat.step();
+		assert(pcontrat.getHgt() == 4);
 	}
 	
 	@Test
@@ -132,6 +141,7 @@ public class PlayerTest {
 		en.addCommand(Command.DIGL);
 		pcontrat.init(en, 5, 5);
 		pcontrat.step();
+		assert(env.getCellNature(4, 4) == Cell.HOL);
 	}
 	
 	@Test
@@ -153,7 +163,9 @@ public class PlayerTest {
 	@Test
 	public void up_left() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
+		s.setNature(1, 2, Cell.PLT);
 		s.setNature(2, 3, Cell.LAD);
+		s.setNature(2, 2, Cell.LAD);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		PlayerService p = new Player();
 		EngineContract en = SetUtil.Engine_maker(env,new Coordinates(2,2));
@@ -162,14 +174,17 @@ public class PlayerTest {
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
 		en.addCommand(Command.LEFT);
+		assert(pcontrat.getWdt() == 2 && pcontrat.getHgt() == 3);
 		pcontrat.step();
-		
+		assert(pcontrat.getHgt() == 3 && pcontrat.getWdt() == 1);
 	}
 	
 	@Test
 	public void up_right() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
+		s.setNature(3, 2, Cell.PLT);
 		s.setNature(2, 3, Cell.LAD);
+		s.setNature(2, 2, Cell.LAD);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		PlayerService p = new Player();
 		EngineContract en = SetUtil.Engine_maker(env,new Coordinates(2,2));
@@ -177,8 +192,9 @@ public class PlayerTest {
 		PlayerContract pcontrat = new PlayerContract(p);
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
-		en.addCommand(Command.LEFT);
+		en.addCommand(Command.RIGHT);
 		pcontrat.step();
+		assert(pcontrat.getHgt() == 3 && pcontrat.getWdt() == 3);
 		
 	}
 	
@@ -187,7 +203,9 @@ public class PlayerTest {
 	@Test
 	public void up_dig_left() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
+		s.setNature(1, 2, Cell.PLT);
 		s.setNature(2, 3, Cell.LAD);
+		s.setNature(2, 2, Cell.LAD);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		PlayerService p = new Player();
 		EngineContract en = SetUtil.Engine_maker(env,new Coordinates(2,2));
@@ -197,6 +215,7 @@ public class PlayerTest {
 		pcontrat.step();
 		en.addCommand(Command.DIGL);
 		pcontrat.step();
+		assert(env.getCellNature(1, 2) == Cell.HOL);
 		
 	}
 	
@@ -240,9 +259,10 @@ public class PlayerTest {
 	public void scenario() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
 		s.setNature(4, 3, Cell.PLT);
-		s.setNature(3, 4, Cell.PLT);
+		s.setNature(3, 3, Cell.PLT);
 		s.setNature(2, 4, Cell.LAD);
 		s.setNature(2, 3, Cell.LAD);
+		s.setNature(2, 2, Cell.LAD);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		PlayerService p = new Player();
 		EngineContract en = SetUtil.Engine_maker(env,new Coordinates(2,2));
@@ -254,7 +274,9 @@ public class PlayerTest {
 		pcontrat.step();
 		en.addCommand(Command.RIGHT);
 		pcontrat.step();
+		assert(pcontrat.getWdt() == 3 && pcontrat.getHgt() == 4);
 		en.addCommand(Command.DIGR);
 		pcontrat.step();
+		assert(env.getCellNature(4,3 ) == Cell.HOL);
 	}
 }

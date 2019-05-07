@@ -80,5 +80,6 @@ public interface EngineService {
 	public ArrayList<ItemService> getBombs();
 	public int get_nb_first_tres();
 	public ArrayList<Door> getDoors();
+	GuardService can_fight();
 
 }

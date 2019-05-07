@@ -166,6 +166,7 @@ public class Engine implements EngineService {
 				treasures.remove(items.get(0));
 				getEnvi().removeCellContentItem(c.getWdt(),c.getHgt(),items.get(0));
 				score = score + 10;
+				System.out.println("la taille des tresors" + treasures.size());
 			}
 			
 			if (c instanceof GuardService) {
@@ -232,6 +233,7 @@ public class Engine implements EngineService {
 		return false;
 	}
 	
+	@Override
 	public GuardService can_fight() {
 		for(GuardService g : guards) {
 			System.out.println("j'y arrive");
@@ -248,17 +250,7 @@ public class Engine implements EngineService {
 	public int getScore () {
 		return score;
 	}
-	
-	public void fight_guard(GuardService g) {
-		if (getPlayer().getWdt() + 3 == g.getWdt() || getPlayer().getWdt() - 3 == g.getWdt()) {
-			if(getPlayer().getBomb() != null) {
-				getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
-				guards.remove(0);
-				getPlayer().setBomb(-1,ItemType.BOMB,-1,-1);
-			}
-		}
-	}
-	
+
 	@Override
 	public int get_nb_first_tres() {
 		return first_t_n;
@@ -293,6 +285,10 @@ public class Engine implements EngineService {
 				GuardService g = can_fight();
 				if(getPlayer().getBomb() != null && getNextCommand()==Command.FIGHT) {
 					getPlayer().setBomb(-1,ItemType.BOMB,-1,-1);
+					if(g.has_treasure()) {
+							addTreasure( g.getWdt(), g.getHgt());
+							g.setTreasure(null);
+						}
 					getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
 					guards.remove(g);
 				}

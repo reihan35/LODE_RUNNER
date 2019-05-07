@@ -23,6 +23,7 @@ public class EditableScreenTest {
 		EditableScreenContract scontrat = new EditableScreenContract(s);
 		scontrat.init(3,5);
 		scontrat.setNature(4, 5, Cell.HDR);
+		assert scontrat.getCellNature(4, 5) == Cell.HDR;
 	}
 	
 	@Test
@@ -31,6 +32,7 @@ public class EditableScreenTest {
 		EditableScreenContract scontrat = new EditableScreenContract(s);
 		scontrat.init(3,5);
 		scontrat.setNature(2, 1, Cell.HDR);
+		assert scontrat.getCellNature(2, 1) == Cell.HDR;
 	}
 	
 }

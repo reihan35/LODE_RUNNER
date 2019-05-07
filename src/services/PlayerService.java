@@ -26,6 +26,7 @@ public interface PlayerService extends CharacterService {
 		if (downCell == Cell.HOL && characterAt(getWdt(), getHgt()-1)){
 			return false; //pour que le player puisse marcher sur la tete du gardien quand ce dernier tombe dans un troue
 		}
+		System.out.println("quand meme");
 		return SetUtil.isIn(downCell,emp) && ! SetUtil.isIn(currCell,lad);
 	}
 	

@@ -41,7 +41,17 @@ public class Guard extends Character implements GuardService {
 		move = 0;
 		
 	}
-
+	
+	@Override
+	public boolean has_treasure() {
+		return treasure != null;
+	}
+	
+	@Override 
+	public ItemService get_treasure() {
+		return treasure;
+	}
+	
 	@Override
 	public int getId() {
 		// TODO Auto-generated method stub
@@ -224,7 +234,9 @@ public class Guard extends Character implements GuardService {
 		
 	}
 	
+	@Override
 	public void drop_off() {
+		System.out.println("je compred pas !");
 		if(treasure != null) {
 			//getEngine().removeTreasure();
 			getEngine().addTreasure( getWdt(), getHgt()+1);
@@ -253,6 +265,8 @@ public class Guard extends Character implements GuardService {
 	public void step() {
 
  		move++;
+ 		System.out.println("je suis move:");
+ 		System.out.println(move);
 		if(!willMove()) return;
 		if(getEnvi().getCellNature(getWdt(),getHgt()) == Cell.HOL)
 			timeInHole++;

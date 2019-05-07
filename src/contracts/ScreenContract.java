@@ -131,8 +131,8 @@ public class ScreenContract extends ScreenDecorator {
 				getCellNature_atPre[i][j] = getCellNature(i, j);
 		
 		
-		if (getCellNature(x, y)== Cell.PLT) {
-			throw new PreconditionError("la case en question est deja remplit !");
+		if (getCellNature(x, y) != Cell.HOL) {
+			throw new PreconditionError("la case en question n'est pas un trou !");
 		}
 		
 		

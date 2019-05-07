@@ -47,9 +47,9 @@ public class Character implements CharacterService {
 		System.out.println((currCell == Cell.LAD || currCell == Cell.HDR));
 		if(wdt != 0
 			&& isFreeCell(wdt-1, hgt)
-			&& (!(currCell == Cell.LAD || currCell == Cell.HDR)
-				|| !(downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
-				|| !characterAt(wdt, hgt-1))){
+			&& (((currCell == Cell.LAD || currCell == Cell.HDR)
+				|| (downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
+				|| characterAt(wdt, hgt-1)))){
 			
 			if(this instanceof GuardService ) {
 				for(CharacterService c : getEnvi().getCellContentChar(wdt-1,hgt)) {
@@ -75,9 +75,9 @@ public class Character implements CharacterService {
 		boolean pas_gardien = true;
 		if(wdt != getEnvi().getWidth()-1
 			&& isFreeCell(wdt+1, hgt)
-			&& (!(currCell == Cell.LAD || currCell == Cell.HDR)
-				|| !(downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
-				||! characterAt(wdt, hgt-1))) {
+			&& ((currCell == Cell.LAD || currCell == Cell.HDR)
+				||(downCell == Cell.PLT || downCell == Cell.MTL || downCell == Cell.LAD)
+				||characterAt(wdt, hgt-1))) {
 
 			if(this instanceof GuardService ) {
 				for(CharacterService c : getEnvi().getCellContentChar(wdt+1,hgt)) {
@@ -100,11 +100,11 @@ public class Character implements CharacterService {
 		int wdt_b = wdt;
 		int hgt_b = hgt;
 		boolean pas_gardien = true;
+		System.out.println("je ne veux pas travailler");
 		if(hgt != getEnvi().getHeight()-1 
 			&& isFreeCell(wdt, hgt+1)
 			&& currCell == Cell.LAD
 			&& !characterAt(wdt, hgt+1)) {
-
 			if(this instanceof GuardService ) {
 				for(CharacterService c : getEnvi().getCellContentChar(wdt,hgt+1)) {
 					if(c instanceof GuardService) {

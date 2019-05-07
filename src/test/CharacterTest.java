@@ -12,6 +12,7 @@ import contracts.EnvironmentContract;
 import contracts.PlayerContract;
 import contracts.PostconditionError;
 import contracts.PreconditionError;
+import services.Cell;
 import services.CharacterService;
 import services.EnvironmentService;
 import services.PlayerService;
@@ -39,18 +40,7 @@ public class CharacterTest {
 		CharacterService c = new Character();
 		CharacterContract ci = new CharacterContract(c);
 		ci.init(econtrat, 2, 3);
-	}
-	
-	@Test
-	public void goLeft_precondition3() {
-		EnvironmentService e = new Environment();
-		EditableScreenContract scontrat = SetUtil.MakeEdiatableScreen(3,3);
-		EnvironmentContract econtrat = new EnvironmentContract(e);
-		econtrat.init(scontrat);
-		CharacterService c = new Character();
-		CharacterContract ci = new CharacterContract(c);
-		ci.init(econtrat, 2, 2);
-		ci.goLeft();
+		assert ci.getHgt() == 3 && ci.getWdt() == 2;
 	}
 	
 	
@@ -63,7 +53,7 @@ public class CharacterTest {
 		CharacterService c = new Character();
 		CharacterContract ci = new CharacterContract(c);
 		ci.init(econtrat, 2, 0);
-		ci.goDown();	
+		ci.goDown();
 	}
 	
 	
@@ -80,12 +70,13 @@ public class CharacterTest {
 		ci.init(econtrat, 5, 5);
 		ci.goDown();
 		ci.goDown();
+		assert  ci.getHgt() == 3 & ci.getWdt() == 5;
+
 	}
 	
-	@Test
 	public void go_Down_go_Up() {
 		EnvironmentService e = new Environment();
-		EditableScreenContract scontrat = SetUtil.MakeEdiatableScreen(3,3);
+		EditableScreenContract scontrat = SetUtil.MakeEdiatableScreen(10,10);
 		EnvironmentContract econtrat = new EnvironmentContract(e);
 		econtrat.init(scontrat);
 		CharacterService c = new Character();
@@ -93,6 +84,9 @@ public class CharacterTest {
 		ci.init(econtrat, 2, 2);
 		ci.goDown();
 		ci.goUp();
+		assert  ci.getHgt() == 2 & ci.getWdt() == 2;
+
+
 	}
 	
 	//Scenario
@@ -106,12 +100,11 @@ public class CharacterTest {
 		CharacterService c = new Character();
 		CharacterContract ci = new CharacterContract(c);
 		ci.init(econtrat, 5, 5);
-		ci.goUp();
 		ci.goLeft();
-		ci.goDown();
 		ci.stay();
 		ci.goRight();
-		System.out.println("(" + ci.getHgt() + ","+ ci.getWdt() + ")");
+		assert  ci.getHgt() == 5 & ci.getWdt() == 5;
+
 	}
 	
 }

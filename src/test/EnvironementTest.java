@@ -40,7 +40,7 @@ public class EnvironementTest {
 		EditableScreenContract scontrat = new EditableScreenContract(s);
 		EnvironmentContract econtrat = new EnvironmentContract(e);
 		econtrat.init(scontrat);
-		econtrat.getCellContentChar(1, 2);
+		assert (econtrat.getCellContentChar(1, 2).size()==0);
 	}
 	
 	
@@ -52,6 +52,7 @@ public class EnvironementTest {
 		s.init(4, 5);
 		econtrat.init(s);
 		econtrat.getCellContentChar(6, 5);
+		
 	}
 	
 	//Transition 
@@ -66,6 +67,7 @@ public class EnvironementTest {
 		i.init(0, ItemType.TREASURE, 2, 2);
 		System.out.println(econtrat.getCellNature(1, 1));
 		econtrat.addCellContentItem(2, 2, i);
+		assert(econtrat.getCellContentItem(2, 2).size() == 1);
 	}
 	
 	@Test(expected = InvariantError.class)
@@ -120,6 +122,7 @@ public class EnvironementTest {
 		i2.init(0, ItemType.TREASURE, 1, 2);
 		econtrat.addCellContentItem(1, 2, i);
 		econtrat.addCellContentItem(1, 2, i2);
+		assert econtrat.getCellContentItem(1, 2).size() == 2;
 	}
 	
 	@Test
@@ -133,6 +136,8 @@ public class EnvironementTest {
 		i.init(0, ItemType.TREASURE, 1, 2);
 		econtrat.addCellContentItem(1, 2, i);
 		econtrat.removeCellContentItem(1, 2, i);
+		assert econtrat.getCellContentItem(1, 2).size() == 0;
+
 	}
 	
 	@Test
@@ -147,6 +152,8 @@ public class EnvironementTest {
 		ci.init(econtrat,1, 2);
 		econtrat.addCellContentChar(1, 2, ci);
 		econtrat.removeCellContentChar(1, 2, ci);
+		assert econtrat.getCellContentChar(1, 2).size() == 0;
+
 	}
 	
 	//Scenario
@@ -166,6 +173,7 @@ public class EnvironementTest {
 		i.init(0, ItemType.TREASURE, 1, 2);
 		econtrat.addCellContentItem(1, 2, i);
 		econtrat.removeCellContentItem(1, 2, i);
+		assert   econtrat.getCellContentChar(1, 2).size() == 0 && econtrat.getCellContentItem(1, 2).size() == 0 ;
 	}
 	
 	

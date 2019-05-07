@@ -18,6 +18,7 @@ import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
 import services.PlayerService;
+import services.Stat;
 import util.SetUtil;
 
 import contracts.InvariantError;
@@ -100,39 +101,21 @@ public class EngineTest {
 	@Test
 	public void step_1() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
+		s.setNature(2, 2, Cell.PLT);
 		s.setNature(3, 2, Cell.PLT);
-		s.setNature(4, 4, Cell.PLT);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		EngineService e = new Engine();
 		EngineContract enconrat = new EngineContract(e);
 		ArrayList<Coordinates> t = new ArrayList<>();
 		t.add(new Coordinates(3, 3));
 		ArrayList<Coordinates> g = new ArrayList<>();
-		g.add(new Coordinates(5, 5));
+		g.add(new Coordinates(3, 3));
 		ArrayList<Coordinates> b = new ArrayList<>();
 		ArrayList<Door> d = new ArrayList<>();
 		enconrat.init(env, new Coordinates(2, 3), g, t, b, d);
 		e.addCommand(Command.LEFT);
 		enconrat.step();
-	}
-	
-	@Test
-	public void step_2() {
-		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
-		s.setNature(3, 2, Cell.PLT);
-		s.setNature(4, 4, Cell.PLT);
-		EnvironmentContract env = SetUtil.EnviMaker(s);
-		EngineService e = new Engine();
-		EngineContract enconrat = new EngineContract(e);
-		ArrayList<Coordinates> t = new ArrayList<>();
-		t.add(new Coordinates(3, 3));
-		ArrayList<Coordinates> g = new ArrayList<>();
-		g.add(new Coordinates(5, 5));
-		ArrayList<Coordinates> b = new ArrayList<>();
-		ArrayList<Door> d = new ArrayList<>();
-		enconrat.init(env, new Coordinates(2, 3), g, t, b, d);
-		e.addCommand(Command.LEFT);
-		enconrat.step();
+		assert enconrat.getPlayer().getWdt() == 1;
 	}
 	
 	@Test
