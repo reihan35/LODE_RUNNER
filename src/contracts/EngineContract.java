@@ -18,6 +18,7 @@ import services.GuardService;
 import services.ItemService;
 import services.ItemType;
 import services.Stat;
+import util.SetUtil;
 
 public class EngineContract extends EngineDecorator implements EngineService{
 	
@@ -30,6 +31,53 @@ public class EngineContract extends EngineDecorator implements EngineService{
 	@Override
 	public void init(EnvironmentService screen,Coordinates playerCoord,ArrayList<Coordinates> guardsCoord,
 			ArrayList<Coordinates> treasuresCoord,ArrayList<Coordinates> bombCoord, ArrayList<Door> doorCoord) {
+		
+		
+		for(Door d:doorCoord) {
+			Coordinates d1 = d.getIn();
+			Coordinates d2 = d.getOut();
+			Cell[] filledCell = {Cell.PLT, Cell.MTL};
+			if(!SetUtil.isIn(screen.getCellNature(d1.getX(), d1.getY()-1), filledCell)){
+				throw new PreconditionError("Erreur de porte 1");
+			}
+			if(! (screen.getCellNature(d1.getX(), d1.getY()) == Cell.EMP)){
+				throw new PreconditionError("Erreur de porte 2");
+			}
+			
+			if(!SetUtil.isIn(screen.getCellNature(d2.getX(), d2.getY()-1), filledCell)){
+				throw new PreconditionError("Erreur de porte 3");
+			}
+			if(! (screen.getCellNature(d2.getX(), d2.getY()) == Cell.EMP)){
+				throw new PreconditionError("Erreur de porte 4");
+			}
+
+		}
+		
+		for(Coordinates t: treasuresCoord) {
+			Cell[] filledCell = {Cell.PLT, Cell.MTL};
+			if(!SetUtil.isIn(screen.getCellNature(t.getX(), t.getY()-1), filledCell)){
+				throw new PreconditionError("Erreur de tresor 1");
+			}
+			if(! (screen.getCellNature(t.getX(), t.getY()) == Cell.EMP)){
+				throw new PreconditionError("Erreur de tresor 2");
+			}
+			if(t.getX() == playerCoord.getX() && t.getY() == playerCoord.getY()) {
+				throw new PreconditionError("Erreur de tresor 3");
+			}
+		}
+		
+		for(Coordinates t: bombCoord) {
+			Cell[] filledCell = {Cell.PLT, Cell.MTL};
+			if(!SetUtil.isIn(screen.getCellNature(t.getX(), t.getY()-1), filledCell)){
+				throw new PreconditionError("Erreur d'arme 1");
+			}
+			if(! (screen.getCellNature(t.getX(), t.getY()) == Cell.EMP)){
+				throw new PreconditionError("Erreur d'arme 2");
+			}
+			if(t.getX() == playerCoord.getX() && t.getY() == playerCoord.getY()) {
+				throw new PreconditionError("Erreur d arme 3");
+			}
+		}
 		
 		super.init(screen, playerCoord, guardsCoord, treasuresCoord,bombCoord, doorCoord);
 		
@@ -127,6 +175,10 @@ public class EngineContract extends EngineDecorator implements EngineService{
 			 throw new InvariantError("Le joueur n'est pas a la bonne place !");
 		}
 		
+		if(getEnvi().getCellNature(getPlayer().getWdt(), getPlayer().getHgt()) == Cell.PLT && getStatus() != Stat.LOSS) {
+				throw new InvariantError("Le joueur a perdu normalement");
+		}
+
 		
 	}
 	
@@ -152,9 +204,9 @@ public class EngineContract extends EngineDecorator implements EngineService{
 				}
 			}
 		}
-				
+		checkInvariants();		
 		super.step();
-		//checkInvariants();
+		checkInvariants();
 		
 		ArrayList<CharacterService> a = getEnvi().getCellContentChar(getPlayer().getWdt(), getPlayer().getHgt());
 		for (CharacterService c : cellContentChar_atPre) {

@@ -73,15 +73,13 @@ public interface PlayerService extends CharacterService {
 	 *  && getEnvi().getCellNature(getWdt()-1,getHgt()-1) == PLT
 	 */
 	default public boolean willDigLeft() {
-		if(getWdt() == 0) {
-			return false;
-		}
-		if(getEnvi().getCellContentItem(getWdt() - 1, getHgt()).size() > 0) {
-			return false;
-		}
+
 		Cell[] canDig ={Cell.LAD,Cell.PLT, Cell.MTL};
 		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);	
 		if(getEngine().getNextCommand() == Command.DIGL) {
+			if(getEnvi().getCellContentItem(getWdt() - 1, getHgt()).size() > 0) {
+				return false;
+			}
 			if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
 				System.out.println("wow omg !");
 				System.out.println(isFreeCell(getWdt()-1,getHgt()));

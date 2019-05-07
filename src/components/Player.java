@@ -9,6 +9,7 @@ import services.EnvironmentService;
 import services.ItemService;
 import services.ItemType;
 import services.PlayerService;
+import services.Stat;
 import util.SetUtil;
 
 public class Player extends Character implements PlayerService {
@@ -39,6 +40,7 @@ public class Player extends Character implements PlayerService {
 		// TODO Auto-generated method stub
 		return engine;
 	}
+	
 
 	@Override
 	public void step() {

@@ -20,9 +20,11 @@ import services.Cell;
 import services.CharacterService;
 import services.Command;
 import services.Coordinates;
+import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
 import services.PlayerService;
+import services.Stat;
 import util.SetUtil;
 
 
@@ -92,10 +94,10 @@ public class PlayerTest {
 		pcontrat.step();
 	}
 	
-	@Test(expected = contracts.PostconditionError.class)
+	@Test
 	public void step_up_door_2() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
-		s.setNature(2, 2, Cell.PLT);
+		s.setNature(2, 1, Cell.PLT);
 		EnvironmentContract env = SetUtil.EnviMaker(s);
 		PlayerService p = new Player();
 		EngineContract en = SetUtil.Engine_maker(env,new Coordinates(2,2));
@@ -103,6 +105,7 @@ public class PlayerTest {
 		en.addCommand(Command.OPEND);
 		pcontrat.init(en, 2, 2);
 		pcontrat.step();
+		assert(pcontrat.getWdt() == 2 && pcontrat.getHgt() == 2);
 	}
 	
 	@Test
@@ -131,7 +134,7 @@ public class PlayerTest {
 		pcontrat.step();
 	}
 	
-	@Test(expected = contracts.PostconditionError.class)
+	@Test
 	public void step_dig_2() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
 		s.setNature(5, 4, Cell.PLT);
@@ -143,6 +146,7 @@ public class PlayerTest {
 		en.addCommand(Command.DIGL);
 		pcontrat.init(en, 5, 5);
 		pcontrat.step();
+		assert en.getEnvi().getCellNature(4, 4) == Cell.MTL;
 	}
 	
 	// Paire de Transition
@@ -178,7 +182,9 @@ public class PlayerTest {
 		
 	}
 	
-	@Test(expected = contracts.PostconditionError.class)
+	
+	//clearly there is a bug here
+	@Test
 	public void up_dig_left() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
 		s.setNature(2, 3, Cell.LAD);
@@ -191,6 +197,41 @@ public class PlayerTest {
 		pcontrat.step();
 		en.addCommand(Command.DIGL);
 		pcontrat.step();
+		
+	}
+	
+	
+	//etat remarquable
+	@Test
+	public void game_loss() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		ArrayList<Coordinates> g = new ArrayList<>();
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(3, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		e.addCommand(Command.DIGR);
+		enconrat.step();
+		assert(enconrat.getEnvi().getCellNature(4, 1) == Cell.HOL);
+		assert(enconrat.getHoles(4, 1) == 0);
+		e.addCommand(Command.RIGHT);
+		enconrat.step();
+
+		assert(enconrat.getPlayer().getWdt() == 4 && enconrat.getPlayer().getHgt() == 2);
+		enconrat.step();
+		assert(enconrat.getPlayer().getWdt() == 4 && enconrat.getPlayer().getHgt() == 1);
+		while(enconrat.getEnvi().getCellNature(4, 1) == Cell.HOL) {
+			enconrat.step();
+			assert(enconrat.getPlayer().getWdt() == 4 && enconrat.getPlayer().getHgt() == 1);
+		}
+		assert(enconrat.getStatus() == Stat.LOSS);
 		
 	}
 	

@@ -304,7 +304,14 @@ public class Engine implements EngineService {
 			}
 			//getEnvi().addCellContentChar(player.getWdt(), player.getHgt(), player);
 			paceOfTime();
+			if(getEnvi().getCellNature(getPlayer().getWdt(), getPlayer().getHgt()) == Cell.PLT) {
+				s = Stat.LOSS;
+			}
 		}
+	}
+
+	public void setS(Stat s) {
+		this.s = s;
 	}
 
 	@Override

@@ -10,13 +10,18 @@ import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
 import services.PlayerService;
+import services.Stat;
 
 public class PlayerContract extends PlayerDecorator implements PlayerService {
 
+	
+	
 	public PlayerContract(PlayerService delegates) {
 		super(delegates);
 		// TODO Auto-generated constructor stub
 	}
+	
+
 
 	/** post : willFall() implies goDown()
 	 *  post : willDigRight() implies getCellNature(getWdt()+1,getHgt()-1) = HOL 
@@ -64,18 +69,21 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		if(p.getEngine().getNextCommand() == Command.DIGL) {
 			System.out.println("salut toi");
 			System.out.println(will_dig_left_at_pre);
-			if (!will_dig_left_at_pre) {
+			/*
+			if (!will_dig_left_at_pre && getEnvi().getCellNature(getWdt()-1,getHgt()-1) == Cell.HOL) {
 				throw new PostconditionError("Le joueur ne peut pas creuser a gauche ");
-			}
+			}*/
 			if(will_dig_left_at_pre && getEnvi().getCellNature(getWdt()-1,getHgt()-1) != Cell.HOL) {
 				throw new PostconditionError("Le joueur n'a pas creusé à gauche alors qu'il le fallait ");
 			}
+			
 		}
 		
 		if(p.getEngine().getNextCommand() == Command.DIGR) {
-			if (!will_dig_right_at_pre) {
+			/*
+			if (!will_dig_right_at_pre && getEnvi().getCellNature(getWdt()+1,getHgt()-1) == Cell.HOL) {
 				throw new PostconditionError("Le joueur ne peut pas creuser a droite ");
-			}
+			}*/
 			
 			if(will_dig_right_at_pre && getEnvi().getCellNature(getWdt()+1,getHgt()-1) != Cell.HOL) {
 				throw new PostconditionError("Le joueur n'a pas creuse a droite alors qu'il le fallait ");
