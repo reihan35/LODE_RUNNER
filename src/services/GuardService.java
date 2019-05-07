@@ -191,5 +191,6 @@ public interface GuardService extends CharacterService {
 	void drop_off();
 	boolean has_treasure();
 	ItemService get_treasure();
+	public void die();
 
 }

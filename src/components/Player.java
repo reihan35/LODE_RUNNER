@@ -1,11 +1,15 @@
 package components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import services.Cell;
 import services.Command;
 import services.Coordinates;
 import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
+import services.GuardService;
 import services.ItemService;
 import services.ItemType;
 import services.PlayerService;
@@ -15,7 +19,7 @@ import util.SetUtil;
 public class Player extends Character implements PlayerService {
 	
 	private EngineService engine;
-	private ItemService bomb = null ;
+	private ArrayList<ItemService> bombs = new ArrayList<>() ;
 	
 	@Override
 	public void init(EngineService e, int w, int h) {
@@ -24,15 +28,8 @@ public class Player extends Character implements PlayerService {
 		
 	}
 	@Override
-	public void setBomb(int id, ItemType t,int x, int y) {
-		System.out.println("ici c'est setBomb");
-		if(id > -1) {
-			bomb = new Item();
-			bomb.init(id, t, x, y);
-		}
-		else {
-			bomb = null;
-		}
+	public void addBomb(ItemService b) {
+		bombs.add(b);
 	}
 	
 	@Override
@@ -81,23 +78,39 @@ public class Player extends Character implements PlayerService {
 					System.out.println(getHgt() - 1 );
 				}
 				else {
-		
-					switch(getEngine().getNextCommand()) {
-					  case UP:
-						  goUp();
-						  break;
-					  case DOWN:
-						  goDown();
-						  break;
-					  case RIGHT:
-						  goRight();
-						  break;
-					  case LEFT:
-						  goLeft();
-						  break;
-					  case NEUTRAL:
-						  stay();
-						  break;
+					if (willFight()) {
+						//determiner si le garde est à gauche ou à droite
+						GuardService g = null;
+						if(getEnvi().getCellContentChar(wdt-1, hgt).size() > 0) {
+							g = (GuardService) getEnvi().getCellContentChar(wdt-1, hgt).get(0);
+						}
+						else {
+							g = (Guard) getEnvi().getCellContentChar(wdt-1, hgt).get(0);
+						}
+						ItemService b = bombs.get(0);
+						bombs.remove(b);
+						g.die();
+					}
+					else {
+			
+						switch(getEngine().getNextCommand()) {
+						  case UP:
+							  goUp();
+							  break;
+						  case DOWN:
+							  goDown();
+							  break;
+						  case RIGHT:
+							  goRight();
+							  break;
+						  case LEFT:
+							  goLeft();
+							  break;
+						  case NEUTRAL:
+							  stay();
+							  break;
+							  
+						}
 					}
 				}
 			}
@@ -106,8 +119,8 @@ public class Player extends Character implements PlayerService {
 	}
 
 	@Override
-	public ItemService getBomb() {
+	public List<ItemService> getBomb() {
 		
-		return bomb;
+		return bombs;
 	}
 }

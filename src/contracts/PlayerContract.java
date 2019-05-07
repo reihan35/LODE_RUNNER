@@ -1,5 +1,8 @@
 package contracts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import components.Character;
 import components.Player;
 import decorators.PlayerDecorator;
@@ -9,6 +12,7 @@ import services.Coordinates;
 import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
+import services.GuardService;
 import services.PlayerService;
 import services.Stat;
 
@@ -39,6 +43,8 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		PlayerService p = new Player();
 		boolean will_dig_right_at_pre = willDigRight();
 		boolean will_dig_left_at_pre = willDigLeft();
+		boolean will_fight_at_pre = willFight();
+		ArrayList<GuardService> guards_at_pre = (ArrayList<GuardService>) getEngine().getGuards().clone();
 		p.init(engine_at_pre,getWdt(),getHgt());
 		Command c = getEngine().getNextCommand();
 				
@@ -66,27 +72,40 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			return;
 		}
 		
-		if(p.getEngine().getNextCommand() == Command.DIGL) {
+		if(will_dig_left_at_pre) {
 			System.out.println("salut toi");
 			System.out.println(will_dig_left_at_pre);
 			/*
 			if (!will_dig_left_at_pre && getEnvi().getCellNature(getWdt()-1,getHgt()-1) == Cell.HOL) {
 				throw new PostconditionError("Le joueur ne peut pas creuser a gauche ");
 			}*/
-			if(will_dig_left_at_pre && getEnvi().getCellNature(getWdt()-1,getHgt()-1) != Cell.HOL) {
+			if(getEnvi().getCellNature(getWdt()-1,getHgt()-1) != Cell.HOL) {
 				throw new PostconditionError("Le joueur n'a pas creusÃ© Ã  gauche alors qu'il le fallait ");
 			}
 			
 		}
 		
-		if(p.getEngine().getNextCommand() == Command.DIGR) {
+		if(will_dig_right_at_pre) {
 			/*
 			if (!will_dig_right_at_pre && getEnvi().getCellNature(getWdt()+1,getHgt()-1) == Cell.HOL) {
 				throw new PostconditionError("Le joueur ne peut pas creuser a droite ");
 			}*/
 			
-			if(will_dig_right_at_pre && getEnvi().getCellNature(getWdt()+1,getHgt()-1) != Cell.HOL) {
+			if(getEnvi().getCellNature(getWdt()+1,getHgt()-1) != Cell.HOL) {
 				throw new PostconditionError("Le joueur n'a pas creuse a droite alors qu'il le fallait ");
+			}
+		}
+		
+		if(will_fight_at_pre) {
+			if(getEngine().getGuards().size() != guards_at_pre.size()- 1) {
+				throw new PostconditionError("Un garde devrait avoir été tué");
+			}
+			for(GuardService g:guards_at_pre) {
+				if(!getEngine().getGuards().contains(g)) {
+					if(!(g.getHgt() == getHgt() && (g.getWdt() == getWdt()-1 || g.getWdt() == getWdt()+1))){
+						throw new PostconditionError("Le garde tué n'était pas sur une case adjacente");
+					}
+				}
 			}
 		}
 		if(p.getEngine().getNextCommand() == Command.DOWN) {
@@ -108,9 +127,6 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 			
 			p.goUp();
 			
-			System.out.println("BONJOUE A TOUS");
-			System.out.println(p.getHgt());
-			System.out.println(getHgt());
 			if (p.getHgt() != getHgt())  {
 				throw new PostconditionError("Le joueur n'est pas allÃ© en haut alors qu'il le fallait ! ");
 			}

@@ -1,5 +1,7 @@
 package services;
 
+import java.util.List;
+
 import util.SetUtil;
 
 public interface PlayerService extends CharacterService {
@@ -92,6 +94,20 @@ public interface PlayerService extends CharacterService {
 		return false;
 	}
 	
+	
+	default public boolean willFight() {
+		if(getEngine().getNextCommand() == Command.FIGHT && getBomb().size()>0) {
+			for(GuardService g : getEngine().getGuards()) {
+				if((g.getWdt() == getWdt()+1 && g.getHgt() == getHgt())
+						|| g.getWdt() == getWdt()-1 && g.getHgt() == getHgt()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+
 	public void init(EngineService e, int w, int h);
 	
 	/**
@@ -110,7 +126,8 @@ public interface PlayerService extends CharacterService {
 	 **/
 	public void step();
 
-	public ItemService getBomb();
+	public List<ItemService> getBomb();
+	
+	public void addBomb(ItemService b);
 
-	public void setBomb(int i, ItemType bomb, int wdt, int hgt);
 }

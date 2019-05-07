@@ -114,5 +114,11 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 		return delegates.get_treasure();
 	}
 
+	@Override
+	public void die() {
+		delegates.die();
+		
+	}
+
 	
 }

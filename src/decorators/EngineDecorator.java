@@ -2,6 +2,7 @@ package decorators;
 
 import java.util.ArrayList;
 
+import services.CharacterService;
 import services.Command;
 import services.Coordinates;
 import services.Door;
@@ -120,9 +121,8 @@ public class EngineDecorator implements EngineService {
 	}
 
 	@Override
-	public GuardService can_fight() {
-		// TODO Auto-generated method stub
-		return delegates.can_fight();
+	public void removeGuard(GuardService g) {
+		delegates.removeGuard(g);
 	}
 
 

@@ -1,6 +1,8 @@
 package decorators;
 
 
+import java.util.List;
+
 import contracts.CharacterContract;
 import services.CharacterService;
 import services.EditableScreenService;
@@ -38,15 +40,13 @@ public class PlayerDecorator extends CharacterContract implements PlayerService 
 	}
 
 	@Override
-	public ItemService getBomb() {
+	public List<ItemService> getBomb() {
 		// TODO Auto-generated method stub
 		return delegates.getBomb();
 	}
 
-	@Override
-	public void setBomb(int i, ItemType bomb, int wdt, int hgt) {
-		delegates.setBomb(i, bomb, wdt, hgt);
+	public void addBomb(ItemService b) {
+		delegates.addBomb(b);
 	}
-
 
 }

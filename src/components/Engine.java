@@ -184,16 +184,9 @@ public class Engine implements EngineService {
 		System.out.println("wdt vaut : " + player.getWdt());
 
 		if(items.size() > 0 && items.get(0).getNature()==ItemType.BOMB){
-			System.out.println("je rentre meme ici avec");
-			if (getPlayer().getBomb()==null){
-				System.out.println("HELLO");
-				int wdt = items.get(0).getWdt();
-				int hgt = items.get(0).getHgt();
-				getPlayer().setBomb(1,ItemType.BOMB,wdt,hgt);
-				System.out.println(getPlayer().getBomb());
-				getEnvi().removeCellContentItem(getPlayer().getWdt(),getPlayer().getHgt(),items.get(0));
-				bombs.remove(0);
-			}
+			getPlayer().addBomb(items.get(0));
+			getEnvi().removeCellContentItem(getPlayer().getWdt(),getPlayer().getHgt(),items.get(0));
+			bombs.remove(0);
 		}
 	}
 	
@@ -233,18 +226,6 @@ public class Engine implements EngineService {
 		return false;
 	}
 	
-	@Override
-	public GuardService can_fight() {
-		for(GuardService g : guards) {
-			System.out.println("j'y arrive");
-			System.out.println(g.getWdt());
-			System.out.println(getPlayer().getWdt());
-			if(g.getWdt()== getPlayer().getWdt() + 1 || g.getWdt() == getPlayer().getWdt() - 1) {
-				return g;
-			}
-		}
-		return null;
-	}
 	
 	@Override
 	public int getScore () {
@@ -281,18 +262,7 @@ public class Engine implements EngineService {
 				g.step();
 				getEnvi().addCellContentChar(g.getWdt(), g.getHgt(), g);
 			}
-			if(can_fight() != null) {
-				GuardService g = can_fight();
-				if(getPlayer().getBomb() != null && getNextCommand()==Command.FIGHT) {
-					getPlayer().setBomb(-1,ItemType.BOMB,-1,-1);
-					if(g.has_treasure()) {
-							addTreasure( g.getWdt(), g.getHgt());
-							g.setTreasure(null);
-						}
-					getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
-					guards.remove(g);
-				}
-			}
+
 			
 			
 			if(haschased()) {
@@ -326,6 +296,18 @@ public class Engine implements EngineService {
 	public ArrayList<Door> getDoors() {
 		// TODO Auto-generated method stub
 		return doors;
+	}
+
+
+	public void removeGuard(GuardService g) {
+		getEnvi().getCellContentChar(g.getWdt(), g.getHgt()).remove(0);
+		for(GuardService g2: guards) {
+			if(g2.getWdt() == g.getWdt() && g2.getHgt() == g.getHgt()) {
+				guards.remove(g2);
+				break;
+			}
+		}
+		
 	}
 
 

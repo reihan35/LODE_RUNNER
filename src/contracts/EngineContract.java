@@ -189,7 +189,6 @@ public class EngineContract extends EngineDecorator implements EngineService{
 		int wdt_player_at_pre = getPlayer().getWdt();
 		boolean will_dig_right_atPre = getPlayer().willDigRight();
 		boolean will_dig_left_atPre = getPlayer().willDigLeft();
-		GuardService can_fight_at_pre = can_fight();
 		ArrayList<CharacterService> cellContentChar_atPre = (ArrayList<CharacterService>) getEnvi().getCellContentChar(wdt_player_at_pre, hgt_player_at_pre).clone(); 
 		ArrayList<ItemService> cellContentItem_atPre = (ArrayList<ItemService>) getEnvi().getCellContentItem(wdt_player_at_pre, hgt_player_at_pre).clone(); 
 		int treasure_size_at_pre = getTreasures().size();
@@ -215,18 +214,17 @@ public class EngineContract extends EngineDecorator implements EngineService{
 				throw new PostconditionError("Le statu n'a pas mis a loos alors que le player a perdu");
 			}
 		}
-		if (can_fight_at_pre != null) {
-			for(ItemService it: cellContentItem_atPre) {
-				System.out.println(getTreasures().size());
-				System.out.println(treasure_size_at_pre - 1);
-				if (it.getNature() == ItemType.TREASURE && getTreasures().size() != treasure_size_at_pre - 1 ) {
-					throw new PostconditionError("Le tresor n'a pas ete enleve de l'environnement");
-				}
-				if (it.getNature() == ItemType.BOMB && getBombs().size() != bombs_size_at_pre - 1) {
-					throw new PostconditionError("L'arme n'a pas ete enleve de l'environnement");
-				}
+		for(ItemService it: cellContentItem_atPre) {
+			System.out.println(getTreasures().size());
+			System.out.println(treasure_size_at_pre - 1);
+			if (it.getNature() == ItemType.TREASURE && getTreasures().size() != treasure_size_at_pre - 1 ) {
+				throw new PostconditionError("Le tresor n'a pas ete enleve de l'environnement");
+			}
+			if (it.getNature() == ItemType.BOMB && getBombs().size() != bombs_size_at_pre - 1) {
+				throw new PostconditionError("L'arme n'a pas ete enleve de l'environnement");
 			}
 		}
+		
 		
 		for(Coordinates c : holes_at_pre) {
 			System.out.println( getHoles(c.getX(), c.getY()));

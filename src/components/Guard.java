@@ -238,7 +238,6 @@ public class Guard extends Character implements GuardService {
 	public void drop_off() {
 		System.out.println("je compred pas !");
 		if(treasure != null) {
-			//getEngine().removeTreasure();
 			getEngine().addTreasure( getWdt(), getHgt()+1);
 			getEngine().getEnvi().addCellContentItem(getWdt(), getHgt()+1, treasure);
 			treasure = null;
@@ -320,5 +319,17 @@ public class Guard extends Character implements GuardService {
 				}	
 			}
 		}
+
+	@Override
+	public void die() {
+		if(treasure != null) {
+			getEngine().addTreasure( getWdt(), getHgt());
+			getEngine().getEnvi().addCellContentItem(getWdt(), getHgt()+1, treasure);
+			treasure = null;
+		}
+
+		getEngine().removeGuard(this);
+		
+	}
 
 }
