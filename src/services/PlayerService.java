@@ -98,11 +98,11 @@ public interface PlayerService extends CharacterService {
 	default public boolean willFight() {
 		if(getEngine().getNextCommand() == Command.FIGHT && getBomb().size()>0) {
 			if(getEnvi().getCellContentChar(getWdt()+1, getHgt()).size() > 0) {
-				if(getEnvi().getCellNature(getWdt()+1, getHgt()-1) == Cell.PLT) {
+				if(getEnvi().getCellNature(getWdt()+1, getHgt()-1) == Cell.PLT && getEnvi().getCellNature(getWdt()+1, getHgt()) == Cell.EMP) {
 					return true;
 				}
 			}
-			if(getEnvi().getCellContentChar(getWdt()-1, getHgt()).size() > 0) {
+			if(getEnvi().getCellContentChar(getWdt()-1, getHgt()).size() > 0 && getEnvi().getCellNature(getWdt()-1, getHgt()) == Cell.EMP) {
 				if(getEnvi().getCellNature(getWdt()-1, getHgt()-1) == Cell.PLT) {
 					return true;
 				}
