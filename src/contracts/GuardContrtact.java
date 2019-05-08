@@ -72,65 +72,6 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 
 	
 	public void checkInvariants() {
-		if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getHgt() < getTarget().getHgt() && getBehaviour() != Move.UP) {
-			throw new InvariantError("Behaviour ne return pas UP alors qu'il le faut !");
-		}
-		
-		if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getHgt() > getTarget().getHgt() && getBehaviour() != Move.DOWN) {
-			throw new InvariantError("Behaviour ne return pas DOWN alors qu'il le faut !");
-		}
-		
-		if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getHgt() > getTarget().getHgt() && getBehaviour() != Move.NEUTRAL) {
-			throw new InvariantError("Behaviour ne return pas NEUTRAL alors qu'il le faut !");
-		}
-		
-		 Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
-		 Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
-		 Cell[] emp ={Cell.HOL, Cell.HDR};
-		
-		if (SetUtil.isIn(currCell,emp) || (!isFreeCell(getWdt(), getHgt()-1)) || (isFreeCell(getWdt(), getHgt()-1))){
-
-			 if(getTarget().getWdt() < getWdt() && getBehaviour() != Move.LEFT) {
-				 throw new InvariantError("Behaviour ne return pas LEFT alors qu'il le faut !");
-			 }
-			 if (getTarget().getWdt() > getWdt() && getBehaviour() != Move.RIGHT) {
-				 throw new InvariantError("Behaviour ne return pas RIGHT alors qu'il le faut !");
-			 }
-			 
-			 else {
-				 throw new InvariantError("Behaviour ne return pas NEUTRAL alors qu'il le faut !");
-				 
-			 }
-		 }
-		
-		 Cell[] f ={Cell.PLT, Cell.MTL};
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getHgt() < getTarget().getHgt() && (!isFreeCell(getWdt(), getHgt() - 1) 
-				 																							|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 if(getTarget().getHgt() - getHgt() < getTarget().getWdt() && getBehaviour() != Move.UP) {
-					throw new InvariantError("Behaviour ne return pas UP alors qu'il le faut !");
-			 }
-		 }
-		 
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getWdt() > getTarget().getWdt() && (!isFreeCell(getWdt(), getHgt() - 1) 
-																											|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 if(getTarget().getHgt() - getHgt() < getTarget().getWdt() && getBehaviour() != Move.DOWN) {
-					throw new InvariantError("Behaviour ne return pas DOWN alors qu'il le faut !");
-			 }
-		 }
-		 
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getHgt() > getTarget().getHgt() &&(!isFreeCell(getWdt(), getHgt() - 1) 
-				 																								|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 if(getTarget().getHgt() - getHgt() < getTarget().getWdt() && getBehaviour() != Move.LEFT) {
-				 throw new InvariantError("Behaviour ne return pas LEFT alors qu'il le faut !");
-			 }
-		 }
-
-		 if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.LAD && getWdt() < getTarget().getWdt() && (!isFreeCell(getWdt(), getHgt() - 1) 
-																											|| isFreeCell(getWdt(), getHgt() - 1) && characterAt(getWdt(), getHgt()- 1))) {
-			 if(getTarget().getHgt() - getHgt() > getTarget().getWdt() && getBehaviour() != Move.RIGHT) {
-				 throw new InvariantError("Behaviour ne return pas RIGHT alors qu'il le faut !");
-			 }
-		 }
 	}
 	
 	@Override
@@ -325,10 +266,6 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 
 			g.goDown();
 			
-			System.out.println(g.getHgt());
-			System.out.println(getHgt());
-			System.out.println(g.getBehaviour());
-			System.out.println(behaviour);
 			
 			if (g.getHgt() != getHgt())  {
 				throw new PostconditionError("Le gardien ne s'est pas deplace vers le bas ! ");
@@ -385,6 +322,37 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 				throw new PostconditionError("Le gardien n'est pas restÃ© a sa place alors qu'il le fallait ! ");
 			}
 		
+		}
+		
+	}
+	
+	@Override
+	public void die() {
+		checkInvariants();
+		ItemService t = get_treasure();
+		boolean has_treasure_atPre = has_treasure();
+		int items_size_atPre = getEnvi().getCellContentItem(getWdt(), getHgt()).size();
+		int treasure_size_atPre = getEngine().getTreasures().size();
+		int guards_size_atPre = getEngine().getGuards().size();
+		super.die();
+		checkInvariants();
+		if(has_treasure_atPre) {
+			int items_size_after = getEnvi().getCellContentItem(getWdt(), getHgt()).size();
+			int treasure_size_after = getEngine().getTreasures().size();
+			int guards_size_after = getEngine().getGuards().size();
+			if(items_size_atPre +1 != items_size_after) {
+				throw new PostconditionError("Erreur le garde est mort sans relacher son tresor 1");
+			}
+			if(treasure_size_atPre + 1 != treasure_size_after) {
+				throw new PostconditionError("Erreur le garde est mort sans relacher son tresor 2");
+			}
+			if(get_treasure() != null) {
+				throw new PostconditionError("Erreur le garde est mort sans relacher son tresor 3");
+			}
+			
+			if(guards_size_atPre-1 != guards_size_after) {
+				throw new PostconditionError("Erreur le garde n'a pas été enlevé de l'environnement");
+			}
 		}
 	}
 }

@@ -97,13 +97,18 @@ public interface PlayerService extends CharacterService {
 	
 	default public boolean willFight() {
 		if(getEngine().getNextCommand() == Command.FIGHT && getBomb().size()>0) {
-			for(GuardService g : getEngine().getGuards()) {
-				if((g.getWdt() == getWdt()+1 && g.getHgt() == getHgt())
-						|| g.getWdt() == getWdt()-1 && g.getHgt() == getHgt()) {
+			if(getEnvi().getCellContentChar(getWdt()+1, getHgt()).size() > 0) {
+				if(getEnvi().getCellNature(getWdt()+1, getHgt()-1) == Cell.PLT) {
+					return true;
+				}
+			}
+			if(getEnvi().getCellContentChar(getWdt()-1, getHgt()).size() > 0) {
+				if(getEnvi().getCellNature(getWdt()-1, getHgt()-1) == Cell.PLT) {
 					return true;
 				}
 			}
 		}
+			
 		return false;
 	}
 	
