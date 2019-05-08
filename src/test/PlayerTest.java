@@ -88,19 +88,26 @@ public class PlayerTest {
 		assert(pcontrat.getWdt()==3);
 	}
 	
-	/*@Test
-	public void step_up_door() {
-		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
-		s.setNature(2, 2, Cell.DOR);
-		EnvironmentContract env = SetUtil.EnviMaker(s);
-		PlayerService p = new Player();
-		EngineContract en = SetUtil.Engine_maker(env,new Coordinates(2,2));
-		PlayerContract pcontrat = new PlayerContract(p);
-		en.addCommand(Command.OPEND);
-		pcontrat.init(en, 2, 2);
-		pcontrat.step();
-		assert(pcontrat.getWdt()==3);
-	}*/
+	@Test
+	public void step_door() {
+			EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+			s.setNature(3, 1, Cell.PLT);
+			s.setNature(4, 1, Cell.PLT);
+			EnvironmentContract env = SetUtil.EnviMaker(s);
+			EngineService e = new Engine();
+			EngineContract enconrat = new EngineContract(e);
+			ArrayList<Coordinates> t = new ArrayList<>();
+			ArrayList<Coordinates> g = new ArrayList<>();
+			g.add(new Coordinates(10, 2));
+			ArrayList<Coordinates> b = new ArrayList<>();
+			ArrayList<Door> d = new ArrayList<>();
+			d.add(new Door(new Coordinates(3, 2), new Coordinates(4, 2)));
+			Coordinates pcoord = new Coordinates(3, 2);
+			enconrat.init(env, pcoord, g, t, b, d);
+			enconrat.addCommand(Command.OPEND);
+			enconrat.step();
+			assert(enconrat.getPlayer().getWdt() == 4 && enconrat.getPlayer().getHgt() == 2);
+	}
 	
 	@Test
 	public void step_up_door_2() {
@@ -199,7 +206,6 @@ public class PlayerTest {
 	}
 	
 	
-	//clearly there is a bug here
 	@Test
 	public void up_dig_left() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
@@ -216,9 +222,31 @@ public class PlayerTest {
 		en.addCommand(Command.DIGL);
 		pcontrat.step();
 		assert(env.getCellNature(1, 2) == Cell.HOL);
-		
 	}
 	
+	
+	@Test
+	public void get_bomb() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(10, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		b.add(new Coordinates(4, 2));
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(3, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		enconrat.addCommand(Command.RIGHT);
+		enconrat.step();
+		enconrat.step();
+		assert(enconrat.getPlayer().getBomb() != null);
+		assert(enconrat.getBombs().size() == 0);
+	}
 	
 	//etat remarquable
 	@Test

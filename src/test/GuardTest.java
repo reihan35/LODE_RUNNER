@@ -136,7 +136,7 @@ public class GuardTest {
 	}
 	
 	
-	//etat remarquable
+	//recuperation d'un tresor
 	@Test
 	public void trasure_guard() {
 		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
@@ -154,14 +154,116 @@ public class GuardTest {
 		ArrayList<Coordinates> t = new ArrayList<>();
 		t.add(new Coordinates(8, 2));
 		ArrayList<Coordinates> g = new ArrayList<>();
-		g.add(new Coordinates(10, 2));
+		g.add(new Coordinates(9, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(4, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		GuardService guard = enconrat.getGuards().get(0);
+		enconrat.step();
+		enconrat.step();
+		enconrat.step();
+		enconrat.step();
+		enconrat.step();
+		assert(guard.has_treasure() == true && enconrat.getTreasures().size() == 0);
+	}
+	
+	//drop d'un tresor
+	@Test
+	public void trasure_guard_2() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		s.setNature(6, 1, Cell.PLT);
+		s.setNature(7, 1, Cell.PLT);
+		s.setNature(8, 1, Cell.PLT);
+		s.setNature(9, 1, Cell.PLT);
+		s.setNature(10, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		t.add(new Coordinates(9, 2));
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(9, 2));
 		ArrayList<Coordinates> b = new ArrayList<>();
 		ArrayList<Door> d = new ArrayList<>();
 		Coordinates pcoord = new Coordinates(7, 2);
 		enconrat.init(env, pcoord, g, t, b, d);
+		enconrat.addCommand(Command.DIGR);
 		GuardService guard = enconrat.getGuards().get(0);
-
+		enconrat.step();
+		assert(guard.has_treasure() == true && enconrat.getTreasures().size() == 0);
 		
+		while(enconrat.getEnvi().getCellNature(guard.getWdt(), guard.getHgt()) != Cell.HOL) {
+			enconrat.step();
+		}
+		assert(guard.has_treasure() == false && enconrat.getTreasures().size() == 1);
+
+	}
+	
+	//die
+	@Test
+	public void die_guard() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		s.setNature(6, 1, Cell.PLT);
+		s.setNature(7, 1, Cell.PLT);
+		s.setNature(8, 1, Cell.PLT);
+		s.setNature(9, 1, Cell.PLT);
+		s.setNature(10, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(8, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		b.add(new Coordinates(7, 2));
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(6, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		enconrat.addCommand(Command.RIGHT);
+		enconrat.step();
+		enconrat.addCommand(Command.FIGHT);
+		enconrat.step();
+		assert(enconrat.getGuards().size() == 0);
+	}
+	
+	//die with treasure
+	@Test
+	public void die_guard_with_treasure() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		s.setNature(6, 1, Cell.PLT);
+		s.setNature(7, 1, Cell.PLT);
+		s.setNature(8, 1, Cell.PLT);
+		s.setNature(9, 1, Cell.PLT);
+		s.setNature(10, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		t.add(new Coordinates(8, 2));
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(8, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		b.add(new Coordinates(7, 2));
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(6, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		enconrat.addCommand(Command.RIGHT);
+		enconrat.step();
+		enconrat.addCommand(Command.FIGHT);
+		enconrat.step();
+		assert(enconrat.getGuards().size() == 0);
+		assert(enconrat.getTreasures().size() == 1);
+		assert(enconrat.getEnvi().getCellContentItem(8, 2).size() == 1);
 	}
 	
 	//etat remarquable
