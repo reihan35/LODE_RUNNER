@@ -121,15 +121,6 @@ public class Character implements CharacterService {
 	}
 
 	
-	public void transport(int w,int h) {
-		int wdt_b = wdt;
-		int hgt_b = hgt;
-		System.out.println(wdt_b);
-		System.out.println(hgt_b);
-		wdt = w;
-		hgt = h;
-	}
-
 	@Override
 	public void goDown() {
 		int wdt_b = wdt;

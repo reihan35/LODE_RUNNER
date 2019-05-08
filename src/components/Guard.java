@@ -25,6 +25,20 @@ public class Guard extends Character implements GuardService {
 	private int first_x;
 	private int first_y;
 	private ItemService treasure;
+	private boolean hasTreasure;
+	@Override
+	public int getFirst_x() {
+		return first_x;
+	}
+	@Override
+	public int getFirst_y() {
+		return first_y;
+	}
+
+	public ItemService getTreasure() {
+		return treasure;
+	}
+
 	private int move;
 	private int can_hold_t;
 	private int timeInHole;
@@ -39,6 +53,7 @@ public class Guard extends Character implements GuardService {
 		first_y = h;
 		timeInHole = 0;
 		move = 0;
+		treasure = null;
 		
 	}
 	
@@ -236,7 +251,6 @@ public class Guard extends Character implements GuardService {
 	
 	@Override
 	public void drop_off() {
-		System.out.println("je compred pas !");
 		if(treasure != null) {
 			getEngine().addTreasure( getWdt(), getHgt()+1);
 			getEngine().getEnvi().addCellContentItem(getWdt(), getHgt()+1, treasure);
@@ -246,10 +260,8 @@ public class Guard extends Character implements GuardService {
 	
 	@Override
 	public void Reinitialize() {
-		System.out.println("je suis dans reinitialize");
-		System.out.println(first_x);
-		System.out.println(first_y);
-		transport(first_x,first_y);
+		wdt = first_x;
+		hgt = first_y;
 	}
 	
 	public boolean willMove() {
@@ -259,6 +271,15 @@ public class Guard extends Character implements GuardService {
 		}
 		return false;
 	}
+	
+	@Override
+	public void grabTreasure() {
+		ItemService t = getEnvi().getCellContentItem(wdt, hgt).get(0); 
+		getEnvi().getCellContentItem(wdt, hgt).remove(0);
+		getEngine().getTreasures().remove(t);
+		treasure = t;
+			
+	}
 
 	@Override
 	public void step() {
@@ -266,6 +287,15 @@ public class Guard extends Character implements GuardService {
  		move++;
  		System.out.println("je suis move:");
  		System.out.println(move);
+ 		
+ 		if(willGrabTreasure()) {
+ 			grabTreasure();
+ 		}
+ 		
+		if (willReinitialize()) {
+			Reinitialize();
+			return;
+		}
 		if(!willMove()) return;
 		if(getEnvi().getCellNature(getWdt(),getHgt()) == Cell.HOL)
 			timeInHole++;
@@ -282,11 +312,6 @@ public class Guard extends Character implements GuardService {
 				stay();
 			}
 			else {
-				if (willReinitialize()) {
-					System.out.println("je suis pas venue ici");
-					Reinitialize();
-				}
-				else {
 					if(willFall()) {
 						goDown();
 						System.out.println("VAS-YYYYYY");
@@ -316,7 +341,6 @@ public class Guard extends Character implements GuardService {
 							}
 						}
 					}
-				}	
 			}
 		}
 

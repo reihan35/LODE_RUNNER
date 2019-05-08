@@ -168,20 +168,11 @@ public class Engine implements EngineService {
 				score = score + 10;
 				System.out.println("la taille des tresors" + treasures.size());
 			}
-			
-			if (c instanceof GuardService) {
-				System.out.println(items.get(0));
-				((GuardService) c).setTreasure(items.get(0));
-				treasures.remove(items.get(0));
-				getEnvi().removeCellContentItem(c.getWdt(),c.getHgt(),items.get(0));
-			}
 		}
 	}
 	
 	public void containBomb() {
-		System.out.println("j'arrive a renter dans containB");
 		ArrayList<ItemService> items = getEnvi().getCellContentItem(getPlayer().getWdt(),getPlayer().getHgt());
-		System.out.println("wdt vaut : " + player.getWdt());
 
 		if(items.size() > 0 && items.get(0).getNature()==ItemType.BOMB){
 			getPlayer().addBomb(items.get(0));
@@ -197,7 +188,6 @@ public class Engine implements EngineService {
 	
 	
 	public void paceOfTime() {
-		System.out.println("je rentre dans pace");
 		for (int i = 0; i < getEnvi().getWidth(); i++) {
 			for (int j = 0 ; j < getEnvi().getHeight(); j++) {
 				if (getEnvi().getCellNature(i, j) == Cell.HOL) {
@@ -208,7 +198,6 @@ public class Engine implements EngineService {
 						if(holesTimes[i][j] + 1 == 50) {
 							holesTimes[i][j] = -1;
 							getEnvi().fill(i, j);
-							System.out.println("je repasse par la");
 							}
 							
 						}
@@ -240,7 +229,6 @@ public class Engine implements EngineService {
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
-		System.out.println("wdt vaut : " + player.getWdt());
 		//if (player.getWdt() > 5) {
 			//throw new Error("je peux augmenter");
 		//}
@@ -258,7 +246,7 @@ public class Engine implements EngineService {
 			
 			for (GuardService g : guards ) {
 				getEnvi().removeCellContentChar(g.getWdt(), g.getHgt(), g);
-				containTreasure(g);
+				//containTreasure(g);
 				g.step();
 				getEnvi().addCellContentChar(g.getWdt(), g.getHgt(), g);
 			}

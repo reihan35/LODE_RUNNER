@@ -97,6 +97,26 @@ public class EngineTest {
 		enconrat.init(env, new Coordinates(3, 3), g, t, b, dlist);
 	}
 	
+	@Test(expected = PreconditionError.class)
+	public void init_5() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(10,10);
+		s.setNature(3, 2, Cell.PLT);
+		s.setNature(2, 2, Cell.PLT);
+		s.setNature(4, 4, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		t.add(new Coordinates(2, 2));
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(2, 3));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> dlist = new ArrayList<>();
+		Door d = new Door(new Coordinates(11, 3), new Coordinates(5, 5));
+		dlist.add(d);
+		enconrat.init(env, new Coordinates(3, 3), g, t, b, dlist);
+	}
+	
 	
 	@Test
 	public void step_1() {

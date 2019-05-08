@@ -53,6 +53,18 @@ public class EngineContract extends EngineDecorator implements EngineService{
 
 		}
 		
+		for(Door d:doorCoord) {
+			Coordinates d1 = d.getIn();
+			Coordinates d2 = d.getOut();
+			if(!screen.isInWindow(d1.getX(), d1.getY())) {
+				throw new PreconditionError("La porte 1 n'est pas dans les limites de l'environnement");
+			}
+			
+			if(!screen.isInWindow(d2.getX(), d2.getY())) {
+				throw new PreconditionError("La porte 2 n'est pas dans les limites de l'environnement");
+			}
+		}
+		
 		for(Coordinates t: treasuresCoord) {
 			Cell[] filledCell = {Cell.PLT, Cell.MTL};
 			if(!SetUtil.isIn(screen.getCellNature(t.getX(), t.getY()-1), filledCell)){

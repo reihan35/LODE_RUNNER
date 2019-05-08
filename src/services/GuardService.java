@@ -15,6 +15,8 @@ public interface GuardService extends CharacterService {
 	public Move getBehaviour();
 	public CharacterService getTarget();
 	public int getTimeInHole();	
+	public int getFirst_x();
+	public int getFirst_y();
 
 	/**
 	 * predicate definition:
@@ -69,10 +71,18 @@ public interface GuardService extends CharacterService {
 		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() < 45 ;
 	}
 	
+	default public boolean willGrabTreasure() {
+		return !has_treasure() && getEnvi().getCellContentItem(getWdt(), getHgt()).size()>0 && 
+				getEnvi().getCellContentItem(getWdt(), getHgt()).get(0).getNature() == ItemType.TREASURE;
+	}
 	default public boolean willReinitialize() {
-		System.out.println("le guard est dans reinitaze : " + getWdt()+ getHgt());
 		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
-		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() == 45 && getEngine().getNextCommand()==Command.NEUTRAL;
+		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.PLT;
+	}
+	
+
+	default boolean has_treasure() {
+		return get_treasure() !=null;
 	}
 	
 	default public boolean GuardAt(int x, int y) {
@@ -189,8 +199,8 @@ public interface GuardService extends CharacterService {
 	
 	boolean willMove();
 	void drop_off();
-	boolean has_treasure();
 	ItemService get_treasure();
 	public void die();
+	public void grabTreasure();
 
 }

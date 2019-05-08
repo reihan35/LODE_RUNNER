@@ -120,5 +120,21 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 		
 	}
 
+	@Override
+	public int getFirst_x() {
+		// TODO Auto-generated method stub
+		return delegates.getFirst_x();
+	}
+
+	@Override
+	public int getFirst_y() {
+		// TODO Auto-generated method stub
+		return delegates.getFirst_y();
+	}
+
+	public void grabTreasure() {
+		delegates.grabTreasure();
+	}
+
 	
 }

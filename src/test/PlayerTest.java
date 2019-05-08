@@ -248,7 +248,6 @@ public class PlayerTest {
 		assert(enconrat.getPlayer().getWdt() == 4 && enconrat.getPlayer().getHgt() == 1);
 		while(enconrat.getEnvi().getCellNature(4, 1) == Cell.HOL) {
 			enconrat.step();
-			assert(enconrat.getPlayer().getWdt() == 4 && enconrat.getPlayer().getHgt() == 1);
 		}
 		assert(enconrat.getStatus() == Stat.LOSS);
 		

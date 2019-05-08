@@ -22,10 +22,12 @@ import services.Cell;
 import services.CharacterService;
 import services.Command;
 import services.Coordinates;
+import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
 import services.GuardService;
 import services.PlayerService;
+import services.Stat;
 import util.SetUtil;
 
 
@@ -131,6 +133,91 @@ public class GuardTest {
 		g.step();
 		assert(g.getHgt() == 1 && g.getWdt() == 3);
 
+	}
+	
+	
+	//etat remarquable
+	@Test
+	public void trasure_guard() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		s.setNature(6, 1, Cell.PLT);
+		s.setNature(7, 1, Cell.PLT);
+		s.setNature(8, 1, Cell.PLT);
+		s.setNature(9, 1, Cell.PLT);
+		s.setNature(10, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		t.add(new Coordinates(8, 2));
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(10, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(7, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		GuardService guard = enconrat.getGuards().get(0);
+
+		
+	}
+	
+	//etat remarquable
+	@Test
+	public void reinit_guard() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		s.setNature(6, 1, Cell.PLT);
+		s.setNature(7, 1, Cell.PLT);
+		s.setNature(8, 1, Cell.PLT);
+		s.setNature(9, 1, Cell.PLT);
+		s.setNature(10, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(10, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(7, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		GuardService guard = enconrat.getGuards().get(0);
+		e.addCommand(Command.DIGR);
+		enconrat.step();
+		assert(enconrat.getEnvi().getCellNature(8, 1) == Cell.HOL);
+		e.addCommand(Command.LEFT);
+		enconrat.step();
+		e.addCommand(Command.DIGR);
+		enconrat.step();
+		assert(enconrat.getEnvi().getCellNature(7, 1) == Cell.HOL);
+		e.addCommand(Command.LEFT);
+		enconrat.step();
+		e.addCommand(Command.DIGR);
+		enconrat.step();
+		assert(enconrat.getEnvi().getCellNature(6, 1) == Cell.HOL);
+		e.addCommand(Command.LEFT);
+		enconrat.step();
+		e.addCommand(Command.DIGR);
+		enconrat.step();
+		assert(enconrat.getEnvi().getCellNature(5, 1) == Cell.HOL);
+		e.addCommand(Command.LEFT);
+		enconrat.step();
+		e.addCommand(Command.DIGR);
+		enconrat.step();
+		assert(enconrat.getEnvi().getCellNature(4, 1) == Cell.HOL);
+		
+		assert(enconrat.getPlayer().getWdt() == 3 && enconrat.getPlayer().getHgt() == 2);
+		while(enconrat.getEnvi().getCellNature(guard.getWdt(), guard.getHgt()) != Cell.PLT) {
+			enconrat.step();
+		}
+		enconrat.step();
+		assert(guard.getWdt() == 10 && guard.getHgt() == 2);
+		
 	}
 	
 }

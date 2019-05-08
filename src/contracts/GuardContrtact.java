@@ -1,5 +1,7 @@
 package contracts;
 
+import java.util.ArrayList;
+
 import components.Guard;
 import components.Player;
 import decorators.GuardDecorator;
@@ -9,6 +11,7 @@ import services.Command;
 import services.EngineService;
 import services.EnvironmentService;
 import services.GuardService;
+import services.ItemService;
 import services.Move;
 import services.PlayerService;
 import util.SetUtil;
@@ -192,6 +195,12 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		if (getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL){
 			t_at_pre = getEngine().getHoles(getWdt(), getHgt());
 		}
+		boolean will_reinitialize_atPre = willReinitialize();
+		boolean will_grab_treasure_atPre = willGrabTreasure();
+		ArrayList<ItemService> treasure_atPre = (ArrayList<ItemService>) getEnvi().getCellContentItem(getWdt(), getHgt()).clone();
+		int wdt_atPre = getWdt();
+		int hgt_atPre = getHgt();
+		int nbTreasures_on_map_atPre = getEngine().getTreasures().size();
 		Move behaviour = getBehaviour();
 		super.step();
 		
@@ -200,7 +209,29 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 			throw new InvariantError("Le moteur de jeu ne doit pas changer ! ");
 		}
 		
-		//traduire par des if else dans la specif...
+		
+		if(will_grab_treasure_atPre) {
+			if(treasure_atPre.size() != getEnvi().getCellContentChar(wdt_atPre, hgt_atPre).size() + 1 ) {
+				throw new PostconditionError("Tresor non enlevé de l'environnement par le garde");
+			}
+			if(nbTreasures_on_map_atPre != getEngine().getTreasures().size()+1) {
+				throw new PostconditionError("le tresor n'a pas été enlevé de l'engine");
+			}
+		}
+		if(will_reinitialize_atPre) {
+			
+
+			if (getFirst_y() != getHgt())  {
+				throw new PostconditionError("Le gardien ne s'est pas reinitialise ");
+			}
+			
+			
+			if (getFirst_x() != getWdt())  {
+				throw new PostconditionError("Le gardien ne s'est pas reinitialise ");
+			}
+			return;
+		}
+		
 		if (!willMove()) return;
 		if(g.willClimbLeft()) {
 			
@@ -232,11 +263,6 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 		
 		}
 		
-		if(g.willAddTime()) {
-			if(t_at_pre + 1 !=  getEngine().getHoles(getWdt(), getHgt())) {
-				throw new PostconditionError("Le gardien n'est pas restÃ© dans le trou");
-			}
-		}
 		
 		
 		
@@ -252,23 +278,11 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 			if (g.getWdt() != getWdt())  {
 				throw new PostconditionError("Le gardien n'est pas restÃ© a sa plca alors qu'il le fallait ! ");
 			}
+			return;
 		
 		}
 		
-		if(g.willReinitialize()) {
-			g.Reinitialize();
-			
 
-			if (g.getHgt() != getHgt())  {
-				throw new PostconditionError("Le gardien ne s'est pas reinitialise ");
-			}
-			
-			
-			if (g.getWdt() != getWdt())  {
-				throw new PostconditionError("Le gardien ne s'est pas reinitialise ");
-			}
-			
-		}
 		
 		System.out.println("WILLL FALLLLLL");
 		System.out.println(g.willFall());

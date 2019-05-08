@@ -85,7 +85,7 @@ public class Player extends Character implements PlayerService {
 							g = (GuardService) getEnvi().getCellContentChar(wdt-1, hgt).get(0);
 						}
 						else {
-							g = (Guard) getEnvi().getCellContentChar(wdt-1, hgt).get(0);
+							g = (GuardService) getEnvi().getCellContentChar(wdt+1, hgt).get(0);
 						}
 						ItemService b = bombs.get(0);
 						bombs.remove(b);
