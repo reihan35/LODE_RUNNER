@@ -3,32 +3,67 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="tmp_LODE_RUNNER">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="LODE_RUNNER">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="D:/jee-oxygen/eclipse/"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.8"/>
-    <property name="source" value="1.8"/>
+    <property name="target" value="11"/>
+    <property name="source" value="11"/>
     <path id="JUnit 5.libraryclasspath">
-        <pathelement location="../../../.p2/pool/plugins/org.junit.jupiter.api_5.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.jupiter.engine_5.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.jupiter.migrationsupport_5.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.jupiter.params_5.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.platform.commons_1.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.platform.engine_1.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.platform.launcher_1.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.platform.runner_1.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.platform.suite.api_1.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit.vintage.engine_4.12.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.opentest4j_1.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.apiguardian_1.0.0.v20170910-2246.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
-        <pathelement location="../../../.p2/pool/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.jupiter.api_5.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.jupiter.engine_5.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.jupiter.migrationsupport_5.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.jupiter.params_5.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.platform.commons_1.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.platform.engine_1.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.platform.launcher_1.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.platform.runner_1.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.platform.suite.api_1.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit.vintage.engine_5.3.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.opentest4j_1.1.1.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.apiguardian_1.0.0.v20181005-1442.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+        <pathelement location="../.p2/pool/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
     </path>
-    <path id="tmp_LODE_RUNNER.classpath">
+    <path id="LODE_RUNNER.classpath">
         <path refid="JUnit 5.libraryclasspath"/>
         <pathelement location="bin"/>
+    </path>
+    <path id="run.CharacterTest.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.EditableScreenTest.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.EngineTest.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.EnvironementTest.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.GuardTest.die_guard_with_treasure.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.GuardTest.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.PlayerTest.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.ScreenTest.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
+    </path>
+    <path id="run.SpriteDemo.classpath">
+        <path refid="JUnit 5.libraryclasspath"/>
+        <path refid="LODE_RUNNER.classpath"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -49,7 +84,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="LODE_RUNNER.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -66,136 +101,82 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="SpriteDemo">
-        <java classname="run.SpriteDemo" failonerror="true" fork="yes">
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </java>
-    </target>
     <target name="CharacterTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_implem_bugee.CharacterTest" todir="${junit.output.dir}"/>
+            <test name="test.CharacterTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="run.CharacterTest.classpath"/>
         </junit>
     </target>
     <target name="EditableScreenTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_implem_bugee.EditableScreenTest" todir="${junit.output.dir}"/>
+            <test name="test.EditableScreenTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="run.EditableScreenTest.classpath"/>
         </junit>
     </target>
     <target name="EngineTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_implem_bugee.EngineTest" todir="${junit.output.dir}"/>
+            <test name="test.EngineTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="run.EngineTest.classpath"/>
         </junit>
     </target>
     <target name="EnvironementTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_implem_bugee.EnvironementTest" todir="${junit.output.dir}"/>
+            <test name="test.EnvironementTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="run.EnvironementTest.classpath"/>
+        </junit>
+    </target>
+    <target name="GuardTest.die_guard_with_treasure">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.GuardTest" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="run.GuardTest.die_guard_with_treasure.classpath"/>
         </junit>
     </target>
     <target name="GuardTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_implem_bugee.GuardTest" todir="${junit.output.dir}"/>
+            <test name="test.GuardTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="run.GuardTest.classpath"/>
         </junit>
     </target>
     <target name="PlayerTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_implem_bugee.PlayerTest" todir="${junit.output.dir}"/>
+            <test name="test.PlayerTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="run.PlayerTest.classpath"/>
         </junit>
     </target>
     <target name="ScreenTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test_implem_bugee.ScreenTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </junit>
-    </target>
-    <target name="CharacterTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="test.CharacterTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </junit>
-    </target>
-    <target name="EditableScreenTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="test.EditableScreenTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </junit>
-    </target>
-    <target name="EngineTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="test.EngineTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </junit>
-    </target>
-    <target name="EnvironementTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="test.EnvironementTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </junit>
-    </target>
-    <target name="GuardTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="test.GuardTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </junit>
-    </target>
-    <target name="PlayerTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="test.PlayerTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
-        </junit>
-    </target>
-    <target name="ScreenTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
             <test name="test.ScreenTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
-            <classpath refid="tmp_LODE_RUNNER.classpath"/>
+            <classpath refid="run.ScreenTest.classpath"/>
         </junit>
+    </target>
+    <target name="SpriteDemo">
+        <java classname="run.SpriteDemo" failonerror="true" fork="yes">
+            <classpath refid="run.SpriteDemo.classpath"/>
+        </java>
     </target>
     <target name="junitreport">
         <junitreport todir="${junit.output.dir}">

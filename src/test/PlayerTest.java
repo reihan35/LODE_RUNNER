@@ -17,7 +17,6 @@ import contracts.EngineContract;
 import contracts.EnvironmentContract;
 import contracts.PlayerContract;
 import contracts.PreconditionError;
-import main.EnvironmentMain;
 import services.Cell;
 import services.CharacterService;
 import services.Command;
