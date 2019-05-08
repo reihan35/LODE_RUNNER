@@ -254,7 +254,6 @@ public class Guard extends Character implements GuardService {
 		
 	}
 	
-	@Override
 	public void drop_off() {
 		if(treasure != null) {
 			getEngine().addTreasure( getWdt(), getHgt()+1);
@@ -373,6 +372,11 @@ public class Guard extends Character implements GuardService {
 	public int getTimeStayed() {
 		// TODO Auto-generated method stub
 		return timeStayed;
+	}
+	@Override
+	public void dropTreasure() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

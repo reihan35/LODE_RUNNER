@@ -273,9 +273,21 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		
 		switch(vie) {
 			case 0:
-				//JOptionPane j = new JOptionPane();
-				//j.showMessageDialog(frame, "see you next time !", "GameOver", 1);
+				JOptionPane j = new JOptionPane();
+				int input = JOptionPane.showOptionDialog(null, "See you next time ! ", "Game Over", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
+				if(input == JOptionPane.OK_OPTION)
+				{
+					System.exit(0);
+
+
+				}
+				
+				if(input == JOptionPane.CANCEL_OPTION)
+				{
+					System.exit(0);
+				}
+				
 			case 1:
 				img = une;
 				break;
@@ -375,7 +387,7 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		g.drawImage(player2,pos_x,pos_y,spriteLength,spriteLength, frame);
 		moteur.step();
 		g.drawString("Score", 18, 15);
-		g.drawString(Integer.toString(moteur.getScore()), 50, 15);
+		g.drawString(Integer.toString(moteur.getScore()), 75, 15);
 		if (moteur.getStatus() == Stat.WIN) {
 			g.drawImage(won, 20, 20, 200, 200, frame);
 		}
@@ -408,7 +420,6 @@ public class SpriteDemo extends JPanel implements KeyListener{
 		}
 		
 		frame.repaint();
-		g.drawString("You have only " + vie + "lives left", 150, 15);
 		s++;
 		if (true) {
 			//throw new Error ("je pass ici");

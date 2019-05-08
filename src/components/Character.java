@@ -103,8 +103,7 @@ public class Character implements CharacterService {
 		System.out.println("je ne veux pas travailler");
 		if(hgt != getEnvi().getHeight()-1 
 			&& isFreeCell(wdt, hgt+1)
-			&& currCell == Cell.LAD
-			&& !characterAt(wdt, hgt+1)) {
+			&& currCell == Cell.LAD) {
 			if(this instanceof GuardService ) {
 				for(CharacterService c : getEnvi().getCellContentChar(wdt,hgt+1)) {
 					if(c instanceof GuardService) {
