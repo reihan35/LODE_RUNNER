@@ -67,15 +67,10 @@ public class Player extends Character implements PlayerService {
 		else {
 			if(willDigRight()) {
 				getEnvi().dig(getWdt() + 1, getHgt() - 1 );
-				System.out.println("voila tout" + getEnvi().getCellNature(getWdt() - 1 , getHgt() - 1));
-				
 			}
 			else {
 				if(willDigLeft()) {
 					getEnvi().dig(getWdt() - 1, getHgt() - 1 );
-					System.out.println("voila tout" + getEnvi().getCellNature(getWdt() - 1 , getHgt() - 1));
-					System.out.println(getWdt() + 1 );
-					System.out.println(getHgt() - 1 );
 				}
 				else {
 					if (willFight()) {

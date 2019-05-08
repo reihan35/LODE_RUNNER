@@ -44,21 +44,13 @@ public interface PlayerService extends CharacterService {
 	 *  && getEnvi().getCellNature(getWdt()+1,getHgt()-1) == PLT
 	 */
 	default public boolean willDigRight() {
-		if(getWdt() == getEnvi().getWidth()-1) {
-			return false;
-		}
-		if(getEnvi().getCellContentItem(getWdt() + 1, getHgt()).size() > 0) {
-			return false;
-		}
-		Cell[] canDig ={Cell.LAD,Cell.PLT, Cell.MTL};
-		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
-		if(getEngine().getNextCommand() == Command.DIGR) {
-			System.out.println("je suis "	+ characterAt(getWdt(), getHgt()-1) );
-			if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
-				System.out.println(isFreeCell(getWdt()+1,getHgt()));
-				System.out.println(getEnvi().getCellNature(3, 1));
-				System.out.println(getEnvi().getCellNature(getWdt()+1,  getHgt()-1)==Cell.PLT);
-				return isFreeCell(getWdt()+1,getHgt()) && getEnvi().getCellNature(getWdt()+1,  getHgt()-1)==Cell.PLT;
+		if(getEnvi().isInWindow(getWdt()+1, getHgt()-1)) {
+			Cell[] canDig ={Cell.LAD,Cell.PLT, Cell.MTL};
+			Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
+			if(getEngine().getNextCommand() == Command.DIGR) {
+				if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
+					return isFreeCell(getWdt()+1,getHgt()) && getEnvi().getCellNature(getWdt()+1,  getHgt()-1)==Cell.PLT;
+				}
 			}
 		}
 		return false;
@@ -77,18 +69,17 @@ public interface PlayerService extends CharacterService {
 	 */
 	default public boolean willDigLeft() {
 
-		Cell[] canDig ={Cell.LAD,Cell.PLT, Cell.MTL};
-		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);	
-		if(getEngine().getNextCommand() == Command.DIGL) {
-			if(getEnvi().getCellContentItem(getWdt() - 1, getHgt()).size() > 0) {
-				return false;
-			}
-			if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
-				System.out.println("wow omg !");
-				System.out.println(isFreeCell(getWdt()-1,getHgt()));
-				System.out.println( getEnvi().getCellNature(getWdt()-1,  getHgt()-1));
-				System.out.println("MAIS JE COMPRENDS PAAS");
-				return isFreeCell(getWdt()-1,getHgt()) && getEnvi().getCellNature(getWdt()-1,  getHgt()-1)==Cell.PLT;
+		if(getEnvi().isInWindow(getWdt()-1, getHgt()-1)) {
+			
+			Cell[] canDig ={Cell.LAD,Cell.PLT, Cell.MTL};
+			Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);	
+			if(getEngine().getNextCommand() == Command.DIGL) {
+				if(getEnvi().getCellContentItem(getWdt() - 1, getHgt()).size() > 0) {
+					return false;
+				}
+				if(SetUtil.isIn(downCell, canDig) || characterAt(getWdt(), getHgt()-1)) {
+					return isFreeCell(getWdt()-1,getHgt()) && getEnvi().getCellNature(getWdt()-1,  getHgt()-1)==Cell.PLT;
+				}
 			}
 		}
 		return false;

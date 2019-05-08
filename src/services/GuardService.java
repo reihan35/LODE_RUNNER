@@ -202,7 +202,7 @@ public interface GuardService extends CharacterService {
 	void setTreasure(ItemService i);
 	
 
-	void drop_off();
+	void dropTreasure();
 	ItemService get_treasure();
 	public void die();
 	public void grabTreasure();

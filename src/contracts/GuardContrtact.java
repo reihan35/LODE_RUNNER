@@ -355,4 +355,33 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 			}
 		}
 	}
+	
+	@Override
+	public void dropTreasure() {
+		if(getEnvi().getCellNature(getWdt(), getHgt()) != Cell.HOL) {
+			throw new PreconditionError("Le garde lache son tresor quand il est dans une case vide seulement");
+		}
+		checkInvariants();
+		ItemService t_atPre = get_treasure();
+		boolean hasTreasure_atPre = has_treasure();
+		int size_Treasures_atPre = getEngine().getTreasures().size();
+		int size_Item_atPre = getEnvi().getCellContentItem(getWdt(), getHgt()).size();
+		super.dropTreasure();
+		
+		if(hasTreasure_atPre) {
+			int size_Treasures_after = getEngine().getTreasures().size();
+			int size_Item_after = getEnvi().getCellContentItem(getWdt(), getHgt()).size();
+			
+			if(size_Item_after != size_Item_atPre) {
+				throw new PostconditionError("le tresor n'a pas ete rajoute dans l'environnement");
+			}
+			if (size_Treasures_after != size_Treasures_atPre + 1) {
+				throw new PostconditionError("Le tresor n'a pas ete remis dans le moteur");
+			}
+			if(get_treasure() != null) {
+				throw new PostconditionError("Le garde doit avoir laché son trésor");
+			}
+		}
+		checkInvariants();
+	}
 }

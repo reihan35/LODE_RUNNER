@@ -17,6 +17,7 @@ import services.Coordinates;
 import services.Door;
 import services.EngineService;
 import services.EnvironmentService;
+import services.GuardService;
 import services.PlayerService;
 import services.Stat;
 import util.SetUtil;
@@ -199,6 +200,40 @@ public class EngineTest {
 		e.addCommand(Command.DIGL);
 		enconrat.step();
 		assert(enconrat.getEnvi().getCellNature(2, 2) == Cell.HOL);
+	}
+	
+	
+	@Test
+	public void test_guard_drop_treasure() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		s.setNature(6, 1, Cell.PLT);
+		s.setNature(7, 1, Cell.PLT);
+		s.setNature(8, 1, Cell.PLT);
+		s.setNature(9, 1, Cell.PLT);
+		s.setNature(10, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		t.add(new Coordinates(9, 2));
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(9, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(7, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		enconrat.addCommand(Command.DIGR);
+		GuardService guard = enconrat.getGuards().get(0);
+		
+		while(enconrat.getEnvi().getCellNature(guard.getWdt(), guard.getHgt()) != Cell.HOL) {
+			enconrat.step();
+		}
+		
+		assert(enconrat.getTreasures().size() == 1);
+		assert(enconrat.getEnvi().getCellContentItem(8, 2).size() == 1);
 	}
 	
 

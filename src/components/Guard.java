@@ -254,10 +254,9 @@ public class Guard extends Character implements GuardService {
 	}
 	
 	@Override
-	public void drop_off() {
+	public void dropTreasure() {
 		if(treasure != null) {
 			getEngine().addTreasure( getWdt(), getHgt()+1);
-			getEngine().getEnvi().addCellContentItem(getWdt(), getHgt()+1, treasure);
 			treasure = null;
 		}
 	}
@@ -320,7 +319,7 @@ public class Guard extends Character implements GuardService {
 						goDown();
 						System.out.println("VAS-YYYYYY");
 						if(getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL) {
-							drop_off();
+							dropTreasure();
 						}
 					}
 					else {

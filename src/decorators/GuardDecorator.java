@@ -98,8 +98,8 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 	}
 
 	@Override
-	public void drop_off() {
-		delegates.drop_off();
+	public void dropTreasure() {
+		delegates.dropTreasure();
 	}
 
 	@Override

@@ -134,7 +134,24 @@ public class GuardTest {
 		assert(g.getHgt() == 1 && g.getWdt() == 3);
 
 	}
-	
+	@Test
+	public void test_die() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(3, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(7, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		enconrat.getGuards().get(0).die();
+		assert enconrat.getGuards().size() == 0;
+		assert enconrat.getEnvi().getCellContentChar(3, 2).size() == 0;
+	}
 	
 	//recuperation d'un tresor
 	@Test
@@ -201,6 +218,31 @@ public class GuardTest {
 		}
 		assert(guard.has_treasure() == false && enconrat.getTreasures().size() == 1);
 
+	}
+	
+	@Test(expected = PreconditionError.class)
+	public void test_drop_treasure() {
+		EditableScreenContract s = SetUtil.MakeEdiatableScreen(11,10);
+		s.setNature(3, 1, Cell.PLT);
+		s.setNature(4, 1, Cell.PLT);
+		s.setNature(5, 1, Cell.PLT);
+		s.setNature(6, 1, Cell.PLT);
+		s.setNature(7, 1, Cell.PLT);
+		s.setNature(8, 1, Cell.PLT);
+		s.setNature(9, 1, Cell.PLT);
+		s.setNature(10, 1, Cell.PLT);
+		EnvironmentContract env = SetUtil.EnviMaker(s);
+		EngineService e = new Engine();
+		EngineContract enconrat = new EngineContract(e);
+		ArrayList<Coordinates> t = new ArrayList<>();
+		t.add(new Coordinates(9, 2));
+		ArrayList<Coordinates> g = new ArrayList<>();
+		g.add(new Coordinates(9, 2));
+		ArrayList<Coordinates> b = new ArrayList<>();
+		ArrayList<Door> d = new ArrayList<>();
+		Coordinates pcoord = new Coordinates(7, 2);
+		enconrat.init(env, pcoord, g, t, b, d);
+		enconrat.getGuards().get(0).dropTreasure();
 	}
 	
 	//die
