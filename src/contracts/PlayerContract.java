@@ -25,6 +25,17 @@ public class PlayerContract extends PlayerDecorator implements PlayerService {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
+	@Override
+	public void goDown() {
+		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
+		int hgt_atPre = getHgt();
+		int wdt_atPre = getWdt();
+		super.goDown();
+		if (downCell == Cell.HOL && characterAt(getWdt(), getHgt()-1) && (hgt_atPre != getHgt() || wdt_atPre !=getWdt())) {
+			throw new PostconditionError("Le joueur n'aurait pas du descendre");
+		}
+	}
 
 
 	/** post : willFall() implies goDown()

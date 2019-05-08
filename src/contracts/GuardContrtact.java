@@ -126,6 +126,65 @@ public class GuardContrtact extends GuardDecorator implements GuardService {
 
 	
 	@Override
+	public void goDown() {
+		
+		boolean g_atPre = false;
+		int wdt_atPre = getWdt();
+		int hgt_atPre = getHgt();
+		if(getHgt()>0)
+			g_atPre = GuardAt(getWdt(), getHgt()-1);
+		super.goDown();
+		
+		if(getHgt()> 0 && g_atPre && (getWdt() == wdt_atPre && getHgt() == hgt_atPre)) {
+			throw new PostconditionError("La position du garde a change alors qu'il y a un autre garde en dessous de lui");
+		}
+	}
+	
+	@Override
+	public void goUp() {
+		
+		boolean g_atPre = false;
+		int wdt_atPre = getWdt();
+		int hgt_atPre = getHgt();
+		if(getHgt() != getEnvi().getHeight()-1)
+			g_atPre = GuardAt(getWdt(), getHgt()+1);
+		super.goUp();
+		
+		if(getHgt() != getEnvi().getHeight()-1 && g_atPre && (getWdt() == wdt_atPre && getHgt() == hgt_atPre)) {
+			throw new PostconditionError("La position du garde a change alors qu'il y a un autre garde au dessus de lui");
+		}
+	}
+	
+	@Override
+	public void goLeft() {
+		
+		boolean g_atPre = false;
+		int wdt_atPre = getWdt();
+		int hgt_atPre = getHgt();
+		if(getWdt()>0)
+			g_atPre = GuardAt(getWdt()-1, getHgt());
+		super.goLeft();
+		
+		if(getWdt() != 0 && g_atPre && (getWdt() == wdt_atPre && getHgt() == hgt_atPre)) {
+			throw new PostconditionError("La position du garde a change alors qu'il y a un autre garde à sa gauche");
+		}
+	}
+	
+	@Override
+	public void goRight() {
+		
+		boolean g_atPre = false;
+		int wdt_atPre = getWdt();
+		int hgt_atPre = getHgt();
+		if(getWdt()!= getEnvi().getWidth()-1)
+			g_atPre = GuardAt(getWdt()+1, getHgt());
+		super.goRight();
+		
+		if(getWdt() != getEnvi().getWidth()-1 && g_atPre && (getWdt() == wdt_atPre && getHgt() == hgt_atPre)) {
+			throw new PostconditionError("La position du garde a change alors qu'il y a un autre garde à sa droite");
+		}
+	}
+	@Override
 	public void step() {
 
 		EngineService engine_at_pre = getEngine();

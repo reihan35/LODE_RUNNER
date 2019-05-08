@@ -40,6 +40,13 @@ public class Player extends Character implements PlayerService {
 	
 
 	@Override
+	public void goDown() {
+		Cell downCell = getEnvi().getCellNature(getWdt(), getHgt()-1);
+		if (!(downCell == Cell.HOL && characterAt(getWdt(), getHgt()-1))) {
+			super.goDown();
+		}
+	}
+	@Override
 	public void step() {
 		System.out.println("je suis la nature");
 		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));

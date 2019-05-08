@@ -23,12 +23,9 @@ public interface PlayerService extends CharacterService {
 		Cell currCell = getEnvi().getCellNature(getWdt(), getHgt());
 		Cell[] emp ={Cell.HOL,Cell.EMP, Cell.HDR};
 		Cell[] lad ={Cell.LAD,Cell.HDR};
-		System.out.println("will fall de palayer");
-		System.out.println(characterAt(getWdt(), getHgt()-1));
 		if (downCell == Cell.HOL && characterAt(getWdt(), getHgt()-1)){
 			return false; //pour que le player puisse marcher sur la tete du gardien quand ce dernier tombe dans un troue
 		}
-		System.out.println("quand meme");
 		return SetUtil.isIn(downCell,emp) && ! SetUtil.isIn(currCell,lad);
 	}
 	
@@ -87,14 +84,15 @@ public interface PlayerService extends CharacterService {
 	
 	
 	default public boolean willFight() {
+		Cell [] filledCell = {Cell.PLT, Cell.MTL};
 		if(getEngine().getNextCommand() == Command.FIGHT && getBomb().size()>0) {
 			if(getEnvi().getCellContentChar(getWdt()+1, getHgt()).size() > 0) {
-				if(getEnvi().getCellNature(getWdt()+1, getHgt()-1) == Cell.PLT && getEnvi().getCellNature(getWdt()+1, getHgt()) == Cell.EMP) {
+				if(SetUtil.isIn(getEnvi().getCellNature(getWdt()+1, getHgt()-1), filledCell) && getEnvi().getCellNature(getWdt()+1, getHgt()) == Cell.EMP) {
 					return true;
 				}
 			}
-			if(getEnvi().getCellContentChar(getWdt()-1, getHgt()).size() > 0 && getEnvi().getCellNature(getWdt()-1, getHgt()) == Cell.EMP) {
-				if(getEnvi().getCellNature(getWdt()-1, getHgt()-1) == Cell.PLT) {
+			if(getEnvi().getCellContentChar(getWdt()-1, getHgt()).size() > 0 ) {
+				if(SetUtil.isIn(getEnvi().getCellNature(getWdt()-1, getHgt()-1), filledCell) && getEnvi().getCellNature(getWdt()-1, getHgt()) == Cell.EMP) {
 					return true;
 				}
 			}

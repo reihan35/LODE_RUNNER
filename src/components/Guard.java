@@ -29,7 +29,7 @@ public class Guard extends Character implements GuardService {
 	private int timeStayed;
 	private int timeInHole;
 	private int nbStay = 3;
-	private int nbStayInHole = 5;
+	private int nbStayInHole = 10;
 	
 	private int can_hold_t;
 	
@@ -285,6 +285,27 @@ public class Guard extends Character implements GuardService {
 			
 	}
 
+	
+	@Override
+	public void goLeft() {
+		if(getWdt() != 0 && !GuardAt(getWdt()-1, getHgt()))
+			super.goLeft();
+	}
+	@Override
+	public void goRight() {
+		if(getWdt() != getEnvi().getWidth()+1 && !GuardAt(getWdt()+1, getHgt()))
+			super.goRight();
+	}
+	@Override
+	public void goDown() {
+		if(getHgt() != 0 && !GuardAt(getWdt(), getHgt()-1))
+			super.goDown();
+	}
+	@Override
+	public void goUp() {
+		if(getHgt() != getEnvi().getHeight()-1 && !GuardAt(getWdt(), getHgt()+1))
+			super.goUp();
+	}
 	@Override
 	public void step() {
 

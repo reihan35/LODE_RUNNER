@@ -41,7 +41,7 @@ public interface GuardService extends CharacterService {
 	 */
 	default public boolean willClimbLeft() {
 		System.out.println("on est dans willClimbLeft : "  + getEnvi().getCellNature(getWdt(), getHgt()) + getBehaviour() );
-		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() >= 5 && getBehaviour() == Move.LEFT;	
+		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() >= getNbStayInHole() && getBehaviour() == Move.LEFT;	
 	}
 	
 	
