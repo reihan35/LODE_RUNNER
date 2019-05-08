@@ -136,5 +136,20 @@ public class GuardDecorator extends CharacterContract implements GuardService{
 		delegates.grabTreasure();
 	}
 
+	@Override
+	public int getNbStayInHole() {
+		return delegates.getNbStayInHole();
+	}
+
+	@Override
+	public int getNbStay() {
+		return delegates.getNbStay();
+	}
+
+	@Override
+	public int getTimeStayed() {
+		return delegates.getTimeStayed();
+	}
+
 	
 }

@@ -14,9 +14,12 @@ public interface GuardService extends CharacterService {
 	 */
 	public Move getBehaviour();
 	public CharacterService getTarget();
-	public int getTimeInHole();	
+	public int getNbStayInHole();
+	public int getNbStay();
 	public int getFirst_x();
 	public int getFirst_y();
+	public int getTimeStayed();
+	public int getTimeInHole();
 
 	/**
 	 * predicate definition:
@@ -47,7 +50,7 @@ public interface GuardService extends CharacterService {
 	 */
 	default public boolean willClimbRight() {
 		 System.out.println("on est dans willClimbRight : "  + getEnvi().getCellNature(getWdt(), getHgt()) + getBehaviour() );
-		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() >= 5 && getBehaviour() == Move.RIGHT;
+		 return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() >= getNbStayInHole() && getBehaviour() == Move.RIGHT;
 	}
 	
 	/**
@@ -66,8 +69,6 @@ public interface GuardService extends CharacterService {
 	 * def = getEnvi().getCellNature(getWdt(),getHgt()) = HOL && getTimeInHole() < 5 * 5
 	 */
 	default public boolean willAddTime() {
-		System.out.println("le guard est dans : " + getWdt()+ getHgt());
-		System.out.println(getEnvi().getCellNature(getWdt(), getHgt()));
 		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.HOL && getTimeInHole() < 45 ;
 	}
 	
@@ -80,6 +81,9 @@ public interface GuardService extends CharacterService {
 		return getEnvi().getCellNature(getWdt(), getHgt()) == Cell.PLT;
 	}
 	
+	default public boolean willMove() {
+		return getTimeStayed() >= getNbStay();
+	}
 
 	default boolean has_treasure() {
 		return get_treasure() !=null;
@@ -197,7 +201,7 @@ public interface GuardService extends CharacterService {
 	void init(EngineService e, int w, int h, PlayerService p);
 	void setTreasure(ItemService i);
 	
-	boolean willMove();
+
 	void drop_off();
 	ItemService get_treasure();
 	public void die();

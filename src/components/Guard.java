@@ -26,6 +26,13 @@ public class Guard extends Character implements GuardService {
 	private int first_y;
 	private ItemService treasure;
 	private boolean hasTreasure;
+	private int timeStayed;
+	private int timeInHole;
+	private int nbStay = 3;
+	private int nbStayInHole = 5;
+	
+	private int can_hold_t;
+	
 	@Override
 	public int getFirst_x() {
 		return first_x;
@@ -39,10 +46,7 @@ public class Guard extends Character implements GuardService {
 		return treasure;
 	}
 
-	private int move;
-	private int can_hold_t;
-	private int timeInHole;
-	
+
 	@Override
 	public void init(EngineService e, int w, int h, PlayerService p) {
 		super.init(e.getEnvi(), w, h);
@@ -52,7 +56,7 @@ public class Guard extends Character implements GuardService {
 		first_x = w;
 		first_y = h;
 		timeInHole = 0;
-		move = 0;
+		timeStayed = 0;
 		treasure = null;
 		
 	}
@@ -264,13 +268,14 @@ public class Guard extends Character implements GuardService {
 		hgt = first_y;
 	}
 	
+	/*
 	public boolean willMove() {
 		if (move > 2) {
 			move = 0;
 			return true;
 		}
 		return false;
-	}
+	}*/
 	
 	@Override
 	public void grabTreasure() {
@@ -284,9 +289,7 @@ public class Guard extends Character implements GuardService {
 	@Override
 	public void step() {
 
- 		move++;
- 		System.out.println("je suis move:");
- 		System.out.println(move);
+ 		timeStayed++;
  		
  		if(willGrabTreasure()) {
  			grabTreasure();
@@ -297,6 +300,7 @@ public class Guard extends Character implements GuardService {
 			return;
 		}
 		if(!willMove()) return;
+		timeStayed = 0;
 		if(getEnvi().getCellNature(getWdt(),getHgt()) == Cell.HOL)
 			timeInHole++;
 		System.out.println("je rentre dans step");
@@ -354,6 +358,20 @@ public class Guard extends Character implements GuardService {
 
 		getEngine().removeGuard(this);
 		
+	}
+	@Override
+	public int getNbStayInHole() {
+		return nbStayInHole;
+	}
+	@Override
+	public int getNbStay() {
+		// TODO Auto-generated method stub
+		return nbStay;
+	}
+	@Override
+	public int getTimeStayed() {
+		// TODO Auto-generated method stub
+		return timeStayed;
 	}
 
 }
